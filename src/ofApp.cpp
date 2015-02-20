@@ -115,7 +115,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+	
+	ofSpherePrimitive sphere(2, 5, OF_PRIMITIVE_TRIANGLES);
+	
 	ofBackground(0,0,0);
 
     //----------------------------------------------------------
@@ -126,6 +128,7 @@ void ofApp::draw(){
     int x = 20;
     int y = ofGetHeight() - h - 20;
     //fftLive.draw(x, y, w, h);
+    fftFile.draw(x, y, w, h);
     
     //----------------------------------------------------------
     ofEnableDepthTest();
@@ -153,8 +156,16 @@ void ofApp::draw(){
 
     ofSetColor(ofColor::white);
     meshWarped.setMode(OF_PRIMITIVE_POINTS);
-	meshWarped.draw();
+	//meshWarped.draw();
     
+	for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
+	{
+		ofPushMatrix();
+		ofTranslate(meshWarped.getVertices()[i]);
+		sphere.drawWireframe();
+		ofPopMatrix();
+		//ofSphere(meshWarped.getVertices()[i],2);
+	}
     if(bUseTexture == true) {
         meshTexture.unbind();
         ofDisableNormalizedTexCoords();
