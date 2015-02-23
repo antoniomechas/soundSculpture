@@ -15,6 +15,10 @@ public:
     void update();
     void draw();
     
+	void drawScene();
+
+	void drawFboTest();
+
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y);
@@ -49,6 +53,9 @@ public:
 	float cameraRotation;
 
 	ofVec3f current;
+	
+	ofFbo rgbaFboFloat;
+	int fadeAmnt;
 
 
 };

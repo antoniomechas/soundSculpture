@@ -30,12 +30,13 @@ void ofApp::setup(){
     customMesh.addIndex(3);
     
     //--------------------------------------------------------------
-    ofSpherePrimitive sphere(100, 100, OF_PRIMITIVE_TRIANGLES);
+    ofSpherePrimitive sphere(100, 10, OF_PRIMITIVE_TRIANGLES);
    
     //--------------------------------------------------------------
-    model.loadModel("head.dae");
-    
-    //--------------------------------------------------------------
+    //model.loadModel("head.dae");
+    model.loadModel("dinosaur.dae");
+
+	//--------------------------------------------------------------
     meshes.push_back(customMesh);
     meshes.push_back(sphere.getMesh());
     meshes.push_back(model.getMesh(0));
@@ -64,12 +65,18 @@ void ofApp::setup(){
 
     cameraDist = 400;
 
+	rgbaFboFloat.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA32F); // with alpha, 32 bits red, 32 bits green, 32 bits blue, 32 bits alpha, from 0 to 1 in 'infinite' steps
+	//rgbaFboFloat.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA); // with alpha, 32 bits red, 32 bits green, 32 bits blue, 32 bits alpha, from 0 to 1 in 'infinite' steps
+	
+	rgbaFboFloat.begin();
+	ofClear(255,255,255, 0);
+    rgbaFboFloat.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
-
+    float scale = 50.0f;
 
 	fftFile.setPeakDecay(audioPeakDecay);
     fftFile.setMaxDecay(audioMaxDecay);
@@ -100,45 +107,125 @@ void ofApp::update(){
     
    
 	float meshDisplacement = 100;
-    
+    meshWarped.clearColors();
     for(int i=0; i<numOfVerts; i++) {
-        float audioValue = audioData[i];
-        ofVec3f & vertOriginal = vertsOriginal[i];
+
+		float t = (2 + ofGetElapsedTimef()) * .1;
+
+		float audioValue = audioData[i];
+		ofVec3f & vertOriginal = vertsOriginal[i] * scale;
         ofVec3f & vertWarped = vertsWarped[i];
-        
-        ofVec3f direction = vertOriginal.getNormalized();
+        ofVec3f dir = vertOriginal;
+		float mult = 100;
+		dir.x = dir.x + ofNoise(vertOriginal.x + t,0,0) * mult;
+		dir.y = dir.y + ofNoise(0,vertOriginal.y + t,0) * mult;
+		dir.z = dir.z + ofNoise(0,0,vertOriginal.z + t) * mult;
+		ofVec3f direction = dir.getNormalized();
+        //ofVec3f direction = vertOriginal.getNormalized();
         vertWarped = vertOriginal + direction * meshDisplacement * audioValue;
+
+		float r = ofNoise(t,0,0) * audioValue * vertOriginal.normalized().x * 2.0;
+		float g = ofNoise(0,t,0) * audioValue * vertOriginal.normalized().y * 2.0;
+		float b = ofNoise(0,0,t) * audioValue * vertOriginal.normalized().z * 2.0;
+		r = MAX(0.1, r);
+		g = MAX(0.1, g);
+		b = MAX(0.1, b);
+		meshWarped.addColor(ofFloatColor(r, g, b));
     }
     
     delete[] audioData;
+
+ //   ofEnableAlphaBlending();
+	//
+ //   rgbaFboFloat.begin();
+	//	//ofClear(255,255,255, 0);
+	//	//drawScene();
+	//	drawFboTest();
+	//rgbaFboFloat.end();
+
 }
+
+//--------------------------------------------------------------
+void ofApp::drawFboTest(){
+	//we clear the fbo if c is pressed. 
+	//this completely clears the buffer so you won't see any trails
+	if( ofGetKeyPressed('c') ){
+		ofClear(255,255,255, 0);
+	}	
+	
+	//some different alpha values for fading the fbo
+	//the lower the number, the longer the trails will take to fade away.
+	fadeAmnt = 40;
+	if(ofGetKeyPressed('1')){
+		fadeAmnt = 1;
+	}else if(ofGetKeyPressed('2')){
+		fadeAmnt = 5;
+	}else if(ofGetKeyPressed('3')){
+		fadeAmnt = 15;
+	}  
+
+	//1 - Fade Fbo
+	
+	//this is where we fade the fbo
+	//by drawing a rectangle the size of the fbo with a small alpha value, we can slowly fade the current contents of the fbo. 
+	ofFill();
+	ofSetColor(255,255,255, fadeAmnt);
+	ofRect(0,0,ofGetWidth(), ofGetHeight());
+
+	//2 - Draw graphics
+	
+	ofNoFill();
+	ofSetColor(255,255,255);
+
+	drawScene();
+
+}
+
 
 //--------------------------------------------------------------
 void ofApp::draw(){
 	
-	ofSpherePrimitive sphere(2, 5, OF_PRIMITIVE_TRIANGLES);
 	
-	ofBackground(0,0,0);
+	//ofBackground(0,0,0);
 
     //----------------------------------------------------------
     gui.draw();
-    
+	
+	ofSetColor(255,255,255);
+	
+	//rgbaFboFloat.draw(0,0);
+
+	drawScene();
+
+	//ofSetColor(ofColor::white);
+}
+
+
+
+void ofApp::drawScene()
+{
+
+	ofSpherePrimitive sphere(2, 5, OF_PRIMITIVE_TRIANGLES);
+
     int w = 512;
     int h = 256;
     int x = 20;
     int y = ofGetHeight() - h - 20;
     //fftLive.draw(x, y, w, h);
-    fftFile.draw(x, y, w, h);
+    //fftFile.draw(x, y, w, h);
     
     //----------------------------------------------------------
     ofEnableDepthTest();
 
 	// generate a noisy 3d position over time 
 	float t = (2 + ofGetElapsedTimef()) * .1;
-	current.x = ofSignedNoise(t, 0, 0);
-	current.y = ofSignedNoise(0, t, 0);
-	current.z = ofSignedNoise(0, 0, t);
-	current *= 400; // scale from -1,+1 range to -400,+400
+	//current.x = ofSignedNoise(t, 0, 0);
+	//current.y = ofSignedNoise(0, t, 0);
+	//current.z = ofSignedNoise(0, 0, t);
+	//current *= 400; // scale from -1,+1 range to -400,+400
+	current.x = 200 + ofNoise(t, 0, 0) * 200.0;
+	current.y = 200 + ofNoise(0, t, 0) * 200.0;
+	current.z = 200 + ofNoise(0, 0, t) * 200.0;
 
 	//cameraDist = 200.0f + 200.0f * fftFile.getAveragePeak();
 
@@ -155,17 +242,19 @@ void ofApp::draw(){
     }
 
     ofSetColor(ofColor::white);
-    meshWarped.setMode(OF_PRIMITIVE_POINTS);
-	//meshWarped.draw();
+    //meshWarped.setMode(OF_PRIMITIVE_POINTS);
+    meshWarped.setMode(OF_PRIMITIVE_LINES);
+	meshWarped.draw();
     
-	for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
-	{
-		ofPushMatrix();
-		ofTranslate(meshWarped.getVertices()[i]);
-		sphere.drawWireframe();
-		ofPopMatrix();
-		//ofSphere(meshWarped.getVertices()[i],2);
-	}
+	//for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
+	//{
+	//	ofPushMatrix();
+	//	ofTranslate(meshWarped.getVertices()[i]);
+	//	ofSetColor(meshWarped.getColors()[i]);
+	//	sphere.drawWireframe();
+	//	ofPopMatrix();
+	//	//ofSphere(meshWarped.getVertices()[i],2);
+	//}
     if(bUseTexture == true) {
         meshTexture.unbind();
         ofDisableNormalizedTexCoords();
@@ -177,8 +266,9 @@ void ofApp::draw(){
     camera.end();
     
     ofDisableDepthTest();
-    ofSetColor(ofColor::white);
+
 }
+
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
