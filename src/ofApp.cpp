@@ -30,15 +30,20 @@ void ofApp::setup(){
     customMesh.addIndex(3);
     
     //--------------------------------------------------------------
-    ofSpherePrimitive sphere(100, 10, OF_PRIMITIVE_TRIANGLES);
-   
+    ofSpherePrimitive sphere(100, 10, OF_PRIMITIVE_POINTS);
+    ofPlanePrimitive plane(200,300,20,30, OF_PRIMITIVE_POINTS);
+	ofIcoSpherePrimitive icoSphere(100,5);
     //--------------------------------------------------------------
-    //model.loadModel("head.dae");
-    model.loadModel("dinosaur.dae");
-
 	//--------------------------------------------------------------
     meshes.push_back(customMesh);
     meshes.push_back(sphere.getMesh());
+    meshes.push_back(plane.getMesh());
+    meshes.push_back(icoSphere.getMesh());
+
+	model.loadModel("dinosaur.dae");
+    meshes.push_back(model.getMesh(0));
+    model.clear();
+	model.loadModel("head.dae");
     meshes.push_back(model.getMesh(0));
     
     //--------------------------------------------------------------
@@ -53,14 +58,18 @@ void ofApp::setup(){
 	fftFile.player = &player;
 
     //--------------------------------------------------------------
+	bGuiVisible = false;
     string guiPath = "audio.xml";
     gui.setup("audio", guiPath, 20, 20);
     gui.add(meshIndex.setup("meshIndex", 1, 0, meshes.size()-1));
     gui.add(bUseTexture.setup("bUseTexture", false));
+    gui.add(scale.setup("scale", 1.0, 1.0, 100.0));
     gui.add(bUseAudioInput.setup("bUseAudioInput", true));
+    gui.add(audioMult.setup("audioMult", 1.0, 0.11, 5.0));
     gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
     gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
     gui.add(audioMirror.setup("audioMirror", true));
+    gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.loadFromFile(guiPath);
 
     cameraDist = 400;
@@ -71,22 +80,32 @@ void ofApp::setup(){
 	rgbaFboFloat.begin();
 	ofClear(255,255,255, 0);
     rgbaFboFloat.end();
+
+	// Setup post-processing chain
+    post.init(ofGetWidth(), ofGetHeight());
+    post.createPass<FxaaPass>()->setEnabled(true);
+    post.createPass<BloomPass>()->setEnabled(true);
+    post.createPass<DofPass>()->setEnabled(false);
+    post.createPass<KaleidoscopePass>()->setEnabled(false);
+    post.createPass<NoiseWarpPass>()->setEnabled(false);
+    post.createPass<PixelatePass>()->setEnabled(false);
+    post.createPass<EdgePass>()->setEnabled(false);
+    post.createPass<VerticalTiltShifPass>()->setEnabled(false);
+    post.createPass<GodRaysPass>()->setEnabled(false);
+
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
-    float scale = 50.0f;
-
 	fftFile.setPeakDecay(audioPeakDecay);
     fftFile.setMaxDecay(audioMaxDecay);
     fftFile.setMirrorData(audioMirror);
     fftFile.update();
-	
-	fftLive.setPeakDecay(audioPeakDecay);
-    fftLive.setMaxDecay(audioMaxDecay);
-    fftLive.setMirrorData(audioMirror);
-    fftLive.update();
+	//fftLive.setPeakDecay(audioPeakDecay);
+ //   fftLive.setMaxDecay(audioMaxDecay);
+ //   fftLive.setMirrorData(audioMirror);
+ //   fftLive.update();
 
     //---------------------------------------------------------- dispacing mesh using audio.
     ofMesh & meshOriginal = meshes[meshIndex];
@@ -122,7 +141,7 @@ void ofApp::update(){
 		dir.z = dir.z + ofNoise(0,0,vertOriginal.z + t) * mult;
 		ofVec3f direction = dir.getNormalized();
         //ofVec3f direction = vertOriginal.getNormalized();
-        vertWarped = vertOriginal + direction * meshDisplacement * audioValue;
+        vertWarped = vertOriginal + direction * meshDisplacement * (audioValue * audioMult);
 
 		float r = ofNoise(t,0,0) * audioValue * vertOriginal.normalized().x * 2.0;
 		float g = ofNoise(0,t,0) * audioValue * vertOriginal.normalized().y * 2.0;
@@ -136,11 +155,13 @@ void ofApp::update(){
     delete[] audioData;
 
  //   ofEnableAlphaBlending();
-	//
+	////
  //   rgbaFboFloat.begin();
-	//	//ofClear(255,255,255, 0);
-	//	//drawScene();
-	//	drawFboTest();
+	//	post.begin();
+	//		//ofClear(255,255,255, 0);
+	//		drawFboTest();
+	//		drawLine();
+	//	post.end();
 	//rgbaFboFloat.end();
 
 }
@@ -177,7 +198,7 @@ void ofApp::drawFboTest(){
 	ofNoFill();
 	ofSetColor(255,255,255);
 
-	drawScene();
+	//drawScene();
 
 }
 
@@ -185,17 +206,29 @@ void ofApp::drawFboTest(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	
+	ofBackground(0,0,0);
+	if (meshIndex == 0)
+	{
+		drawLine();
+		//rgbaFboFloat.draw(0,0);
+		if (bGuiVisible)
+			gui.draw();
+		return;
+	}
 	
 	//ofBackground(0,0,0);
 
     //----------------------------------------------------------
-    gui.draw();
 	
 	ofSetColor(255,255,255);
 	
 	//rgbaFboFloat.draw(0,0);
-
-	drawScene();
+	post.begin();
+		drawScene();
+	post.end();
+	
+	if (bGuiVisible)
+		gui.draw();
 
 	//ofSetColor(ofColor::white);
 }
@@ -243,8 +276,9 @@ void ofApp::drawScene()
 
     ofSetColor(ofColor::white);
     //meshWarped.setMode(OF_PRIMITIVE_POINTS);
-    meshWarped.setMode(OF_PRIMITIVE_LINES);
-	meshWarped.draw();
+    //meshWarped.setMode(OF_PRIMITIVE_LINES);
+	//meshWarped.draw();
+	meshWarped.drawFaces();
     
 	//for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
 	//{
@@ -269,6 +303,39 @@ void ofApp::drawScene()
 
 }
 
+void ofApp::drawLine()
+{
+	ofSetColor(255,255,255);  
+	ofNoFill();  
+
+	int spacing = 50;   
+	int amount = ofGetWidth() / spacing;
+	int i = 0;
+	float * audioData = new float[amount];
+	fftFile.getFftPeakData(audioData, amount);
+
+	post.begin();
+		ofSetLineWidth(lineWidth);
+		//for (int z = 0 ; z >= -5 ; z = z - 5)
+		float z = ofNoise((2 + ofGetElapsedTimef()) * .1) * 150.0;
+		{
+			//ofPushMatrix();
+			//ofTranslate(0,0,z);
+			ofBeginShape();   
+			for(int x=0; x<ofGetWidth(); x+= spacing) {   
+				float audioValue = audioData[i] * audioMult;
+				audioValue = MAX(0.1, audioValue);
+				ofCurveVertex(x, ofGetHeight()/2 + (ofGetHeight()/2.0) * 0.3f * audioValue * sin(x*0.01f + ofGetFrameNum() * 0.02f), z);   
+				i++;
+			}   
+			ofEndShape(false);   
+			//ofPopMatrix();
+		}
+		
+	post.end();
+	delete [] audioData;
+}
+
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -283,9 +350,11 @@ void ofApp::keyPressed(int key){
             meshIndex = 0;
         }
     } else if(key == ' ') {
-        bUseAudioInput = !bUseAudioInput;
+        bGuiVisible = !bGuiVisible;
     } else if(key == 'e' || key == 'E') {
         ofxObjLoader::save("mesh_export.obj", meshWarped);
+    } else if(key == 's' ) {
+        gui.saveToFile("audio.xml");
     }
 }
 

@@ -6,6 +6,7 @@
 #include "ofxFFTLive.h"
 #include "ofxFFTFile.h"
 #include "ofxObjLoader.h"
+#include "ofxPostProcessing.h"
 
 class ofApp : public ofBaseApp{
 
@@ -18,6 +19,7 @@ public:
 	void drawScene();
 
 	void drawFboTest();
+	void drawLine();
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -36,7 +38,10 @@ public:
     ofxSlider<float> audioPeakDecay;
     ofxSlider<float> audioMaxDecay;
     ofxToggle audioMirror;
-    
+    ofxFloatSlider scale;
+	ofxFloatSlider audioMult;
+	ofxFloatSlider lineWidth;
+
     ofxFFTLive fftLive;
     ofxFFTFile fftFile;
 
@@ -57,5 +62,8 @@ public:
 	ofFbo rgbaFboFloat;
 	int fadeAmnt;
 
+	bool bGuiVisible;
+
+	ofxPostProcessing post;
 
 };
