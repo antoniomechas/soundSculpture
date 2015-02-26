@@ -32,26 +32,41 @@ void ofApp::setup(){
     //--------------------------------------------------------------
     ofSpherePrimitive sphere(100, 10, OF_PRIMITIVE_POINTS);
     ofPlanePrimitive plane(200,300,20,30, OF_PRIMITIVE_POINTS);
-	ofIcoSpherePrimitive icoSphere(100,5);
+	icoSphere = new ofIcoSpherePrimitive(100,5);
     //--------------------------------------------------------------
 	//--------------------------------------------------------------
+    meshes.push_back(icoSphere->getMesh());
     meshes.push_back(customMesh);
     meshes.push_back(sphere.getMesh());
-    meshes.push_back(plane.getMesh());
-    meshes.push_back(icoSphere.getMesh());
+    //meshes.push_back(plane.getMesh());
 
 	model.loadModel("dinosaur.dae");
     meshes.push_back(model.getMesh(0));
-    model.clear();
+    
+	model.clear();
 	model.loadModel("head.dae");
     meshes.push_back(model.getMesh(0));
+    
+	model.clear();
+	model.loadModel("Medusa.3DS");
+	meshes.push_back(model.getMesh(2));
+
+	model.clear();
+	model.loadModel("BigFish/fish.dae");
+	meshes.push_back(model.getMesh(0));
+	//ofMesh tmp;
+	//for (int i = 0; i < model.getMeshCount() ; i++)
+	//{
+	//	//tmp.addVertices(model.getMesh(i).getVertices());
+	//	meshes.push_back(model.getMesh(i));
+	//}
     
     //--------------------------------------------------------------
     fftLive.setup();
 
 	fftFile.setup();
 
-	player.loadSound("techno.mp3");
+	player.loadSound("surface.wav");
 	player.setLoop(true);
 	player.play();
 	
@@ -61,9 +76,10 @@ void ofApp::setup(){
 	bGuiVisible = false;
     string guiPath = "audio.xml";
     gui.setup("audio", guiPath, 20, 20);
+    gui.add(drawMode.setup("drawMoe", 1, 1, 3));
     gui.add(meshIndex.setup("meshIndex", 1, 0, meshes.size()-1));
     gui.add(bUseTexture.setup("bUseTexture", false));
-    gui.add(scale.setup("scale", 1.0, 1.0, 100.0));
+    gui.add(scale.setup("scale", 1.0, 0.1f, 100.0));
     gui.add(bUseAudioInput.setup("bUseAudioInput", true));
     gui.add(audioMult.setup("audioMult", 1.0, 0.11, 5.0));
     gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
@@ -83,15 +99,26 @@ void ofApp::setup(){
 
 	// Setup post-processing chain
     post.init(ofGetWidth(), ofGetHeight());
-    post.createPass<FxaaPass>()->setEnabled(true);
     post.createPass<BloomPass>()->setEnabled(true);
-    post.createPass<DofPass>()->setEnabled(false);
-    post.createPass<KaleidoscopePass>()->setEnabled(false);
-    post.createPass<NoiseWarpPass>()->setEnabled(false);
-    post.createPass<PixelatePass>()->setEnabled(false);
-    post.createPass<EdgePass>()->setEnabled(false);
-    post.createPass<VerticalTiltShifPass>()->setEnabled(false);
-    post.createPass<GodRaysPass>()->setEnabled(false);
+    post.createPass<BloomPass>()->setEnabled(true);
+    post.createPass<BloomPass>()->setEnabled(true);
+    post.createPass<FxaaPass>()->setEnabled(true);
+    //post.createPass<DofPass>()->setEnabled(false);
+    //post.createPass<KaleidoscopePass>()->setEnabled(false);
+    //post.createPass<NoiseWarpPass>()->setEnabled(false);
+    //post.createPass<PixelatePass>()->setEnabled(false);
+    //post.createPass<EdgePass>()->setEnabled(false);
+    //post.createPass<VerticalTiltShifPass>()->setEnabled(false);
+    //post.createPass<GodRaysPass>()->setEnabled(false);
+	SoundBox s;
+	s.setup(ofVec3f(0,0,0),ofVec3f(0,0,0),100);
+	soundBoxes.push_back(s);
+
+	//s.setup(ofVec3f(100,50,100),ofVec3f(0,0,0),50);
+	//soundBoxes.push_back(s);
+
+	//s.setup(ofVec3f(200,200,200),ofVec3f(0,0,0),80);
+	//soundBoxes.push_back(s);
 
 }
 
@@ -124,6 +151,17 @@ void ofApp::update(){
 
 	fftFile.getFftPeakData(audioData, numOfVerts);
     
+	float average = fftFile.getAveragePeak();
+	post[0]->setEnabled(false);
+	post[1]->setEnabled(false);
+	post[2]->setEnabled(false);
+	if (average < 0.33)
+		post[0]->setEnabled(true);
+	if (average < 0.66)
+		post[1]->setEnabled(true);
+	if (average <= 1.0)
+		post[2]->setEnabled(true);
+	//cout << average << ", ";
    
 	float meshDisplacement = 100;
     meshWarped.clearColors();
@@ -164,6 +202,20 @@ void ofApp::update(){
 	//	post.end();
 	//rgbaFboFloat.end();
 
+
+	updateSoundObjects();
+
+}
+
+void ofApp::updateSoundObjects()
+{
+	int amount = soundBoxes[0].getAudioDataAmount();
+	float * audioData = new float[amount];
+	fftFile.getFftPeakData(audioData, amount);
+    
+	float average = fftFile.getAveragePeak();
+	for (int i = 0 ; i < soundBoxes.size() ; i++)
+		soundBoxes[i].update(average, audioData, audioMult);
 }
 
 //--------------------------------------------------------------
@@ -207,9 +259,13 @@ void ofApp::drawFboTest(){
 void ofApp::draw(){
 	
 	ofBackground(0,0,0);
+	
 	if (meshIndex == 0)
 	{
-		drawLine();
+		camera.begin();
+		//drawLine();
+		drawSoundObjects();
+		camera.end();
 		//rgbaFboFloat.draw(0,0);
 		if (bGuiVisible)
 			gui.draw();
@@ -226,13 +282,17 @@ void ofApp::draw(){
 	post.begin();
 		drawScene();
 	post.end();
-	
 	if (bGuiVisible)
 		gui.draw();
 
 	//ofSetColor(ofColor::white);
 }
 
+void ofApp::drawSoundObjects()
+{	
+	for (int i = 0 ; i < soundBoxes.size() ; i++)
+		soundBoxes[i].draw(drawMode);
+}
 
 
 void ofApp::drawScene()
@@ -262,10 +322,10 @@ void ofApp::drawScene()
 
 	//cameraDist = 200.0f + 200.0f * fftFile.getAveragePeak();
 
-	camera.disableMouseInput();
-    camera.setDistance(cameraDist);
-    camera.setGlobalPosition(current);
-	camera.lookAt(ofVec3f(0,0,0));
+	//camera.disableMouseInput();
+ //   camera.setDistance(cameraDist);
+ //   camera.setGlobalPosition(current);
+	//camera.lookAt(ofVec3f(0,0,0));
 
 	camera.begin();
     
@@ -278,8 +338,13 @@ void ofApp::drawScene()
     //meshWarped.setMode(OF_PRIMITIVE_POINTS);
     //meshWarped.setMode(OF_PRIMITIVE_LINES);
 	//meshWarped.draw();
-	meshWarped.drawFaces();
-    
+	if (drawMode == 1)
+		meshWarped.drawVertices();
+	else if (drawMode == 2)
+   		meshWarped.drawWireframe();
+	else if (drawMode == 3)
+   		meshWarped.drawFaces();
+
 	//for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
 	//{
 	//	ofPushMatrix();

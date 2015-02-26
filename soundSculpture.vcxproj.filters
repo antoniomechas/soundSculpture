@@ -151,6 +151,12 @@
     <ClCompile Include="..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.cpp">
       <Filter>addons\ofxPostProcessing</Filter>
     </ClCompile>
+    <ClCompile Include="src\SoundObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundBox.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -448,6 +454,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.h">
       <Filter>addons\ofxPostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoundObject.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoundBox.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

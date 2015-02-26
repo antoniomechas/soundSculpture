@@ -7,6 +7,7 @@
 #include "ofxFFTFile.h"
 #include "ofxObjLoader.h"
 #include "ofxPostProcessing.h"
+#include "SoundBox.h"
 
 class ofApp : public ofBaseApp{
 
@@ -20,6 +21,8 @@ public:
 
 	void drawFboTest();
 	void drawLine();
+	void updateSoundObjects();
+	void drawSoundObjects();
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -32,6 +35,7 @@ public:
     void gotMessage(ofMessage msg);
 
     ofxPanel gui;
+	ofxIntSlider drawMode;
     ofxSlider<int> meshIndex;
     ofxToggle bUseTexture;
     ofxToggle bUseAudioInput;
@@ -65,5 +69,8 @@ public:
 	bool bGuiVisible;
 
 	ofxPostProcessing post;
+	ofIcoSpherePrimitive *icoSphere;
+
+	vector<SoundBox> soundBoxes;
 
 };
