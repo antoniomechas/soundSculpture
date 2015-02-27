@@ -262,13 +262,23 @@ void ofApp::draw(){
 	
 	if (meshIndex == 0)
 	{
-		camera.begin();
+		ofSetColor(255,255,255);
+
+		ofPushMatrix();
+		//camera.begin();
+		post.begin(camera);
 		//drawLine();
-		drawSoundObjects();
-		camera.end();
+			drawSoundObjects();
+		post.end();
+		//camera.end();
 		//rgbaFboFloat.draw(0,0);
+		ofPopMatrix();
+		ofDisableDepthTest();
+
+		ofSetColor(255,255,255);
 		if (bGuiVisible)
 			gui.draw();
+
 		return;
 	}
 	
@@ -279,9 +289,13 @@ void ofApp::draw(){
 	ofSetColor(255,255,255);
 	
 	//rgbaFboFloat.draw(0,0);
+	ofPushMatrix();
 	post.begin();
 		drawScene();
 	post.end();
+	ofPopMatrix();
+	ofSetColor(255,255,255);
+
 	if (bGuiVisible)
 		gui.draw();
 
@@ -291,7 +305,10 @@ void ofApp::draw(){
 void ofApp::drawSoundObjects()
 {	
 	for (int i = 0 ; i < soundBoxes.size() ; i++)
+	{
+		soundBoxes[i].setLineWidth(lineWidth);
 		soundBoxes[i].draw(drawMode);
+	}
 }
 
 
