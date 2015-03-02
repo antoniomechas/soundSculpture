@@ -5,7 +5,8 @@ void ofApp::setup(){
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
-    ofLoadImage(meshTexture, "texture.jpg");
+    //ofLoadImage(meshTexture, "texture.jpg");
+    ofLoadImage(meshTexture, "estuco2.jpg");
     
     //--------------------------------------------------------------
     ofMesh customMesh;
@@ -94,7 +95,8 @@ void ofApp::setup(){
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.add(bFXBloom.setup("FX Bloom", true));
     gui.add(bFXFxaa.setup("FX fxaa", true));
-
+	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,50,500));
+	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
 	gui.loadFromFile(guiPath);
     
 	cameraDist = 400;
@@ -128,8 +130,14 @@ void ofApp::setup(){
 
 	//s.setup(ofVec3f(200,200,200),ofVec3f(0,0,0),80);
 	//soundBoxes.push_back(s);
-	matrix3D.setup(200,200,10,10);
-
+	
+	matrix3D.setup(ofGetWidth(),ofGetHeight(),40,40);
+	
+	//m_cam.setupPerspective( false, 45.0f, 0.1f, 100.0f );
+ //   m_cam.setDistance(40.0f);
+ //   m_cam.setGlobalPosition( 30.0f, 15.0f, 20.0f );
+    
+    m_cam.lookAt( ofVec3f( 0.0f, 0.0f, 0.0f ) );
 	m_shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
     m_bPaused = false;
 	m_angle = 0;
@@ -138,22 +146,22 @@ void ofApp::setup(){
 }
 
 void ofApp::setupLights() {
-    // ofxShadowMapLight extends ofLight - you can use it just like a regular light
-    // it's set up as a spotlight, all the shadow work + lighting must be handled in a shader
-    // there's an example shader in
-    
-    // shadow map resolution (must be power of 2), field of view, near, far
-    // the larger the shadow map resolution, the better the detail, but slower
-    m_shadowLight.setup( 2048, 45.0f, 0.1f, 80.0f );
-    m_shadowLight.setBlurLevel(4.0f); // amount we're blurring to soften the shadows
-    
-    m_shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
-    m_shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
-    m_shadowLight.setSpecularColor( ofFloatColor( 1.0f, 1.0f, 1.0f, 1.0f ) );
-    
-    m_shadowLight.setPosition( 10.0f, 10.0f, 45.0f );
-    
-    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
+    //// ofxShadowMapLight extends ofLight - you can use it just like a regular light
+    //// it's set up as a spotlight, all the shadow work + lighting must be handled in a shader
+    //// there's an example shader in
+    //
+    //// shadow map resolution (must be power of 2), field of view, near, far
+    //// the larger the shadow map resolution, the better the detail, but slower
+    //m_shadowLight.setup( 2048, 45.0f, 0.1f, 80.0f );
+    //m_shadowLight.setBlurLevel(4.0f); // amount we're blurring to soften the shadows
+    //
+    //m_shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    //m_shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+    //m_shadowLight.setSpecularColor( ofFloatColor( 1.0f, 1.0f, 1.0f, 1.0f ) );
+    //
+    //m_shadowLight.setPosition( 100.0f, 100.0f, 150.0f );
+    //
+    //ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
 
 //--------------------------------------------------------------
@@ -243,7 +251,6 @@ void ofApp::update(){
 
 
 	updateSoundObjects();
-	matrix3D.update();
 }
 
 void ofApp::drawShadow()
@@ -253,17 +260,20 @@ void ofApp::drawShadow()
     ofDisableAlphaBlending();
     
     if (!m_bPaused) {
-        m_angle += 0.25f;
+        //m_angle += 0.25f;
+        m_angle += 2;
     }
     
     m_shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
-    m_shadowLight.orbit( m_angle, -30.0, 50.0f, ofVec3f(0.0,0.0,0.0) );
+    m_shadowLight.orbit( m_angle, 0, 100.0f, ofVec3f(0.0,0.0,0.0) );
 
     m_shadowLight.enable();
    
     // render linear depth buffer from light view
     m_shadowLight.beginShadowMap();
-        matrix3D.draw();
+	    glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		matrix3D.draw();
     m_shadowLight.endShadowMap();
     
     // render final scene
@@ -279,7 +289,9 @@ void ofApp::drawShadow()
     m_cam.begin();
     
     m_shadowLight.enable();
-        matrix3D.draw();
+        glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		matrix3D.draw();
     m_shadowLight.disable();
     
     if ( m_bDrawLight ) {
@@ -318,6 +330,14 @@ void ofApp::updateSoundObjects()
 	float average = fftFile.getAveragePeak();
 	for (int i = 0 ; i < soundBoxes.size() ; i++)
 		soundBoxes[i].update(average, audioData, audioMult);
+
+	delete [] audioData;
+
+	amount = matrix3D.getAudioDataAmount();
+	audioData = new float[amount];
+	fftFile.getFftPeakData(audioData, amount);
+	matrix3D.update(average, audioData);    
+
 }
 
 //--------------------------------------------------------------
@@ -361,9 +381,9 @@ void ofApp::drawFboTest(){
 void ofApp::draw(){
 	
 	ofBackground(0,0,0);
-	ofSetColor(255,255,255);
-	drawShadow();
-	return;
+	//ofSetColor(255,255,255);
+	//drawShadow();
+	//return;
 	//ofBackground(0,0,0);
 
     //----------------------------------------------------------
@@ -530,7 +550,13 @@ void ofApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-
+	    if ( key == ' ' ) {
+        m_bDrawDepth = !m_bDrawDepth;
+    } else if ( key == 'l' ) {
+        m_bDrawLight = !m_bDrawLight;
+    } else if ( key == 'p' ) {
+        m_bPaused = !m_bPaused;
+    }
 }
 
 //--------------------------------------------------------------
