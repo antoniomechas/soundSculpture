@@ -12,8 +12,8 @@ void Matrix3D::setup(float width, float height, int cols, int rows)
 	cellHeight = height / rows;
 	ofColor cl = ofColor::fromHsb(ofRandom(128,255), 255, 255);
 	MATRIX m;
-	for (int c = 0 ; c < cols ; c++)
-		for (int r = 0 ; r < rows ; r++)
+	for (int r = 0 ; r < rows ; r++)
+		for (int c = 0 ; c < cols ; c++)
 		{
 			m.height = cellHeight;
 			m.width = cellWidth;
@@ -26,7 +26,8 @@ void Matrix3D::setup(float width, float height, int cols, int rows)
 	
 	setupLigths();
 
-	audioDataAmount = cols * rows;
+	//audioDataAmount = cols * rows;
+	audioDataAmount = MAX(cols , rows);
 
 }
 
@@ -68,16 +69,29 @@ void Matrix3D::update(float average, float *soundData)
 
 	//mesh.clear();
 	int p = 0;
-	int step = 14;
-	for (int k = 0 ; k < step ; k++)
+	//int step = 14;
+	//for (int k = 0 ; k < step ; k++)
+	//{
+	//	for (int i = k; i < matrix.size() ; i = i + step)
+	//	{
+	//		//matrix[i].length = ofNoise((float)i*200.0f, ofGetElapsedTimef() * 0.1f) * 20;
+	//		matrix[p++].length = soundData[i] * paramMaxLenght * paramMult;
+	//	}
+	//}
+
+	ofPoint centro( floor(cols / 2), floor(rows / 2));
+	ofPoint pos;
+	for (int grados = 0 ; grados < 360 ; grados ++)
 	{
-		for (int i = k; i < matrix.size() ; i = i + step)
-		{
-			//matrix[i].length = ofNoise((float)i*200.0f, ofGetElapsedTimef() * 0.1f) * 20;
-			matrix[p++].length = soundData[i] * paramMaxLenght * paramMult;
-		}
+		float rad = 2*PI*grados / 360.0;
+		pos.x = floor(centro.x + 5 * cos(rad));
+		pos.y = floor(centro.y + 5 * sin(rad));
+		matrix[(int)pos.y * cols + (int)pos.x].length = average * paramMaxLenght * paramMult;
 	}
-	
+
+
+
+
 	p = 0;
 	for (int co = 0; co < cols ; co++)
 		for (int ro = 0; ro < rows ; ro++)
