@@ -117,6 +117,7 @@
     <ClCompile Include="..\..\..\addons\ofxPostProcessing\src\VerticalTiltShifPass.cpp" />
     <ClCompile Include="..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Matrix3D.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.cpp" />
     <ClCompile Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.cpp" />
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.cpp" />
     <ClCompile Include="..\..\..\addons\ofxFFT\libs\fft.cpp" />
+    <ClCompile Include="src\shadowMapLight.cpp" />
     <ClCompile Include="src\SoundBox.cpp" />
     <ClCompile Include="src\SoundObject.cpp" />
   </ItemGroup>
@@ -169,6 +171,7 @@
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\ToonPass.h" />
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\VerticalTiltShifPass.h" />
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.h" />
+    <ClInclude Include="src\Matrix3D.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpMeshHelper.h" />
@@ -221,6 +224,7 @@
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.h" />
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.h" />
     <ClInclude Include="..\..\..\addons\ofxFFT\libs\fft.h" />
+    <ClInclude Include="src\shadowMapLight.h" />
     <ClInclude Include="src\SoundBox.h" />
     <ClInclude Include="src\SoundObject.h" />
   </ItemGroup>

@@ -157,6 +157,12 @@
     <ClCompile Include="src\SoundBox.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Matrix3D.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\shadowMapLight.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -459,6 +465,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\SoundBox.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Matrix3D.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shadowMapLight.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

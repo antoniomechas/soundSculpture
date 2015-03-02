@@ -54,13 +54,23 @@ void SoundBox::update( float average, float *soundData, float multAmount )
 		ofVec3f vertWarped = vertOriginal + dir + vertOriginal.getNormalized() * audio * 100.0f; //* audio;
 		meshDst.addVertex(vertWarped);
 		
+		//ofSetColor(ofColor::fromHsb(sinf(t) * 128 + 128, 255, 255));
 		float r = ofNoise(t*.1,0,0) * audioValue * vertOriginal.normalized().x * 2.0;
 		float g = ofNoise(0,t*.1,0) * audioValue * vertOriginal.normalized().y * 2.0;
 		float b = ofNoise(0,0,t*.1) * audioValue * vertOriginal.normalized().z * 2.0;
+		
+		//float r = ofNoise(t*.1,0,0) * audioValue * 2.0;
+		//float g = ofNoise(0,t*.1,0) * audioValue * 2.0;
+		//float b = ofNoise(0,0,t*.1) * audioValue * 2.0;
 		r = MAX(0.1, r);
 		g = MAX(0.1, g);
 		b = MAX(0.1, b);
-		meshDst.addColor(ofFloatColor(r, g, b));
+		ofColor c = ofFloatColor(r,g,b);
+		//c.setHue(sinf(t) * 128 + 128);
+		meshDst.addColor(c);
+		//meshDst.addColor(ofFloatColor(r, g, b));
+		//meshDst.addColor(ofColor::fromHsb(sinf(t) * 128 + 128, 255, 255));
+		
 		meshDst.addIndices(meshSrc.getIndices());
     }
 }

@@ -29,6 +29,11 @@ void ofApp::setup(){
     customMesh.addIndex(2);
     customMesh.addIndex(3);
     
+	//creo un box en vez de un plano
+	customMesh.clear();
+	ofBoxPrimitive box(10,10,10);
+	customMesh = box.getMesh();
+
     //--------------------------------------------------------------
     ofSpherePrimitive sphere(100, 10, OF_PRIMITIVE_POINTS);
     ofPlanePrimitive plane(200,300,20,30, OF_PRIMITIVE_POINTS);
@@ -68,6 +73,7 @@ void ofApp::setup(){
 
 	player.loadSound("surface.wav");
 	player.setLoop(true);
+	//player.setVolume(0.05);
 	player.play();
 	
 	fftFile.player = &player;
@@ -76,8 +82,8 @@ void ofApp::setup(){
 	bGuiVisible = false;
     string guiPath = "audio.xml";
     gui.setup("audio", guiPath, 20, 20);
-    gui.add(drawMode.setup("drawMoe", 1, 1, 3));
-    gui.add(meshIndex.setup("meshIndex", 1, 0, meshes.size()-1));
+    gui.add(drawMode.setup("drawMode", 1, 1, 3));
+    gui.add(meshIndex.setup("meshIndex", 1, 1, meshes.size()-1));
     gui.add(bUseTexture.setup("bUseTexture", false));
     gui.add(scale.setup("scale", 1.0, 0.1f, 100.0));
     gui.add(bUseAudioInput.setup("bUseAudioInput", true));
@@ -86,9 +92,12 @@ void ofApp::setup(){
     gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
     gui.add(audioMirror.setup("audioMirror", true));
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
-    gui.loadFromFile(guiPath);
+    gui.add(bFXBloom.setup("FX Bloom", true));
+    gui.add(bFXFxaa.setup("FX fxaa", true));
 
-    cameraDist = 400;
+	gui.loadFromFile(guiPath);
+    
+	cameraDist = 400;
 
 	rgbaFboFloat.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA32F); // with alpha, 32 bits red, 32 bits green, 32 bits blue, 32 bits alpha, from 0 to 1 in 'infinite' steps
 	//rgbaFboFloat.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA); // with alpha, 32 bits red, 32 bits green, 32 bits blue, 32 bits alpha, from 0 to 1 in 'infinite' steps
@@ -119,7 +128,32 @@ void ofApp::setup(){
 
 	//s.setup(ofVec3f(200,200,200),ofVec3f(0,0,0),80);
 	//soundBoxes.push_back(s);
+	matrix3D.setup(200,200,10,10);
 
+	m_shader.load( "shaders/mainScene.vert", "shaders/mainScene.frag" );
+    m_bPaused = false;
+	m_angle = 0;
+    setupLights();
+
+}
+
+void ofApp::setupLights() {
+    // ofxShadowMapLight extends ofLight - you can use it just like a regular light
+    // it's set up as a spotlight, all the shadow work + lighting must be handled in a shader
+    // there's an example shader in
+    
+    // shadow map resolution (must be power of 2), field of view, near, far
+    // the larger the shadow map resolution, the better the detail, but slower
+    m_shadowLight.setup( 2048, 45.0f, 0.1f, 80.0f );
+    m_shadowLight.setBlurLevel(4.0f); // amount we're blurring to soften the shadows
+    
+    m_shadowLight.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    m_shadowLight.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+    m_shadowLight.setSpecularColor( ofFloatColor( 1.0f, 1.0f, 1.0f, 1.0f ) );
+    
+    m_shadowLight.setPosition( 10.0f, 10.0f, 45.0f );
+    
+    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
 
 //--------------------------------------------------------------
@@ -155,13 +189,18 @@ void ofApp::update(){
 	post[0]->setEnabled(false);
 	post[1]->setEnabled(false);
 	post[2]->setEnabled(false);
-	if (average < 0.33)
-		post[0]->setEnabled(true);
-	if (average < 0.66)
-		post[1]->setEnabled(true);
-	if (average <= 1.0)
-		post[2]->setEnabled(true);
-	//cout << average << ", ";
+	if (bFXBloom)
+	{
+		if (average < 0.33)
+			post[0]->setEnabled(true);
+		if (average < 0.66)
+			post[1]->setEnabled(true);
+		if (average <= 1.0)
+			post[2]->setEnabled(true);
+	}
+
+	post[3]->setEnabled(bFXFxaa);
+		//cout << average << ", ";
    
 	float meshDisplacement = 100;
     meshWarped.clearColors();
@@ -204,6 +243,69 @@ void ofApp::update(){
 
 
 	updateSoundObjects();
+	matrix3D.update();
+}
+
+void ofApp::drawShadow()
+{
+    glEnable( GL_DEPTH_TEST );
+    
+    ofDisableAlphaBlending();
+    
+    if (!m_bPaused) {
+        m_angle += 0.25f;
+    }
+    
+    m_shadowLight.lookAt( ofVec3f(0.0,0.0,0.0) );
+    m_shadowLight.orbit( m_angle, -30.0, 50.0f, ofVec3f(0.0,0.0,0.0) );
+
+    m_shadowLight.enable();
+   
+    // render linear depth buffer from light view
+    m_shadowLight.beginShadowMap();
+        matrix3D.draw();
+    m_shadowLight.endShadowMap();
+    
+    // render final scene
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+  
+    m_shader.begin();
+
+    m_shadowLight.bindShadowMapTexture(0); // bind shadow map texture to unit 0
+    m_shader.setUniform1i("u_ShadowMap", 0); // set uniform to unit 0
+    m_shader.setUniform1f("u_LinearDepthConstant", m_shadowLight.getLinearDepthScalar()); // set near/far linear scalar
+    m_shader.setUniformMatrix4f("u_ShadowTransMatrix", m_shadowLight.getShadowMatrix(m_cam)); // specify our shadow matrix
+    
+    m_cam.begin();
+    
+    m_shadowLight.enable();
+        matrix3D.draw();
+    m_shadowLight.disable();
+    
+    if ( m_bDrawLight ) {
+        glDisable(GL_CULL_FACE);
+        m_shadowLight.draw();
+        glEnable(GL_CULL_FACE);
+    }
+    
+    m_cam.end();
+    
+    m_shadowLight.unbindShadowMapTexture();
+
+    m_shader.end();
+    
+
+    // Debug shadowmap
+    if ( m_bDrawDepth ) {
+        m_shadowLight.debugShadowMap();
+    }
+    
+    // draw info string
+    ofDisableLighting();
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    ofSetColor(255, 0, 0, 255);
+    ofDrawBitmapString("Press SPACE to toggle rendering the shadow map texture (linear depth map)\nPress L to toggle drawing the light\nPress P to toggle pause", ofPoint(15, 20));
 
 }
 
@@ -259,29 +361,9 @@ void ofApp::drawFboTest(){
 void ofApp::draw(){
 	
 	ofBackground(0,0,0);
-	
-	if (meshIndex == 0)
-	{
-		ofSetColor(255,255,255);
-
-		ofPushMatrix();
-		//camera.begin();
-		post.begin(camera);
-		//drawLine();
-			drawSoundObjects();
-		post.end();
-		//camera.end();
-		//rgbaFboFloat.draw(0,0);
-		ofPopMatrix();
-		ofDisableDepthTest();
-
-		ofSetColor(255,255,255);
-		if (bGuiVisible)
-			gui.draw();
-
-		return;
-	}
-	
+	ofSetColor(255,255,255);
+	drawShadow();
+	return;
 	//ofBackground(0,0,0);
 
     //----------------------------------------------------------
@@ -290,6 +372,7 @@ void ofApp::draw(){
 	
 	//rgbaFboFloat.draw(0,0);
 	ofPushMatrix();
+	
 	post.begin();
 		drawScene();
 	post.end();
@@ -355,12 +438,17 @@ void ofApp::drawScene()
     //meshWarped.setMode(OF_PRIMITIVE_POINTS);
     //meshWarped.setMode(OF_PRIMITIVE_LINES);
 	//meshWarped.draw();
-	if (drawMode == 1)
-		meshWarped.drawVertices();
-	else if (drawMode == 2)
-   		meshWarped.drawWireframe();
-	else if (drawMode == 3)
-   		meshWarped.drawFaces();
+	if (meshIndex == 0)
+		matrix3D.draw();
+	else
+	{
+		if (drawMode == 1)
+			meshWarped.drawVertices();
+		else if (drawMode == 2)
+   			meshWarped.drawWireframe();
+		else if (drawMode == 3)
+   			meshWarped.drawFaces();
+	}
 
 	//for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
 	//{
