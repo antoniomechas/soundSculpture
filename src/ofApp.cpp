@@ -95,6 +95,7 @@ void ofApp::setup(){
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.add(bFXBloom.setup("FX Bloom", true));
     gui.add(bFXFxaa.setup("FX fxaa", true));
+	gui.add(matrix3D.paramLightDistance.setup("matrix Light Dist",100,50,500));
 	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,50,500));
 	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
 	gui.loadFromFile(guiPath);
@@ -130,8 +131,9 @@ void ofApp::setup(){
 
 	//s.setup(ofVec3f(200,200,200),ofVec3f(0,0,0),80);
 	//soundBoxes.push_back(s);
-	
-	matrix3D.setup(ofGetWidth(),ofGetHeight(),40,40);
+	int cols = 80;
+	int rows = (float)cols * (float)((float)ofGetHeight() / (float)ofGetWidth());
+	matrix3D.setup(ofGetWidth(),ofGetHeight(),cols, rows);
 	
 	//m_cam.setupPerspective( false, 45.0f, 0.1f, 100.0f );
  //   m_cam.setDistance(40.0f);
@@ -381,7 +383,7 @@ void ofApp::drawFboTest(){
 void ofApp::draw(){
 	
 	ofBackground(0,0,0);
-	//ofSetColor(255,255,255);
+	ofSetColor(255,255,255);
 	//drawShadow();
 	//return;
 	//ofBackground(0,0,0);

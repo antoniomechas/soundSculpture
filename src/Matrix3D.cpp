@@ -35,21 +35,23 @@ void Matrix3D::draw()
 	ofEnableDepthTest();
 
 	ofEnableLighting();
+	ofSetSmoothLighting(true);
+	light.setPosition(300,-300,paramLightDistance);
 	light.enable();
 	for (int i = 0; i < matrix.size() ; i++)
 	{
 		ofPushMatrix();
 		ofSetColor(matrix[i].color);
-		ofTranslate(matrix[i].pos.x, matrix[i].pos.y, matrix[i].length / 2.0);
+		ofTranslate(matrix[i].pos.x, matrix[i].pos.y, matrix[i].length );
 		//ofTranslate(matrix[i].pos.x - cellWidth / 2.0, matrix[i].pos.y - cellHeight / 2.0);
 		//ofTranslate(matrix[i].pos.x - cellWidth / 2.0, matrix[i].pos.y - cellHeight / 2.0, matrix[i].length / 2);
 		ofSetLineWidth(1.0);
 		ofFill();
-		ofDrawBox(matrix[i].width-1, matrix[i].height-1, matrix[i].length);
+		ofDrawBox(matrix[i].width, matrix[i].height, matrix[i].length);
 		ofNoFill();
-		ofSetLineWidth(2.0);
+		ofSetLineWidth(1.0);
 		ofSetColor(0,0,0);
-		//ofDrawBox(matrix[i].width, matrix[i].height, matrix[i].length);
+		ofDrawBox(matrix[i].width, matrix[i].height, matrix[i].length);
 		ofPopMatrix();
 	}
 	light.disable();
@@ -65,11 +67,30 @@ void Matrix3D::update(float average, float *soundData)
 {
 
 	//mesh.clear();
-	for (int i = 0; i < matrix.size() ; i++)
+	int p = 0;
+	int step = 14;
+	for (int k = 0 ; k < step ; k++)
 	{
-		//matrix[i].length = ofNoise((float)i*200.0f, ofGetElapsedTimef() * 0.1f) * 20;
-		matrix[i].length = soundData[i] * paramMaxLenght * paramMult;
+		for (int i = k; i < matrix.size() ; i = i + step)
+		{
+			//matrix[i].length = ofNoise((float)i*200.0f, ofGetElapsedTimef() * 0.1f) * 20;
+			matrix[p++].length = soundData[i] * paramMaxLenght * paramMult;
+		}
 	}
+	
+	p = 0;
+	for (int co = 0; co < cols ; co++)
+		for (int ro = 0; ro < rows ; ro++)
+		{
+			float t = (2 + ofGetElapsedTimef()) ;
+			float col = ofMap(co,0,cols-1,0,.5);
+			float row = ofMap(ro,0,rows-1,0,.5);
+			//ofSetColor(ofColor::fromHsb(sinf(t) * 128 + 128, 255, 255));
+			float r = ofNoise(row,col, t*.1);
+			float g = ofNoise(row,col, 100.0 + t*.1);
+			float b = ofNoise(row,col, 200.0 + t*.1);
+			matrix[p++].color = ofFloatColor(r,g,b);
+		}
 
 }
 
