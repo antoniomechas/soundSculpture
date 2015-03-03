@@ -43,16 +43,30 @@ void Matrix3D::draw()
 	{
 		ofPushMatrix();
 		ofSetColor(matrix[i].color);
-		ofTranslate(matrix[i].pos.x, matrix[i].pos.y, matrix[i].length );
-		//ofTranslate(matrix[i].pos.x - cellWidth / 2.0, matrix[i].pos.y - cellHeight / 2.0);
-		//ofTranslate(matrix[i].pos.x - cellWidth / 2.0, matrix[i].pos.y - cellHeight / 2.0, matrix[i].length / 2);
+		ofTranslate(matrix[i].pos.x, matrix[i].pos.y, matrix[i].length/2 );
 		ofSetLineWidth(1.0);
 		ofFill();
-		ofDrawBox(matrix[i].width, matrix[i].height, matrix[i].length);
+
+
+		ofVec3f start = matrix[i].pos;
+		start.z = 0;
+		ofVec3f end = start;
+		end.z = matrix[i].length;
+		//ofSetLineWidth(20);
+		//ofDrawArrow(start,end,cellWidth/2);
+		//ofDrawSphere(end,cellWidth/2);
+		
+		//ofRotateX(-90);
+		//ofDrawCone(cellWidth / 2, matrix[i].length);
+
+		ofRotateX(90);
+		ofDrawCylinder(cellWidth, matrix[i].length);
+
+		//ofDrawBox(matrix[i].width-1, matrix[i].height-1, matrix[i].length);
 		ofNoFill();
 		ofSetLineWidth(1.0);
 		ofSetColor(0,0,0);
-		ofDrawBox(matrix[i].width, matrix[i].height, matrix[i].length);
+		//ofDrawBox(matrix[i].width, matrix[i].height, matrix[i].length);
 		ofPopMatrix();
 	}
 	light.disable();
@@ -79,17 +93,27 @@ void Matrix3D::update(float average, float *soundData)
 	//	}
 	//}
 
-	ofPoint centro( floor(cols / 2), floor(rows / 2));
-	ofPoint pos;
-	for (int grados = 0 ; grados < 360 ; grados ++)
-	{
-		float rad = 2*PI*grados / 360.0;
-		pos.x = floor(centro.x + 5 * cos(rad));
-		pos.y = floor(centro.y + 5 * sin(rad));
-		matrix[(int)pos.y * cols + (int)pos.x].length = average * paramMaxLenght * paramMult;
-	}
+	int centroX = cols / 2;
+	int centroY = rows / 2;
+	
+	for (int i = 1 ; i < (cols / 2) - 1 && i < audioDataAmount ; i++)
+		circle(centroX, centroY, i, soundData[i]);
 
+	//for (int i = 0 ; i < rows ; i++)
+	//	lineHorizontal( i, soundData[i]);
+	
+	//for (int i = 0 ; i < matrix.size() ; i++)
+	//	matrix[i].length = 0;
 
+	//for (int i = 0 ; i < matrix.size() ; i++)
+	//{
+	//	if (matrix[i].length < 1)
+	//		matrix[i].length = 0;
+	//	else
+	//		matrix[i].length *= paramDamp;
+	//}
+
+	//circle(centroX, centroY, ofNoise(ofGetElapsedTimef()) * (cols/2), average);
 
 
 	p = 0;
@@ -123,4 +147,56 @@ void Matrix3D::setupLigths() {
 int Matrix3D::getAudioDataAmount ()
 {
 	return audioDataAmount;
+}
+
+
+void Matrix3D::circle(int centroX, int centroY, int radius, float value)
+{
+
+    int f = 1 - radius;
+    int ddF_x = 0;
+    int ddF_y = -2 * radius;
+    int x = 0;
+    int y = radius;
+	
+	setMatrixValue(centroX, centroY + radius, value * paramMaxLenght * paramMult);
+	setMatrixValue(centroX, centroY - radius, value * paramMaxLenght * paramMult);
+	setMatrixValue(centroX + radius, centroY, value * paramMaxLenght * paramMult);
+	setMatrixValue(centroX - radius, centroY, value * paramMaxLenght * paramMult);
+
+	while(x < y) 
+    {
+        if(f >= 0) 
+        {
+            y--;
+            ddF_y += 2;
+            f += ddF_y;
+        }
+        x++;
+        ddF_x += 2;
+        f += ddF_x + 1;    
+		
+		setMatrixValue(centroX + x, centroY + y, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX - x, centroY + y, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX + x, centroY - y, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX - x, centroY - y, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX + y, centroY + x, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX - y, centroY + x, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX + y, centroY - x, value * paramMaxLenght * paramMult);
+		setMatrixValue(centroX - y, centroY - x, value * paramMaxLenght * paramMult);
+
+    }
+}
+
+void Matrix3D::lineHorizontal(int y, float value)
+{
+	for (int x = 0 ; x < cols ; x++)
+		setMatrixValue(x, y, value * paramMaxLenght * paramMult);
+}
+
+
+void Matrix3D::setMatrixValue (int x, int y, float value)
+{
+	if (x < cols && x >= 0 && y >= 0 && y < rows)
+		matrix[MPOS(x,y)].length = value;
 }

@@ -2,6 +2,8 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 
+#define MPOS(x,y) (((y) * cols) + x)
+
 class Matrix3D
 {
 
@@ -15,10 +17,14 @@ class Matrix3D
 		ofxIntSlider	paramMaxLenght;
 		ofxFloatSlider	paramMult;
 		ofxIntSlider	paramLightDistance;
+		ofxFloatSlider	paramDamp;
 
 	protected:
 
 		void	setupLigths();
+		void	circle(int centroX, int centroY, int radio, float value);
+		void	lineHorizontal(int y, float value);
+		void	setMatrixValue (int x, int y, float value);
 
 		struct MATRIX
 		{

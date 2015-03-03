@@ -95,9 +95,10 @@ void ofApp::setup(){
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.add(bFXBloom.setup("FX Bloom", true));
     gui.add(bFXFxaa.setup("FX fxaa", true));
-	gui.add(matrix3D.paramLightDistance.setup("matrix Light Dist",100,50,500));
-	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,50,500));
+	gui.add(matrix3D.paramLightDistance.setup("matrix Light Dist",100,50,1000));
+	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,5,500));
 	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
+	gui.add(matrix3D.paramDamp.setup("matrix Damp", 0.9,0.01,1.0));
 	gui.loadFromFile(guiPath);
     
 	cameraDist = 400;
@@ -131,7 +132,7 @@ void ofApp::setup(){
 
 	//s.setup(ofVec3f(200,200,200),ofVec3f(0,0,0),80);
 	//soundBoxes.push_back(s);
-	int cols = 80;
+	int cols = 120;
 	int rows = (float)cols * (float)((float)ofGetHeight() / (float)ofGetWidth());
 	matrix3D.setup(ofGetWidth(),ofGetHeight(),cols, rows);
 	
