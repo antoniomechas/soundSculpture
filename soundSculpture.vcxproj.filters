@@ -163,6 +163,18 @@
     <ClCompile Include="src\shadowMapLight.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\particleSystem\part.cpp">
+      <Filter>src\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\particleSystem\AVGSistPart.cpp">
+      <Filter>src\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Particulas.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxCameraSaveLoad.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -218,6 +230,9 @@
     </Filter>
     <Filter Include="addons\ofxPostProcessing">
       <UniqueIdentifier>{d995d0c3-f3b7-4493-ba09-5204f49954aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ParticleSystem">
+      <UniqueIdentifier>{c3ba7716-9d95-4012-a687-e7b126f7835f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -471,6 +486,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\shadowMapLight.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particleSystem\part.h">
+      <Filter>src\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\particleSystem\AVGSistPart.h">
+      <Filter>src\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Particulas.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxCameraSaveLoad.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,7 +52,7 @@ void SoundBox::update( float average, float *soundData, float multAmount )
         //ofVec3f direction = vertOriginal.getNormalized();
         float audio = MAX(1.0,(audioValue * multAmount));
 		ofVec3f vertWarped = vertOriginal + dir + vertOriginal.getNormalized() * audio * 100.0f; //* audio;
-		meshDst.addVertex(vertWarped);
+		meshDst.addVertex(pos + vertWarped);
 		
 		//ofSetColor(ofColor::fromHsb(sinf(t) * 128 + 128, 255, 255));
 		float r = ofNoise(t*.1,0,0) * audioValue * vertOriginal.normalized().x * 2.0;

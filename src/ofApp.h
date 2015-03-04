@@ -10,14 +10,29 @@
 #include "SoundBox.h"
 #include "Matrix3D.h"
 #include "shadowMapLight.h"
+#include "AVGSistPart.h"
+#include "ofxCameraSaveLoad.h"
+
+#define PRESET_MODEL 1
+#define PRESET_MATRIX3D 2
+#define PRESET_PARTICLES 3
+#define PRESET_AUDIO_OBJECTS 4
+#define PRESET_MAX 5
 
 class ofApp : public ofBaseApp{
 
 public:
 
     void setup();
-    void update();
+    void setupGui();
+	void update();
     void draw();
+	
+	void drawPresetMatrix3D();
+	void drawPresetModel();
+	void drawPresetParticles();
+	void drawPresetAudioObjects();
+
 	void setupLights();
 	void drawShadow();
 
@@ -27,6 +42,9 @@ public:
 	void drawLine();
 	void updateSoundObjects();
 	void drawSoundObjects();
+
+	void loadSettings( int preset );
+	void saveSettings( int preset );
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -39,6 +57,8 @@ public:
     void gotMessage(ofMessage msg);
 
     ofxPanel			gui;
+    ofxPanel			gui2;
+	ofxIntSlider		presetType;
 	ofxIntSlider		drawMode;
     ofxSlider<int>		meshIndex;
     ofxToggle			bUseTexture;
@@ -90,4 +110,8 @@ public:
     bool    m_bDrawDepth;
     bool    m_bDrawLight;
 	bool	m_bPaused;
+
+	AVGSistPart sistPart;
+
+	int		iPresetActual;
 };

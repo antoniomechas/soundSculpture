@@ -1,0 +1,40 @@
+<audio>
+	<presetType>4</presetType>
+	<drawMode>2</drawMode>
+	<meshIndex>1</meshIndex>
+	<bUseTexture>0</bUseTexture>
+	<scale>12.088</scale>
+	<bUseAudioInput>1</bUseAudioInput>
+	<audioMult>1.2836</audioMult>
+	<audioPeakDecay>0.9055</audioPeakDecay>
+	<audioMaxDecay>0.9655</audioMaxDecay>
+	<audioMirror>1</audioMirror>
+	<linewidth>0.5</linewidth>
+	<FX_Bloom>1</FX_Bloom>
+	<FX_fxaa>0</FX_fxaa>
+	<matrix_Light_Dist>705</matrix_Light_Dist>
+	<matrix_Max_Lenght>59</matrix_Max_Lenght>
+	<matrix_Mult>2.52</matrix_Mult>
+	<matrix_Damp>0.01</matrix_Damp>
+<Particulas>
+		<part_Tipo>0</part_Tipo>
+		<part_Color_Auto>0</part_Color_Auto>
+		<part_Color_A_Delay>0.1</part_Color_A_Delay>
+		<part_Color_Ini>127, 127, 127, 255</part_Color_Ini>
+		<part_Color_Fin>127, 127, 127, 255</part_Color_Fin>
+		<part_Vida_Ini>1</part_Vida_Ini>
+		<part_Vida_Fin>1</part_Vida_Fin>
+		<part_Size_Ini>1</part_Size_Ini>
+		<part_Size_Fin>1</part_Size_Fin>
+		<part_Alpha_Ini_1>1</part_Alpha_Ini_1>
+		<part_Alpha_Ini_2>1</part_Alpha_Ini_2>
+		<part_Alpha_Fin_1>1</part_Alpha_Fin_1>
+		<part_Alpha_Fin_2>1</part_Alpha_Fin_2>
+		<part_damping>0.006</part_damping>
+		<part_gravedad>0</part_gravedad>
+		<part_Vel_Z_1>0</part_Vel_Z_1>
+		<part_Vel_Z_2>0</part_Vel_Z_2>
+		<part_Porcentaje_Esp>1</part_Porcentaje_Esp>
+	</Particulas>
+<audio/>
+</audio>

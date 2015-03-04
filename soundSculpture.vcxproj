@@ -75,7 +75,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxGui\libs;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxFFT\libs;..\..\..\addons\ofxFFT\src;..\..\..\addons\ofxObjLoader\libs;..\..\..\addons\ofxObjLoader\src;..\..\..\addons\ofxPostProcessing\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxGui\libs;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxFFT\libs;..\..\..\addons\ofxFFT\src;..\..\..\addons\ofxObjLoader\libs;..\..\..\addons\ofxObjLoader\src;..\..\..\addons\ofxPostProcessing\src;.\src\particleSystem</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -139,6 +139,10 @@
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.cpp" />
     <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.cpp" />
     <ClCompile Include="..\..\..\addons\ofxFFT\libs\fft.cpp" />
+    <ClCompile Include="src\ofxCameraSaveLoad.cpp" />
+    <ClCompile Include="src\particleSystem\AVGSistPart.cpp" />
+    <ClCompile Include="src\particleSystem\part.cpp" />
+    <ClCompile Include="src\Particulas.cpp" />
     <ClCompile Include="src\shadowMapLight.cpp" />
     <ClCompile Include="src\SoundBox.cpp" />
     <ClCompile Include="src\SoundObject.cpp" />
@@ -224,6 +228,10 @@
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.h" />
     <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.h" />
     <ClInclude Include="..\..\..\addons\ofxFFT\libs\fft.h" />
+    <ClInclude Include="src\ofxCameraSaveLoad.h" />
+    <ClInclude Include="src\particleSystem\AVGSistPart.h" />
+    <ClInclude Include="src\particleSystem\part.h" />
+    <ClInclude Include="src\Particulas.h" />
     <ClInclude Include="src\shadowMapLight.h" />
     <ClInclude Include="src\SoundBox.h" />
     <ClInclude Include="src\SoundObject.h" />

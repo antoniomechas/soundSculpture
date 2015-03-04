@@ -46,20 +46,20 @@ void ofApp::setup(){
     meshes.push_back(sphere.getMesh());
     //meshes.push_back(plane.getMesh());
 
-	model.loadModel("dinosaur.dae");
-    meshes.push_back(model.getMesh(0));
-    
-	model.clear();
-	model.loadModel("head.dae");
-    meshes.push_back(model.getMesh(0));
-    
-	model.clear();
-	model.loadModel("Medusa.3DS");
-	meshes.push_back(model.getMesh(2));
+	//model.loadModel("dinosaur.dae");
+ //   meshes.push_back(model.getMesh(0));
+ //   
+	//model.clear();
+	//model.loadModel("head.dae");
+ //   meshes.push_back(model.getMesh(0));
+ //   
+	//model.clear();
+	//model.loadModel("Medusa.3DS");
+	//meshes.push_back(model.getMesh(2));
 
-	model.clear();
-	model.loadModel("BigFish/fish.dae");
-	meshes.push_back(model.getMesh(0));
+	//model.clear();
+	//model.loadModel("BigFish/fish.dae");
+	//meshes.push_back(model.getMesh(0));
 	//ofMesh tmp;
 	//for (int i = 0; i < model.getMeshCount() ; i++)
 	//{
@@ -79,28 +79,6 @@ void ofApp::setup(){
 	
 	fftFile.player = &player;
 
-    //--------------------------------------------------------------
-	bGuiVisible = false;
-    string guiPath = "audio.xml";
-    gui.setup("audio", guiPath, 20, 20);
-    gui.add(drawMode.setup("drawMode", 1, 1, 3));
-    gui.add(meshIndex.setup("meshIndex", 1, 1, meshes.size()-1));
-    gui.add(bUseTexture.setup("bUseTexture", false));
-    gui.add(scale.setup("scale", 1.0, 0.1f, 100.0));
-    gui.add(bUseAudioInput.setup("bUseAudioInput", true));
-    gui.add(audioMult.setup("audioMult", 1.0, 0.11, 5.0));
-    gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
-    gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
-    gui.add(audioMirror.setup("audioMirror", true));
-    gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
-    gui.add(bFXBloom.setup("FX Bloom", true));
-    gui.add(bFXFxaa.setup("FX fxaa", true));
-	gui.add(matrix3D.paramLightDistance.setup("matrix Light Dist",100,50,1000));
-	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,5,500));
-	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
-	gui.add(matrix3D.paramDamp.setup("matrix Damp", 0.9,0.01,1.0));
-	gui.loadFromFile(guiPath);
-    
 	cameraDist = 400;
 
 	rgbaFboFloat.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA32F); // with alpha, 32 bits red, 32 bits green, 32 bits blue, 32 bits alpha, from 0 to 1 in 'infinite' steps
@@ -123,9 +101,14 @@ void ofApp::setup(){
     //post.createPass<EdgePass>()->setEnabled(false);
     //post.createPass<VerticalTiltShifPass>()->setEnabled(false);
     //post.createPass<GodRaysPass>()->setEnabled(false);
-	SoundBox s;
-	s.setup(ofVec3f(0,0,0),ofVec3f(0,0,0),100);
-	soundBoxes.push_back(s);
+	SoundBox *s;
+	for (int i = 0 ; i < 3 ; i++)
+	{
+		s = new SoundBox;
+		s->setup(ofVec3f(ofRandom(-100,100),ofRandom(-100,100),ofRandom(-100,100)),ofVec3f(0,0,0),ofRandom(30,80));
+		soundBoxes.push_back(*s);
+		delete s;
+	}
 
 	//s.setup(ofVec3f(100,50,100),ofVec3f(0,0,0),50);
 	//soundBoxes.push_back(s);
@@ -146,6 +129,57 @@ void ofApp::setup(){
 	m_angle = 0;
     setupLights();
 
+	iPresetActual = 1;
+	setupGui();
+	loadSettings(iPresetActual);
+
+}
+
+void ofApp::setupGui()
+{
+	//--------------------------------------------------------------
+	bGuiVisible = false;
+    string guiPath = "audio.xml";
+    gui.setup("audio", guiPath, 20, 20);
+    gui.add(presetType.setup("presetType", 1, 1, PRESET_MAX - 1));
+    gui.add(drawMode.setup("drawMode", 1, 1, 3));
+    gui.add(meshIndex.setup("meshIndex", 1, 1, meshes.size()-1));
+    gui.add(bUseTexture.setup("bUseTexture", false));
+    gui.add(scale.setup("scale", 1.0, 0.1f, 100.0));
+    gui.add(bUseAudioInput.setup("bUseAudioInput", true));
+    gui.add(audioMult.setup("audioMult", 1.0, 0.11, 5.0));
+    gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
+    gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
+    gui.add(audioMirror.setup("audioMirror", true));
+    gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
+    gui.add(bFXBloom.setup("FX Bloom", true));
+    gui.add(bFXFxaa.setup("FX fxaa", true));
+	gui.add(matrix3D.paramLightDistance.setup("matrix Light Dist",100,50,1000));
+	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,5,500));
+	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
+	gui.add(matrix3D.paramDamp.setup("matrix Damp", 0.9,0.01,1.0));
+	
+	gui2.setName("Particulas");
+	gui2.setPosition(gui.getPosition() + ofPoint(gui.getWidth() + 20, 0));
+	gui2.add(sistPart.partTipo.setup( "part Tipo", 0, 0, 4 ));
+	gui2.add(sistPart.partColorAuto.setup( "part Color Auto", false));
+	gui2.add(sistPart.partColorAutoDelay.setup( "part Color A Delay", 0.1, 0.001, 1.0 ));
+	gui2.add(sistPart.partColorIni.setup( "part Color Ini",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
+	gui2.add(sistPart.partColorFin.setup( "part Color Fin",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
+	gui2.add(sistPart.partVidaIni.setup( "part Vida Ini", 1, 1, 100 ));
+	gui2.add(sistPart.partVidaFin.setup( "part Vida Fin", 1, 1, 100 ));
+	gui2.add(sistPart.partSizeIni.setup( "part Size Ini", 1, 1, 100 ));
+	gui2.add(sistPart.partSizeFin.setup( "part Size Fin", 1, 1, 100 ));
+	gui2.add(sistPart.partAlphaIni1.setup( "part Alpha Ini 1", 1, 0.0, 1.0 ));
+	gui2.add(sistPart.partAlphaIni2.setup( "part Alpha Ini 2", 1, 0.0, 1.0 ));
+	gui2.add(sistPart.partAlphaFin1.setup( "part Alpha Fin 1", 1, 0.0, 1.0 ));
+	gui2.add(sistPart.partAlphaFin2.setup( "part Alpha Fin 2", 1, 0.0, 1.0 ));
+	gui2.add(sistPart.partDamping.setup( "part damping",  0.006f, 0, 0.01f ));
+	gui2.add(sistPart.partGravedad.setup( "part gravedad", 0, -0.1f, 0.1f ));
+	gui2.add(sistPart.partVelZ1.setup( "part Vel Z 1", 0, -200, 200 ));
+	gui2.add(sistPart.partVelZ2.setup( "part Vel Z 2", 0, -200, 200 ));
+	gui2.add(sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
+
 }
 
 void ofApp::setupLights() {
@@ -165,6 +199,31 @@ void ofApp::setupLights() {
     //m_shadowLight.setPosition( 100.0f, 100.0f, 150.0f );
     //
     //ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
+}
+
+void ofApp::loadSettings(int preset)
+{
+	stringstream filename;
+	filename << "settings_" << preset << ".xml";
+	gui.loadFromFile(filename.str()); 
+	gui2.loadFromFile(filename.str()); 
+
+	stringstream filename2;
+	filename2 << "camera_" << preset << ".xml";
+	ofxLoadCamera(camera, filename2.str());
+
+}
+
+void ofApp::saveSettings(int preset)
+{
+	stringstream filename;
+	filename << "settings_" << preset << ".xml";
+	gui.saveToFile(filename.str()); 
+	gui2.saveToFile(filename.str()); 
+	
+	stringstream filename2;
+	filename2 << "camera_" << preset << ".xml";
+	ofxSaveCamera(camera, filename2.str());
 }
 
 //--------------------------------------------------------------
@@ -397,16 +456,97 @@ void ofApp::draw(){
 	ofPushMatrix();
 	
 	post.begin();
-		drawScene();
+	
+		switch (presetType)
+		{
+			case PRESET_MODEL:
+				drawScene();
+				break;
+			
+			case PRESET_MATRIX3D:
+				drawPresetMatrix3D();
+				break;
+
+			case PRESET_PARTICLES:
+				drawPresetParticles();
+				break;
+
+			case PRESET_AUDIO_OBJECTS:
+				drawPresetAudioObjects();
+				break;
+		}
+
 	post.end();
 	ofPopMatrix();
 	ofSetColor(255,255,255);
 
 	if (bGuiVisible)
+	{
 		gui.draw();
+		gui2.draw();
+	}
 
 	//ofSetColor(ofColor::white);
 }
+
+
+void ofApp::drawPresetParticles()
+{
+	
+}
+
+void ofApp::drawPresetAudioObjects()
+{
+    ofEnableDepthTest();
+
+	camera.begin();
+    
+    if(bUseTexture == true) {
+        ofEnableNormalizedTexCoords();
+        meshTexture.bind();
+    }
+
+    ofSetColor(ofColor::white);
+
+	drawSoundObjects();
+
+	if(bUseTexture == true) {
+        meshTexture.unbind();
+        ofDisableNormalizedTexCoords();
+    }
+
+    camera.end();
+    
+    ofDisableDepthTest();	
+}
+
+void ofApp::drawPresetMatrix3D()
+{
+    ofEnableDepthTest();
+
+	camera.begin();
+    
+    if(bUseTexture == true) {
+        ofEnableNormalizedTexCoords();
+        meshTexture.bind();
+    }
+
+    ofSetColor(ofColor::white);
+
+	matrix3D.draw();
+
+	if(bUseTexture == true) {
+        meshTexture.unbind();
+        ofDisableNormalizedTexCoords();
+    }
+    
+
+    camera.end();
+    
+    ofDisableDepthTest();
+
+}
+
 
 void ofApp::drawSoundObjects()
 {	
@@ -461,17 +601,12 @@ void ofApp::drawScene()
     //meshWarped.setMode(OF_PRIMITIVE_POINTS);
     //meshWarped.setMode(OF_PRIMITIVE_LINES);
 	//meshWarped.draw();
-	if (meshIndex == 0)
-		matrix3D.draw();
-	else
-	{
-		if (drawMode == 1)
-			meshWarped.drawVertices();
-		else if (drawMode == 2)
-   			meshWarped.drawWireframe();
-		else if (drawMode == 3)
-   			meshWarped.drawFaces();
-	}
+	if (drawMode == 1)
+		meshWarped.drawVertices();
+	else if (drawMode == 2)
+   		meshWarped.drawWireframe();
+	else if (drawMode == 3)
+   		meshWarped.drawFaces();
 
 	//for (int i = 0 ; i < meshWarped.getNumVertices() ; i++)
 	//{
@@ -547,8 +682,12 @@ void ofApp::keyPressed(int key){
     } else if(key == 'e' || key == 'E') {
         ofxObjLoader::save("mesh_export.obj", meshWarped);
     } else if(key == 's' ) {
-        gui.saveToFile("audio.xml");
-    }
+        saveSettings(iPresetActual);
+    } else if(key > '0' && key < '9')
+	{
+		iPresetActual = key - '0';
+		loadSettings(iPresetActual);
+	}	
 }
 
 //--------------------------------------------------------------
