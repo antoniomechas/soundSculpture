@@ -45,9 +45,9 @@ void SoundBox::update( float average, float *soundData, float multAmount )
         //ofVec3f & vertWarped = vertsWarped[i];
         ofVec3f dir = vertOriginal;
 		float mult = 10;
-		dir.x = ofSignedNoise(vertOriginal.x + t,0,0);
-		dir.y = ofSignedNoise(0,vertOriginal.y + t,0);
-		dir.z = ofSignedNoise(0,0,vertOriginal.z + t);
+		dir.x = ofSignedNoise(pos.x + vertOriginal.x + t,0,0);
+		dir.y = ofSignedNoise(0,pos.y + vertOriginal.y + t,0);
+		dir.z = ofSignedNoise(0,0,pos.z + vertOriginal.z + t);
 		dir = dir * mult;
         //ofVec3f direction = vertOriginal.getNormalized();
         float audio = MAX(1.0,(audioValue * multAmount));

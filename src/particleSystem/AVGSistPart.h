@@ -132,8 +132,6 @@ protected:
 		void	dibujaVBO();					//  Dibuja las particulas utilizando VBO
 		void	dibujaEspeciales();				//	Dibuja las particulas especiales
 		void	dibujaParticulas();
-		void	dibujaMosaico();
-		void	initMosaico();
 
 		// helper functions
 		void addFace(ofMesh& mesh, ofVec3f a, ofVec3f b, ofVec3f c);
@@ -148,26 +146,6 @@ protected:
 		
 		int					iParticulaActual;
 
-		struct MOSAICO_PARAMS
-		{
-			ofVec2f				pos;
-			int					width;
-			int					height;
-			float				rows, columns, aspectratio;
-			float				cellW, cellH;
-			ofImage				fotoMosaico;		// La foto destino que formarán las partículas
-			ofMesh				mesh;				// mesh para dibujar las particulas que forman el mosaico
-			vector<int>			partVivas;
-			enum ESTADO_MOSAICO
-			{
-				ESTADO_MOSAICO_IDLE,
-				ESTADO_MOSAICO_WORKING,
-				ESTADO_MOSAICO_DONE
-			};
-			ESTADO_MOSAICO		estado;				// controla el estado en el que se encuentra el dibujo del mosaico
-		};
-
-		MOSAICO_PARAMS mosaico_params;
 };
 
 

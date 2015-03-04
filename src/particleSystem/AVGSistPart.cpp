@@ -69,33 +69,13 @@ void AVGSistPart::setup()
 
 	// Por defecto el sistema de particulas funciona como particulas
 	modo = MODO_NORMAL;
-	// El mosaico no se ha inicializado
-	mosaico_params.estado = mosaico_params.ESTADO_MOSAICO_IDLE;
 
-}
 
-void AVGSistPart::resetMosaico()
-{
-	mosaico_params.estado = mosaico_params.ESTADO_MOSAICO_IDLE;
 }
 
 
 void AVGSistPart::actualiza()
 {
-	switch (modo)
-	{
-		case MODO_NORMAL:
-			break;
-		
-		case MODO_MOSAICO:
-			//Hay que ver si el mosaico se ha inicializado, o sea, que las particulas deberán dirigirse hacia su lugar en el mosaico
-			if (mosaico_params.estado == mosaico_params.ESTADO_MOSAICO_IDLE)
-			{
-				initMosaico();
-				mosaico_params.estado = mosaico_params.ESTADO_MOSAICO_WORKING;
-			}
-			break;
-	}
 
 	for (int i=0 ; (i < MAXPART) && (i < iLimiteParticulas); i++)
 		if ( particulas[i].viva )
@@ -105,52 +85,6 @@ void AVGSistPart::actualiza()
 	//printf("Actualiza ");
 }
 
-//--------------------------------------
-//Inicializa las particulas para que se comporten en modo mosaico
-void AVGSistPart::initMosaico()
-{
-
-	//ofVec2f imageSize(mosaico_params.width, mosaico_params.height);
-
-	//mosaico_params.partVivas.clear();
-	//// Mira cuantas particulas hay en el sistema
-	//for (int i=0 ; (i < MAXPART) && (i < iLimiteParticulas) ; i++)
-	//	if ( particulas[i].viva )
-	//		mosaico_params.partVivas.push_back(i);
-	//
-	//// Calcula en cuantas filas y columnas hay que dividir la imagen para que quepan todas las partículas
-	//// teniendo en cuenta el aspect ratio de la imagen
-
-	//mosaico_params.aspectratio = (float)mosaico_params.height / (float)mosaico_params.width;
-	//mosaico_params.rows = sqrt( mosaico_params.aspectratio * (float)mosaico_params.partVivas.size() );
-	//mosaico_params.columns = (float)mosaico_params.partVivas.size() / mosaico_params.rows;
-	//mosaico_params.cellW = (float)mosaico_params.width / mosaico_params.columns;
-	//mosaico_params.cellH = (float)mosaico_params.height / mosaico_params.rows;
-	//float xx = 0;
-	//float yy = 0;
-	//printf("num particulas: (%i)\n", mosaico_params.partVivas.size());
-	//printf("Imagen: (%i,%i)\n", mosaico_params.width, mosaico_params.height);
-	//printf("aspect ratio: %1.3f\n",mosaico_params.aspectratio);
-	//printf("columns, rows: (%1.3f,%1.3f)\n",mosaico_params.columns, mosaico_params.rows);
-
-	//for(int c = 0; c < mosaico_params.partVivas.size(); c++) 
-	//{
-	//	part *p = &particulas[mosaico_params.partVivas[c]];
-	//	p->posFin = ofVec2f(xx, yy);
-	//	p->vel = p->posFin - p->pos;
-	//	p->vel.normalize();
-	//	p->vel = p->vel * ofRandom(partMosaicoVelIni, partMosaicoVelFin);
-	//	p->tipo = TIPO_PARTICULA_MOSAICO;
-
-	//	xx += mosaico_params.cellW;
-	//	if (xx >= mosaico_params.width)
-	//	{
-	//		xx = 0;
-	//		yy += mosaico_params.cellH;
-	//	}
-	//}
-
-}
 
 void AVGSistPart::resetForce()
 {
@@ -186,67 +120,6 @@ void AVGSistPart::dibuja()
 	dibujaEspeciales();
 
 	ofPopStyle();
-
-}
-
-//------------------------------------------------------------------
-//Dibuja las particulas como quads que contiene cada una una parte de la imagen fotoMosaico
-//
-void AVGSistPart::dibujaMosaico()
-{
-	//return;
-	mosaico_params.mesh.clear();
-	mosaico_params.mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-	
-
-	ofVec2f imageSize(mosaico_params.width,mosaico_params.height);
-	
-	float xx = 0;
-	float yy = 0;
-	for(int c = 0; c < mosaico_params.partVivas.size(); c++) 
-	{
-		part *p = &particulas[mosaico_params.partVivas[c]];
-		ofVec3f nw = ofVec3f(p->pos.x - (mosaico_params.cellW / 2.0) , p->pos.y - (mosaico_params.cellH / 2.0), 0);
-		ofVec3f ne = ofVec3f(p->pos.x + (mosaico_params.cellW / 2.0) , p->pos.y - (mosaico_params.cellH / 2.0), 0);
-		ofVec3f sw = ofVec3f(p->pos.x - (mosaico_params.cellW / 2.0) , p->pos.y + (mosaico_params.cellH / 2.0), 0);
-		ofVec3f se = ofVec3f(p->pos.x + (mosaico_params.cellW / 2.0) , p->pos.y + (mosaico_params.cellH / 2.0), 0);
-		//ofVec3f nw = ofVec3f(p->pos.x - (p->size / 2) , p->pos.y - (p->size / 2), 0);
-		//ofVec3f ne = ofVec3f(p->pos.x + (p->size / 2) , p->pos.y - (p->size / 2), 0);
-		//ofVec3f sw = ofVec3f(p->pos.x - (p->size / 2) , p->pos.y + (p->size / 2), 0);
-		//ofVec3f se = ofVec3f(p->pos.x + (p->size / 2) , p->pos.y + (p->size / 2), 0);
-		ofVec2f nwi(xx, yy);
-		ofVec2f nei(xx + mosaico_params.cellW, yy);
-		ofVec2f swi(xx, yy + mosaico_params.cellH);
-		ofVec2f sei(xx + mosaico_params.cellW, yy + mosaico_params.cellH);
-			
-		addFace(mosaico_params.mesh, nw, ne, se, sw);
-
-		// Normalize our texture coordinates if normalized 
-		// texture coordinates are currently enabled.
-		if(ofGetUsingNormalizedTexCoords()) 
-		{
-			nwi /= imageSize;
-			nei /= imageSize;
-			sei /= imageSize;
-			swi /= imageSize;
-		}
-
-		addTexCoords(mosaico_params.mesh, nwi, nei, sei, swi);
-		
-		xx += mosaico_params.cellW;
-		if (xx >= mosaico_params.width)
-		{
-			xx = 0;
-			yy+=mosaico_params.cellH;
-		}
-
-	}
-	ofBackground(0,0,0);
-	ofSetColor(255,255,255);
-	
-	mosaico_params.fotoMosaico.bind();
-	mosaico_params.mesh.draw();
-	mosaico_params.fotoMosaico.unbind();
 
 }
 
@@ -471,21 +344,6 @@ void AVGSistPart::CargaTextura(string strArchivo, int iTextura)
 	texture.loadImage(strArchivo);
 	texture.setImageType(OF_IMAGE_COLOR);
 	gltexture[iTextura] = LoadTexture(texture);
-
-}
-
-//Carga una imagen para utilzarla como mosaico para las particulas
-// si width y height == 0, deja la foto en tamaño original
-void AVGSistPart::cargaFotoMosaico(string strArchivo, ofVec2f pos, int width, int height)
-{
-	mosaico_params.fotoMosaico.loadImage(strArchivo);
-	
-	if (width != 0 && height !=0)
-		mosaico_params.fotoMosaico.resize(width, height);
-	
-	mosaico_params.pos = pos;
-	mosaico_params.width = mosaico_params.fotoMosaico.width;
-	mosaico_params.height = mosaico_params.fotoMosaico.height;
 
 }
 
