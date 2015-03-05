@@ -2,6 +2,7 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "AVGSistPart.h"
+#include "ColorUtil.h"
 
 class Particulas
 {
@@ -18,6 +19,8 @@ class Particulas
 		ofxIntSlider	paramLightDistance;
 		//ofxFloatSlider	paramDamp;
 
+		AVGSistPart		sistPart;
+
 	protected:
 
 		void	setupLigths();
@@ -30,7 +33,6 @@ class Particulas
 		ofLight			light;
 
 		int				audioDataAmount;		//Cuantos valores de audio necesita de input
-		
-		AVGSistPart		sistPart;
+		ColorUtil		colorUtil;
 
 };

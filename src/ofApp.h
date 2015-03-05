@@ -12,6 +12,7 @@
 #include "shadowMapLight.h"
 #include "AVGSistPart.h"
 #include "ofxCameraSaveLoad.h"
+#include "Particulas.h"
 
 #define PRESET_MODEL 1
 #define PRESET_MATRIX3D 2
@@ -111,7 +112,7 @@ public:
     bool    m_bDrawLight;
 	bool	m_bPaused;
 
-	AVGSistPart sistPart;
-
 	int		iPresetActual;
+
+	Particulas particulas;
 };

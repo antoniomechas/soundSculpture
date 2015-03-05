@@ -116,6 +116,7 @@
     <ClCompile Include="..\..\..\addons\ofxPostProcessing\src\ToonPass.cpp" />
     <ClCompile Include="..\..\..\addons\ofxPostProcessing\src\VerticalTiltShifPass.cpp" />
     <ClCompile Include="..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.cpp" />
+    <ClCompile Include="src\ColorUtil.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Matrix3D.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\ToonPass.h" />
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\VerticalTiltShifPass.h" />
     <ClInclude Include="..\..\..\addons\ofxPostProcessing\src\ZoomBlurPass.h" />
+    <ClInclude Include="src\ColorUtil.h" />
     <ClInclude Include="src\Matrix3D.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxAssimpModelLoader\src\ofxAssimpAnimation.h" />

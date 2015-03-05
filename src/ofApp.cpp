@@ -133,14 +133,14 @@ void ofApp::setup(){
 	setupGui();
 	loadSettings(iPresetActual);
 
+	particulas.setup(ofGetWidth(),ofGetHeight());
 }
 
 void ofApp::setupGui()
 {
 	//--------------------------------------------------------------
 	bGuiVisible = false;
-    string guiPath = "audio.xml";
-    gui.setup("audio", guiPath, 20, 20);
+    gui.setup("audio");
     gui.add(presetType.setup("presetType", 1, 1, PRESET_MAX - 1));
     gui.add(drawMode.setup("drawMode", 1, 1, 3));
     gui.add(meshIndex.setup("meshIndex", 1, 1, meshes.size()-1));
@@ -159,26 +159,26 @@ void ofApp::setupGui()
 	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
 	gui.add(matrix3D.paramDamp.setup("matrix Damp", 0.9,0.01,1.0));
 	
-	gui2.setName("Particulas");
+    gui2.setup("Particulas");
 	gui2.setPosition(gui.getPosition() + ofPoint(gui.getWidth() + 20, 0));
-	gui2.add(sistPart.partTipo.setup( "part Tipo", 0, 0, 4 ));
-	gui2.add(sistPart.partColorAuto.setup( "part Color Auto", false));
-	gui2.add(sistPart.partColorAutoDelay.setup( "part Color A Delay", 0.1, 0.001, 1.0 ));
-	gui2.add(sistPart.partColorIni.setup( "part Color Ini",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
-	gui2.add(sistPart.partColorFin.setup( "part Color Fin",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
-	gui2.add(sistPart.partVidaIni.setup( "part Vida Ini", 1, 1, 100 ));
-	gui2.add(sistPart.partVidaFin.setup( "part Vida Fin", 1, 1, 100 ));
-	gui2.add(sistPart.partSizeIni.setup( "part Size Ini", 1, 1, 100 ));
-	gui2.add(sistPart.partSizeFin.setup( "part Size Fin", 1, 1, 100 ));
-	gui2.add(sistPart.partAlphaIni1.setup( "part Alpha Ini 1", 1, 0.0, 1.0 ));
-	gui2.add(sistPart.partAlphaIni2.setup( "part Alpha Ini 2", 1, 0.0, 1.0 ));
-	gui2.add(sistPart.partAlphaFin1.setup( "part Alpha Fin 1", 1, 0.0, 1.0 ));
-	gui2.add(sistPart.partAlphaFin2.setup( "part Alpha Fin 2", 1, 0.0, 1.0 ));
-	gui2.add(sistPart.partDamping.setup( "part damping",  0.006f, 0, 0.01f ));
-	gui2.add(sistPart.partGravedad.setup( "part gravedad", 0, -0.1f, 0.1f ));
-	gui2.add(sistPart.partVelZ1.setup( "part Vel Z 1", 0, -200, 200 ));
-	gui2.add(sistPart.partVelZ2.setup( "part Vel Z 2", 0, -200, 200 ));
-	gui2.add(sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
+	gui2.add(particulas.sistPart.partTipo.setup( "part Tipo", 0, 0, 4 ));
+	gui2.add(particulas.sistPart.partColorAuto.setup( "part Color Auto", false));
+	gui2.add(particulas.sistPart.partColorAutoDelay.setup( "part Color A Delay", 0.1, 0.001, 1.0 ));
+	gui2.add(particulas.sistPart.partColorIni.setup( "part Color Ini",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
+	gui2.add(particulas.sistPart.partColorFin.setup( "part Color Fin",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
+	gui2.add(particulas.sistPart.partVidaIni.setup( "part Vida Ini", 1, 1, 100 ));
+	gui2.add(particulas.sistPart.partVidaFin.setup( "part Vida Fin", 1, 1, 100 ));
+	gui2.add(particulas.sistPart.partSizeIni.setup( "part Size Ini", 1, 1, 100 ));
+	gui2.add(particulas.sistPart.partSizeFin.setup( "part Size Fin", 1, 1, 100 ));
+	gui2.add(particulas.sistPart.partAlphaIni1.setup( "part Alpha Ini 1", 1, 0.0, 1.0 ));
+	gui2.add(particulas.sistPart.partAlphaIni2.setup( "part Alpha Ini 2", 1, 0.0, 1.0 ));
+	gui2.add(particulas.sistPart.partAlphaFin1.setup( "part Alpha Fin 1", 1, 0.0, 1.0 ));
+	gui2.add(particulas.sistPart.partAlphaFin2.setup( "part Alpha Fin 2", 1, 0.0, 1.0 ));
+	gui2.add(particulas.sistPart.partDamping.setup( "part damping",  0.006f, 0, 0.01f ));
+	gui2.add(particulas.sistPart.partGravedad.setup( "part gravedad", 0, -0.1f, 0.1f ));
+	gui2.add(particulas.sistPart.partVelZ1.setup( "part Vel Z 1", 0, -200, 200 ));
+	gui2.add(particulas.sistPart.partVelZ2.setup( "part Vel Z 2", 0, -200, 200 ));
+	gui2.add(particulas.sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
 
 }
 
@@ -311,7 +311,6 @@ void ofApp::update(){
 	//	post.end();
 	//rgbaFboFloat.end();
 
-
 	updateSoundObjects();
 }
 
@@ -399,6 +398,16 @@ void ofApp::updateSoundObjects()
 	audioData = new float[amount];
 	fftFile.getFftPeakData(audioData, amount);
 	matrix3D.update(average, audioData);    
+
+	amount = particulas.getAudioDataAmount();
+	audioData = new float[amount];
+	fftFile.getFftPeakData(audioData, amount);
+	matrix3D.update(average, audioData);    
+
+	if (presetType == PRESET_PARTICLES)
+		particulas.update(average, audioData);
+
+	
 
 }
 
@@ -492,7 +501,27 @@ void ofApp::draw(){
 
 void ofApp::drawPresetParticles()
 {
-	
+    ofEnableDepthTest();
+
+	camera.begin();
+    
+    if(bUseTexture == true) {
+        ofEnableNormalizedTexCoords();
+        meshTexture.bind();
+    }
+
+    ofSetColor(ofColor::white);
+
+	particulas.draw();
+
+	if(bUseTexture == true) {
+        meshTexture.unbind();
+        ofDisableNormalizedTexCoords();
+    }
+
+    camera.end();
+    
+    ofDisableDepthTest();	
 }
 
 void ofApp::drawPresetAudioObjects()
