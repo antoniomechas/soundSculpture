@@ -158,9 +158,11 @@ void ofApp::setupGui()
 	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,5,500));
 	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
 	gui.add(matrix3D.paramDamp.setup("matrix Damp", 0.9,0.01,1.0));
+	gui.add(matrix3D.paramWidthMult.setup("matrix width mult", 1.0,0.1,2.0));
 	
     gui2.setup("Particulas");
 	gui2.setPosition(gui.getPosition() + ofPoint(gui.getWidth() + 20, 0));
+	gui2.add(particulas.paramMult.setup( "Multiplicador", 1, 0.1, 20.0 ));
 	gui2.add(particulas.sistPart.partTipo.setup( "part Tipo", 0, 0, 4 ));
 	gui2.add(particulas.sistPart.partColorAuto.setup( "part Color Auto", false));
 	gui2.add(particulas.sistPart.partColorAutoDelay.setup( "part Color A Delay", 0.1, 0.001, 1.0 ));

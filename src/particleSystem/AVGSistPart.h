@@ -140,10 +140,12 @@ protected:
 		void addTexCoords(ofMesh& mesh, ofVec2f a, ofVec2f b, ofVec2f c, ofVec2f d);
 
 		//Para las texturas
-		ofImage				texture;
-		GLuint	gltexture[NUM_TEX];
-		GLuint	LoadTexture(ofImage image);
+		//ofImage				texture;
+		//GLuint	gltexture[NUM_TEX];
+		//GLuint	LoadTexture(ofImage image);
 		
+		vector<ofTexture>		textures;
+
 		int					iParticulaActual;
 
 };

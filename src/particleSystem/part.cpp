@@ -279,9 +279,9 @@ void part::update(){
 			//}
 
 
-			r = ofRandom(r1,r2);
-			g = ofRandom(g1,g2);
-			b = ofRandom(b1,b2);
+			//r = ofRandom(r1,r2);
+			//g = ofRandom(g1,g2);
+			//b = ofRandom(b1,b2);
 			
 			rnd = ofRandom(0.0f, 1.0f);
 			if (rnd > fPorcentajeEspecial)
@@ -559,6 +559,10 @@ void part::setColorRange(ofColor ini, ofColor fin)
 	b1 = (float)ini.b / 255.0;
 	b2 = (float)fin.b / 255.0;
 
+	r = ofRandom(r1,r2);
+	g = ofRandom(g1,g2);
+	b = ofRandom(b1,b2);
+
 }
 
 void part::setColorRange(float _r1, float _r2, float _g1, float _g2, float _b1, float _b2)
@@ -572,6 +576,10 @@ void part::setColorRange(float _r1, float _r2, float _g1, float _g2, float _b1, 
 	b1 = _b1;
 	b2 = _b2;
 
+	r = ofRandom(r1,r2);
+	g = ofRandom(g1,g2);
+	b = ofRandom(b1,b2);
+
 }
 
 void part::setColor(float r, float g, float b)
@@ -579,6 +587,11 @@ void part::setColor(float r, float g, float b)
 	this -> r = r;
 	this -> g = g;
 	this -> b = b;
+}
+
+ofColor part::getColor()
+{
+	return ofColor(r * 255.0,g * 255.0,b *255.0);
 }
 
 void part::setPos(float x, float y)

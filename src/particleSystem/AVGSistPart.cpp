@@ -35,7 +35,7 @@ void AVGSistPart::inicializa()
 	}
 
 	iParticulaActual = 0;
-	iLimiteParticulas = 999999;
+	iLimiteParticulas = MAXPART;
 }
 
 
@@ -169,9 +169,11 @@ void AVGSistPart::dibujaEspeciales()
 	float size;
 	float x, y, z;
 	float a;
-
+	ofEnableNormalizedTexCoords();
+	ofDisableDepthTest();
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, gltexture[0]);
+	//glBindTexture(GL_TEXTURE_2D, gltexture[0]);
+	textures[0].bind();
 	glEnable( GL_POINT_SMOOTH );
 	glEnable(GL_BLEND);									
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
@@ -194,6 +196,7 @@ void AVGSistPart::dibujaEspeciales()
 				glTexCoord2f(1.0f,0.0f); glVertex3f(x+ size, y+size,z);
 			glEnd();
 		}
+	textures[0].unbind();
 	glDisable(GL_BLEND);		
 	glDisable(GL_TEXTURE_2D);
 	glDisable( GL_POINT_SMOOTH );
@@ -206,8 +209,8 @@ void AVGSistPart::dibujaVBO()
 	glPushMatrix();
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, gltexture[0]);
-
+	//glBindTexture(GL_TEXTURE_2D, gltexture[0]);
+	textures[0].bind();
 	glEnable( GL_POINT_SMOOTH );
 	glPointSize(fTamañoPunto);
 	glEnable(GL_BLEND);									
@@ -251,6 +254,8 @@ void AVGSistPart::dibujaVBO()
 	glDisableClientState(GL_COLOR_ARRAY);
 		
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+
+	textures[0].unbind();
 
 	glDisable(GL_BLEND);									
 	glDisable( GL_POINT_SMOOTH );
@@ -299,51 +304,58 @@ void	AVGSistPart::eliminaParticula (int iNumParticula)
 
 
 // load a 256x256 RGB .RAW file as a texture
-GLuint AVGSistPart::LoadTexture(ofImage image)
-{
-	unsigned char* texturedata;
-	
-	texturedata = image.getPixels();
-	
-    GLuint texture;
-	bool wrap = true;
-	
-    // allocate a texture name
-    glGenTextures( 1, &texture );
-	
-    // select our current texture
-    glBindTexture( GL_TEXTURE_2D, texture );
-	
-    // select modulate to mix texture with color for shading
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	
-    // when texture area is small, bilinear filter the closest mipmap
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-					GL_LINEAR_MIPMAP_NEAREST );
-    // when texture area is large, bilinear filter the first mipmap
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-	
-    // if wrap is true, the texture wraps over at the edges (repeat)
-    //       ... false, the texture ends at the edges (clamp)
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-					wrap ? GL_REPEAT : GL_CLAMP );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
-					wrap ? GL_REPEAT : GL_CLAMP );
-	
-    // build our texture mipmaps
-    gluBuild2DMipmaps( GL_TEXTURE_2D, 3, image.width, image.height,
-					  GL_RGB, GL_UNSIGNED_BYTE, texturedata );
-	
-    return texture;
-}
+//GLuint AVGSistPart::LoadTexture(ofImage image)
+//{
+//	unsigned char* texturedata;
+//	
+//	texturedata = image.getPixels();
+//	
+//    GLuint texture;
+//	bool wrap = true;
+//	
+//    // allocate a texture name
+//    glGenTextures( 1, &texture );
+//	
+//    // select our current texture
+//    glBindTexture( GL_TEXTURE_2D, texture );
+//	
+//    // select modulate to mix texture with color for shading
+//    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
+//	
+//    // when texture area is small, bilinear filter the closest mipmap
+//    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+//					GL_LINEAR_MIPMAP_NEAREST );
+//    // when texture area is large, bilinear filter the first mipmap
+//    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+//	
+//    // if wrap is true, the texture wraps over at the edges (repeat)
+//    //       ... false, the texture ends at the edges (clamp)
+//    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+//					wrap ? GL_REPEAT : GL_CLAMP );
+//    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,
+//					wrap ? GL_REPEAT : GL_CLAMP );
+//	
+//    // build our texture mipmaps
+//    gluBuild2DMipmaps( GL_TEXTURE_2D, 3, image.width, image.height,
+//					  GL_RGB, GL_UNSIGNED_BYTE, texturedata );
+//	
+//    return texture;
+//}
 
 void AVGSistPart::CargaTextura(string strArchivo, int iTextura)
 {
 	
 	//Carga la textura para las particulas
-	texture.loadImage(strArchivo);
-	texture.setImageType(OF_IMAGE_COLOR);
-	gltexture[iTextura] = LoadTexture(texture);
+	//texture.loadImage(strArchivo);
+	//texture.setImageType(OF_IMAGE_COLOR);
+	//gltexture[iTextura] = LoadTexture(texture);
+	ofEnableNormalizedTexCoords();
+	ofImage img;
+	img.loadImage(strArchivo);
+	ofTexture tex;
+	textures.push_back(tex);
+	textures.back().loadData(img);
+
 
 }
 

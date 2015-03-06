@@ -60,7 +60,7 @@ void Matrix3D::draw()
 		//ofDrawCone(cellWidth / 2, matrix[i].length);
 
 		ofRotateX(90);
-		ofDrawCylinder(cellWidth, matrix[i].length);
+		ofDrawCylinder(cellWidth * paramWidthMult, matrix[i].length);
 
 		//ofDrawBox(matrix[i].width-1, matrix[i].height-1, matrix[i].length);
 		ofNoFill();

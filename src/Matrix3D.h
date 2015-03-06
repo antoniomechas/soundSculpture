@@ -18,6 +18,7 @@ class Matrix3D
 		ofxFloatSlider	paramMult;
 		ofxIntSlider	paramLightDistance;
 		ofxFloatSlider	paramDamp;
+		ofxFloatSlider	paramWidthMult;
 
 	protected:
 

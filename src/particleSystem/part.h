@@ -40,6 +40,7 @@ class part
 		void		setAlpha(float alphaIni, float alphaFin);
 		void		setEndSize(float SizeIni, float SizeFin);
 		void		setColor(float r, float g, float b);
+		ofColor		getColor();
 		float		getR();
 		float		getG();
 		float		getB();
@@ -70,6 +71,8 @@ class part
 		float*	_partTex;
 		float	r,g,b,a;
         ofVec3f pos;
+		ofColor color;
+
 
 		int		iEspecial;				// si es diferente de 0, significa que la particula esta en un estado especial, para dibujar un destello, etc.
 		float	fPorcentajeEspecial;	// Para determinar el porcentaje de particulas que se vuelven especiales
