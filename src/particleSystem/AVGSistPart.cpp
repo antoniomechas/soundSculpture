@@ -110,14 +110,14 @@ void AVGSistPart::dibuja()
 	//		if (bUseVBO)
 	//			dibujaVBO();
 	//		else
-	//			dibujaParticulas();
+				dibujaParticulas();
 	//
 	//		dibujaEspeciales();
 	//		
 	//		break;
 	//}
 
-	dibujaEspeciales();
+	//dibujaEspeciales();
 
 	ofPopStyle();
 
@@ -141,18 +141,7 @@ void AVGSistPart::dibujaParticulas()
 	for (int i=0 ; (i < MAXPART) && (i < iLimiteParticulas) ; i++)
 		if ( particulas[i].viva )
 		{
-			r = particulas[i].r;
-			g = particulas[i].g;
-			b = particulas[i].b;
-			a = particulas[i].a;
-			s = 1.0f;
-			glColor4f(r, g, b, a);
-			glPointSize(s);
-			glBegin(GL_POINTS);
-				glVertex2f(particulas[i].pos.x, particulas[i].pos.y);
-			glEnd();
-			//ofCircle(particulas[i].pos.x, particulas[i].pos.y,5);
-			//printf("%i,%i\n",particulas[i].pos.x, particulas[i].pos.y);
+			particulas[i].draw();
 		}
 
 

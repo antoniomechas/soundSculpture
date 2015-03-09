@@ -233,9 +233,22 @@ void part::update(){
 	switch (tipo)
 	{
 		case 1:
+			addDampingForce();
+			frc.y = frc.y + gravity;
 			vel = vel + frc;
 			pos = pos + vel;
+			//pos.z = pos.z + ofNoise(
+			//if (pos.y > screenH)
+			//{
+			//	vel.y = -1.0f * vel.y;
+			//	pos.y = screenH;
+			//}
 
+
+			//r = ofRandom(r1,r2);
+			//g = ofRandom(g1,g2);
+			//b = ofRandom(b1,b2);
+			
 			rnd = ofRandom(0.0f, 1.0f);
 			if (rnd > fPorcentajeEspecial)
 				iEspecial = 1;
@@ -271,7 +284,7 @@ void part::update(){
 			frc.y = frc.y + gravity;
 			vel = vel + frc;
 			pos = pos + vel;
-
+			//pos.z = pos.z + ofNoise(
 			//if (pos.y > screenH)
 			//{
 			//	vel.y = -1.0f * vel.y;
@@ -382,19 +395,6 @@ void part::draw(){
 	if ( !viva )
 		return; 
 
-		/*
-	ofSetColor(r,g,b,ABS(vel.x)*255);
-	ofFill();
-	ofCircle(pos.x, pos.y, 3*(ABS(vel.x)-ABS(vel.y)));
-	*/
-	//ofSetColor(ofRandom(100,255),ofRandom(100,255),ofRandom(100,255));
-	//ofFill();
-	//ofCircle(pos.x, pos.y,1);
-
-	//ofCircle(pos.x, pos.y, 3*(ABS(vel.x)-ABS(vel.y)));
-	//ofRect(pos.x, pos.y,5-5*(ABS(vel.x)),5-5*(ABS(vel.y)));
-	//myFont.drawStringAsShapes("hhdhdhdhhhdhd", pos.x,pos.y);
-	cout << "tipo" << endl;
 	switch (tipo)
 	{
 		case 1:
@@ -451,46 +451,14 @@ void part::draw(){
 		case 3:
 				//r=1.0f;g=1.0f;b=1.0f;a=1.0f;
 				glColor4f(r, g, b, a);
-				glPushMatrix();
-					glPointSize(3.0f);
-					glBegin(GL_POINTS);
-						glVertex2f(pos.x, pos.y);
-					glEnd();
-				glPopMatrix();
+				//glPushMatrix();
+				//	glPointSize(3.0f);
+				//	glBegin(GL_POINTS);
+				//		glVertex2f(pos.x, pos.y);
+				//	glEnd();
+				//glPopMatrix();
 				//ofSetColor(r*255.0f,g*255.0f,b*255.0f,a*255.0f);
-				//ofCircle(pos.x, pos.y, 3);
-				return;
-			f = ofRandom(0,10);
-			if (f > 9.5f)
-			{
-				r=1.0f;g=1.0f;b=1.0f;a=1.0f;
-				//glColor4f(r, g, b, a);
-				ofSetColor(r*255.0f,g*255.0f,b*255.0f,a*255.0f);
-				ofCircle(pos.x, pos.y, 3);
-/*
-				glPushMatrix();
-					glPointSize(3.0f);
-					glBegin(GL_POINT);
-						glVertex2f(pos.x, pos.y);
-					glEnd();
-				glPopMatrix();
-*/
-			}
-			else
-			{
-				//glColor4f(r, g, b, a);
-				ofSetColor(r*255.0f,g*255.0f,b*255.0f,a*255.0f);
-				ofCircle(pos.x, pos.y, 1);
-/*
-				glPushMatrix();
-					glPointSize(1.0f);
-					glBegin(GL_POINT);
-						glVertex2f(pos.x, pos.y);
-					glEnd();
-				glPopMatrix();
-*/
-			}
-
+				ofCircle(pos, size);
 			break;
 
 

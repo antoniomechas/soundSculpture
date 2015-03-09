@@ -6,8 +6,8 @@
 	<scale>12.088</scale>
 	<bUseAudioInput>1</bUseAudioInput>
 	<audioMult>0.11</audioMult>
-	<audioPeakDecay>0.965</audioPeakDecay>
-	<audioMaxDecay>0.9835</audioMaxDecay>
+	<audioPeakDecay>1</audioPeakDecay>
+	<audioMaxDecay>0.9</audioMaxDecay>
 	<audioMirror>1</audioMirror>
 	<linewidth>5.9625</linewidth>
 	<FX_Bloom>1</FX_Bloom>
@@ -18,24 +18,24 @@
 	<matrix_Damp>0.01</matrix_Damp>
 <Particulas>
 		<part_Tipo>3</part_Tipo>
-		<part_Color_Auto>1</part_Color_Auto>
+		<part_Color_Auto>0</part_Color_Auto>
 		<part_Color_A_Delay>0.1</part_Color_A_Delay>
-		<part_Color_Ini>255, 0, 84, 255</part_Color_Ini>
-		<part_Color_Fin>255, 0, 255, 255</part_Color_Fin>
-		<part_Vida_Ini>100</part_Vida_Ini>
-		<part_Vida_Fin>100</part_Vida_Fin>
-		<part_Size_Ini>4</part_Size_Ini>
-		<part_Size_Fin>4</part_Size_Fin>
+		<part_Color_Ini>255, 183, 84, 255</part_Color_Ini>
+		<part_Color_Fin>85, 255, 0, 255</part_Color_Fin>
+		<part_Vida_Ini>120</part_Vida_Ini>
+		<part_Vida_Fin>120</part_Vida_Fin>
+		<part_Size_Ini>1</part_Size_Ini>
+		<part_Size_Fin>1</part_Size_Fin>
 		<part_Alpha_Ini_1>1</part_Alpha_Ini_1>
 		<part_Alpha_Ini_2>1</part_Alpha_Ini_2>
-		<part_Alpha_Fin_1>0.13</part_Alpha_Fin_1>
-		<part_Alpha_Fin_2>0.255</part_Alpha_Fin_2>
-		<part_damping>0.006</part_damping>
-		<part_gravedad>0.005</part_gravedad>
+		<part_Alpha_Fin_1>0.08</part_Alpha_Fin_1>
+		<part_Alpha_Fin_2>0.34</part_Alpha_Fin_2>
+		<part_damping>0</part_damping>
+		<part_gravedad>0</part_gravedad>
 		<part_Vel_Z_1>0</part_Vel_Z_1>
-		<part_Vel_Z_2>0</part_Vel_Z_2>
+		<part_Vel_Z_2>2</part_Vel_Z_2>
 		<part_Porcentaje_Esp>0</part_Porcentaje_Esp>
-	<Multiplicador>11.244</Multiplicador>
+	<Multiplicador>0.1</Multiplicador>
 	</Particulas>
 <audio/>
 <matrix_width_mult>1</matrix_width_mult>

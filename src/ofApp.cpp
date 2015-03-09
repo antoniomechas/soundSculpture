@@ -72,7 +72,7 @@ void ofApp::setup(){
 
 	fftFile.setup();
 
-	player.loadSound("surface.wav");
+	player.loadSound("3.mp3");
 	player.setLoop(true);
 	//player.setVolume(0.05);
 	player.play();
@@ -168,8 +168,8 @@ void ofApp::setupGui()
 	gui2.add(particulas.sistPart.partColorAutoDelay.setup( "part Color A Delay", 0.1, 0.001, 1.0 ));
 	gui2.add(particulas.sistPart.partColorIni.setup( "part Color Ini",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
 	gui2.add(particulas.sistPart.partColorFin.setup( "part Color Fin",ofColor(127,127,127),ofColor(0,0),ofColor(255,255)));
-	gui2.add(particulas.sistPart.partVidaIni.setup( "part Vida Ini", 1, 1, 100 ));
-	gui2.add(particulas.sistPart.partVidaFin.setup( "part Vida Fin", 1, 1, 100 ));
+	gui2.add(particulas.sistPart.partVidaIni.setup( "part Vida Ini", 1, 1, 1000 ));
+	gui2.add(particulas.sistPart.partVidaFin.setup( "part Vida Fin", 1, 1, 1000 ));
 	gui2.add(particulas.sistPart.partSizeIni.setup( "part Size Ini", 1, 1, 100 ));
 	gui2.add(particulas.sistPart.partSizeFin.setup( "part Size Fin", 1, 1, 100 ));
 	gui2.add(particulas.sistPart.partAlphaIni1.setup( "part Alpha Ini 1", 1, 0.0, 1.0 ));

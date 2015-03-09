@@ -23,9 +23,12 @@ class Particulas
 
 	protected:
 
-		void	updateMesh			(float average, float *soundData);
-		void	setupLigths();
-		void	drawAsociaciones();
+		void	updateMesh			( float average, float *soundData );
+		void	setupLigths			( );
+		void	drawAsociaciones	( );
+		void	addAsociacion		( int *pos, float lineWidth );
+		void	updatePosicion		( );
+		int		addParticula		( ofVec3f pos, ofVec3f vel, float audioAverage );
 
 		float			width;
 		float			height;
@@ -46,8 +49,19 @@ class Particulas
 			ofColor	color1;
 			ofColor	color2;
 			ofColor	color3;
+			float	lineWidth;
 		};
 
 		vector <int> pVivas;
 		vector<ASOCIACION> asociaciones;
+
+		struct EMITTER
+		{
+			ofFloatColor color;
+			//Current circle state
+			ofPoint pos;				//Circle center
+			ofPoint axeX, axyY, axyZ;	//Circle's coordinate system
+			ofVec2f dir;
+		};
+		EMITTER emitter[4];
 };
