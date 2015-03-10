@@ -89,10 +89,14 @@ class AVGSistPart
 		ofxFloatSlider		partVelZ2;
 		ofxFloatSlider		partDamping;
 		ofxFloatSlider		partGravedad;
-		ofxToggle			partUseSound;
-		ofxToggle			partUseSoundGlobal;
-		ofxFloatSlider		partSoundMult;
-		ofxFloatSlider		partSoundMax;
+		ofxFloatSlider		partVelXmin;
+		ofxFloatSlider		partVelXmax;
+		ofxFloatSlider		partVelYmin;
+		ofxFloatSlider		partVelYmax;
+		//ofxToggle			partUseSound;
+		//ofxToggle			partUseSoundGlobal;
+		//ofxFloatSlider		partSoundMult;
+		//ofxFloatSlider		partSoundMax;
 
 		//Particulas 2
 		ofxIntSlider		part2Tipo;

@@ -5,8 +5,8 @@ void ofApp::setup(){
 
 	ofSetLogLevel(OF_LOG_VERBOSE);
 
-    //ofLoadImage(meshTexture, "texture.jpg");
-    ofLoadImage(meshTexture, "estuco2.jpg");
+    ofLoadImage(meshTexture, "texture.jpg");
+    //ofLoadImage(meshTexture, "estuco2.jpg");
     
     //--------------------------------------------------------------
     ofMesh customMesh;
@@ -72,7 +72,7 @@ void ofApp::setup(){
 
 	fftFile.setup();
 
-	player.loadSound("3.mp3");
+	player.loadSound("music/3.mp3");
 	player.setLoop(true);
 	//player.setVolume(0.05);
 	player.play();
@@ -144,7 +144,8 @@ void ofApp::setupGui()
     gui.add(presetType.setup("presetType", 1, 1, PRESET_MAX - 1));
     gui.add(drawMode.setup("drawMode", 1, 1, 3));
     gui.add(meshIndex.setup("meshIndex", 1, 1, meshes.size()-1));
-    gui.add(bUseTexture.setup("bUseTexture", false));
+    gui.add(bUseDepthTest.setup("use Depth Test", false));
+    gui.add(bUseTexture.setup("use Texture", false));
     gui.add(scale.setup("scale", 1.0, 0.1f, 100.0));
     gui.add(bUseAudioInput.setup("bUseAudioInput", true));
     gui.add(audioMult.setup("audioMult", 1.0, 0.11, 5.0));
@@ -162,6 +163,7 @@ void ofApp::setupGui()
 	
     gui2.setup("Particulas");
 	gui2.setPosition(gui.getPosition() + ofPoint(gui.getWidth() + 20, 0));
+	gui2.add(particulas.paramDrawMode.setup( "DrawMode", 1, 0, 2 ));
 	gui2.add(particulas.paramMult.setup( "Multiplicador", 1, 0.1, 20.0 ));
 	gui2.add(particulas.sistPart.partTipo.setup( "part Tipo", 0, 0, 4 ));
 	gui2.add(particulas.sistPart.partColorAuto.setup( "part Color Auto", false));
@@ -178,9 +180,13 @@ void ofApp::setupGui()
 	gui2.add(particulas.sistPart.partAlphaFin2.setup( "part Alpha Fin 2", 1, 0.0, 1.0 ));
 	gui2.add(particulas.sistPart.partDamping.setup( "part damping",  0.006f, 0, 0.01f ));
 	gui2.add(particulas.sistPart.partGravedad.setup( "part gravedad", 0, -0.1f, 0.1f ));
-	gui2.add(particulas.sistPart.partVelZ1.setup( "part Vel Z 1", 0, -200, 200 ));
-	gui2.add(particulas.sistPart.partVelZ2.setup( "part Vel Z 2", 0, -200, 200 ));
 	gui2.add(particulas.sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
+	gui2.add(particulas.sistPart.partVelXmin.setup( "part vel x min", -2.0, -2.0, 2.0 ));
+	gui2.add(particulas.sistPart.partVelXmax.setup( "part vel x max", 2.0, -2.0, 2.0 ));
+	gui2.add(particulas.sistPart.partVelYmin.setup( "part vel y min", -2.0, -2.0, 2.0 ));
+	gui2.add(particulas.sistPart.partVelYmax.setup( "part vel y max", 2.0, -2.0, 2.0 ));
+	gui2.add(particulas.sistPart.partVelZ1.setup( "part Vel Z 1", 0, -2, 2 ));
+	gui2.add(particulas.sistPart.partVelZ2.setup( "part Vel Z 2", 0, -2, 2 ));
 
 }
 
@@ -503,7 +509,8 @@ void ofApp::draw(){
 
 void ofApp::drawPresetParticles()
 {
-    ofEnableDepthTest();
+    if (bUseDepthTest)
+		ofEnableDepthTest();
 
 	camera.begin();
     
@@ -528,7 +535,8 @@ void ofApp::drawPresetParticles()
 
 void ofApp::drawPresetAudioObjects()
 {
-    ofEnableDepthTest();
+	if (bUseDepthTest)
+		ofEnableDepthTest();
 
 	camera.begin();
     
@@ -553,7 +561,8 @@ void ofApp::drawPresetAudioObjects()
 
 void ofApp::drawPresetMatrix3D()
 {
-    ofEnableDepthTest();
+	if (bUseDepthTest)
+	    ofEnableDepthTest();
 
 	camera.begin();
     
@@ -602,7 +611,8 @@ void ofApp::drawScene()
     //fftFile.draw(x, y, w, h);
     
     //----------------------------------------------------------
-    ofEnableDepthTest();
+	if (bUseDepthTest)
+	 ofEnableDepthTest();
 
 	// generate a noisy 3d position over time 
 	float t = (2 + ofGetElapsedTimef()) * .1;

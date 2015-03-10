@@ -17,6 +17,8 @@ class Particulas
 		//ofxIntSlider	paramMaxLenght;
 		ofxFloatSlider	paramMult;
 		ofxIntSlider	paramLightDistance;
+		ofxIntSlider	paramDrawMode;
+
 		//ofxFloatSlider	paramDamp;
 
 		AVGSistPart		sistPart;
@@ -28,7 +30,7 @@ class Particulas
 		void	drawAsociaciones	( );
 		void	addAsociacion		( int *pos, float lineWidth );
 		void	updatePosicion		( );
-		int		addParticula		( ofVec3f pos, ofVec3f vel, float audioAverage );
+		int		addParticula		( ofVec3f pos, ofVec3f vel, float audioAverage, ofColor color );
 
 		float			width;
 		float			height;

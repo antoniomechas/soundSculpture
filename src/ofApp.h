@@ -62,6 +62,7 @@ public:
 	ofxIntSlider		presetType;
 	ofxIntSlider		drawMode;
     ofxSlider<int>		meshIndex;
+    ofxToggle			bUseDepthTest;
     ofxToggle			bUseTexture;
     ofxToggle			bUseAudioInput;
     ofxSlider<float>	audioPeakDecay;
