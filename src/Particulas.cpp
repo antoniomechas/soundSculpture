@@ -127,7 +127,17 @@ void Particulas::update(float average, float *soundData)
 				float velX = ofRandom(sistPart.partVelXmin,sistPart.partVelXmax);
 				float velY = ofRandom(sistPart.partVelYmin,sistPart.partVelYmax);
 				float velZ = ofRandom(sistPart.partVelZ1, sistPart.partVelZ2);
+				if (beatDetector->isHigh())
+				{
+					velX *= 5.0;
+					velY *= 5.0;
+				}
 				int p = addParticula(punto2, ofVec3f( velX, velY, velZ), average, cEmitter);
+				if (beatDetector->isHigh())
+				{
+					sistPart.particulas[p].clicksMuerte = ofRandom(30,40);
+					sistPart.particulas[p].setColor(1.0,1.0,1.0);
+				}
 				pOrg[k] = p;
 				punto2 = punto + ofVec3f(ofRandom(5,5 + 10 * average), ofRandom(5,5 + 10 * average),0);
 			}

@@ -364,6 +364,14 @@ void ofxFFTBase::getFftData(float * data, int length) {
     }
 }
 
+void ofxFFTBase::getRawFftData(float * data, int length) {
+    for(int i=0; i<length; i++) {
+        int j = (int)((i / (float)(length - 1)) * (binSize - 1));
+        float v  = fftData.data[j];
+        data[i] = v;
+    }
+}
+
 void ofxFFTBase::getFftPeakData(float * data, int length) {
     for(int i=0; i<length; i++) {
         int j = (int)((i / (float)(length - 1)) * (binSize - 1));

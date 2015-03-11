@@ -85,6 +85,7 @@ public:
     virtual void getFftData(float *data, int length);
     virtual void getFftPeakData(float *data, int length);
     virtual void getGlitchData(int * data, int length);
+    virtual void getRawFftData(float *data, int length);
     
     fft * _fft;
     

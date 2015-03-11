@@ -76,8 +76,8 @@ void ofApp::setup(){
 	player.setLoop(true);
 	//player.setVolume(0.05);
 	player.play();
-	
 	fftFile.player = &player;
+	beatDetector.enableBeatDetect();
 
 	cameraDist = 400;
 
@@ -264,24 +264,8 @@ void ofApp::update(){
 	fftFile.getFftPeakData(audioData, numOfVerts);
     
 	float average = fftFile.getAveragePeak();
-	post[0]->setEnabled(false);
-	post[1]->setEnabled(false);
-	post[2]->setEnabled(false);
-	if (bFXBloom)
-	{
-		//if (average < 0.33)
-		//	post[0]->setEnabled(true);
-		//if (average < 0.66)
-		//	post[1]->setEnabled(true);
-		//if (average <= 1.0)
-		//	post[2]->setEnabled(true);
-		if (beatDetector.isLow())
-			post[0]->setEnabled(true);
-	}
 
-	post[3]->setEnabled(bFXFxaa);
-		//cout << average << ", ";
-   
+  
 	float meshDisplacement = 100;
     meshWarped.clearColors();
     for(int i=0; i<numOfVerts; i++) {
@@ -321,9 +305,31 @@ void ofApp::update(){
 	//	post.end();
 	//rgbaFboFloat.end();
 	
-	delete [] audioData;
 	audioData = new float[beatDetector.getFFTSize()];
+	fftFile.getRawFftData(audioData, beatDetector.getFFTSize());
+
+	//for (int i = 0; i < beatDetector.getFFTSize() ; i++)
+	//	audioData[i] *= 255.0f;
 	beatDetector.update(audioData);
+
+	post[0]->setEnabled(false);
+	post[1]->setEnabled(false);
+	post[2]->setEnabled(false);
+	post[3]->setEnabled(bFXFxaa);
+	beatDetector.setBeatValue(1.0f);
+	if (bFXBloom)
+	{
+		//if (average < 0.33)
+		//	post[0]->setEnabled(true);
+		//if (average < 0.66)
+		//	post[1]->setEnabled(true);
+		//if (average <= 1.0)
+		//	post[2]->setEnabled(true);
+		if (beatDetector.isBeat(0))
+			post[0]->setEnabled(true);
+	}
+
+	delete [] audioData;
 
 	updateSoundObjects();
 }
@@ -472,12 +478,8 @@ void ofApp::draw(){
 		gui.draw();
 		gui2.draw();
 	}
-	int w = OFX_FFT_WIDTH;
-    int h = OFX_FFT_HEIGHT;
-    int x = 20;
-    int y = ofGetHeight() - h - 20;
-    fftFile.draw(x, y, w, h);
-	return;
+
+	//return;
 	//drawShadow();
 	//return;
 	//ofBackground(0,0,0);
@@ -513,6 +515,16 @@ void ofApp::draw(){
 	post.end();
 	ofPopMatrix();
 	ofSetColor(255,255,255);
+	
+	int w = OFX_FFT_WIDTH;
+    int h = OFX_FFT_HEIGHT;
+    int x = 20;
+    int y = ofGetHeight() - h - 20;
+    //fftFile.draw(x, y, w, h);
+	//beatDetector.drawBeats();
+	//cout << "HAT: " << beatDetector.isHat() << ","
+	//	<< "SNARE: " << beatDetector.isSnare() << ","
+	//	<< "Kick: " << beatDetector.isKick() << "," << endl;
 
 	if (bGuiVisible)
 	{
