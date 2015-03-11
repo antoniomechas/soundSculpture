@@ -3,13 +3,14 @@
 #include "ofxGui.h"
 #include "AVGSistPart.h"
 #include "ColorUtil.h"
+#include "ofxBeatDetector.h"
 
 class Particulas
 {
 
 	public:
 		
-		void	setup				(float width, float height);
+		void	setup				(float width, float height, ofxBeatDetector *beatDetector);
 		void	update				(float average, float *soundData);
 		void	draw				( );
 		int		getAudioDataAmount	( );
@@ -57,6 +58,15 @@ class Particulas
 		vector <int> pVivas;
 		vector<ASOCIACION> asociaciones;
 
+		struct CIRCULO
+		{
+			ofPoint		centro;
+			float		radio;
+			ofColor		color;
+			int			vida;
+		};
+		vector<CIRCULO> circulos;
+
 		struct EMITTER
 		{
 			ofFloatColor color;
@@ -66,4 +76,6 @@ class Particulas
 			ofVec2f dir;
 		};
 		EMITTER emitter[4];
+
+		ofxBeatDetector *beatDetector;
 };

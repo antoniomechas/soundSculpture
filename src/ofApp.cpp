@@ -133,7 +133,7 @@ void ofApp::setup(){
 	setupGui();
 	loadSettings(iPresetActual);
 
-	particulas.setup(ofGetWidth(),ofGetHeight());
+	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
 }
 
 void ofApp::setupGui()
@@ -178,7 +178,7 @@ void ofApp::setupGui()
 	gui2.add(particulas.sistPart.partAlphaIni2.setup( "part Alpha Ini 2", 1, 0.0, 1.0 ));
 	gui2.add(particulas.sistPart.partAlphaFin1.setup( "part Alpha Fin 1", 1, 0.0, 1.0 ));
 	gui2.add(particulas.sistPart.partAlphaFin2.setup( "part Alpha Fin 2", 1, 0.0, 1.0 ));
-	gui2.add(particulas.sistPart.partDamping.setup( "part damping",  0.006f, 0, 0.01f ));
+	gui2.add(particulas.sistPart.partDamping.setup( "part damping",  0.9f, 0.9f, 1.0f ));
 	gui2.add(particulas.sistPart.partGravedad.setup( "part gravedad", 0, -0.1f, 0.1f ));
 	gui2.add(particulas.sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
 	gui2.add(particulas.sistPart.partVelXmin.setup( "part vel x min", -2.0, -2.0, 2.0 ));
@@ -269,12 +269,14 @@ void ofApp::update(){
 	post[2]->setEnabled(false);
 	if (bFXBloom)
 	{
-		if (average < 0.33)
+		//if (average < 0.33)
+		//	post[0]->setEnabled(true);
+		//if (average < 0.66)
+		//	post[1]->setEnabled(true);
+		//if (average <= 1.0)
+		//	post[2]->setEnabled(true);
+		if (beatDetector.isLow())
 			post[0]->setEnabled(true);
-		if (average < 0.66)
-			post[1]->setEnabled(true);
-		if (average <= 1.0)
-			post[2]->setEnabled(true);
 	}
 
 	post[3]->setEnabled(bFXFxaa);
@@ -318,6 +320,10 @@ void ofApp::update(){
 	//		drawLine();
 	//	post.end();
 	//rgbaFboFloat.end();
+	
+	delete [] audioData;
+	audioData = new float[beatDetector.getFFTSize()];
+	beatDetector.update(audioData);
 
 	updateSoundObjects();
 }
@@ -461,6 +467,17 @@ void ofApp::draw(){
 	
 	ofBackground(0,0,0);
 	ofSetColor(255,255,255);
+    if (bGuiVisible)
+	{
+		gui.draw();
+		gui2.draw();
+	}
+	int w = OFX_FFT_WIDTH;
+    int h = OFX_FFT_HEIGHT;
+    int x = 20;
+    int y = ofGetHeight() - h - 20;
+    fftFile.draw(x, y, w, h);
+	return;
 	//drawShadow();
 	//return;
 	//ofBackground(0,0,0);

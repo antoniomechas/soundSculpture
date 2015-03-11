@@ -61,18 +61,6 @@
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.cpp">
-      <Filter>addons\ofxFFT\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.cpp">
-      <Filter>addons\ofxFFT\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.cpp">
-      <Filter>addons\ofxFFT\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxFFT\libs\fft.cpp">
-      <Filter>addons\ofxFFT\libs</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxObjLoader\libs\glm.c">
       <Filter>addons\ofxObjLoader</Filter>
     </ClCompile>
@@ -178,6 +166,21 @@
     <ClCompile Include="src\ColorUtil.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ofxBeatDetector\src\ofxBeatDetector.cpp">
+      <Filter>addons\ofxBeatDetector</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxFFT\src\ofxFFTFile.cpp">
+      <Filter>addons\ofxFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxFFT\src\ofxFFTLive.cpp">
+      <Filter>addons\ofxFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxFFT\src\ofxFFTBase.cpp">
+      <Filter>addons\ofxFFT</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxFFT\libs\fft.cpp">
+      <Filter>addons\ofxFFT</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -219,15 +222,6 @@
     <Filter Include="addons\ofxXmlSettings\libs">
       <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxFFT">
-      <UniqueIdentifier>{A51EF345-6145-7F34-5210-584B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFFT\src">
-      <UniqueIdentifier>{CEF5BE20-E223-E8E5-5FDB-C2D7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxFFT\libs">
-      <UniqueIdentifier>{1AA69749-353B-6094-7733-4489}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons\ofxObjLoader">
       <UniqueIdentifier>{ffba5f84-ff63-46a3-b3bc-d09391f64fb7}</UniqueIdentifier>
     </Filter>
@@ -236,6 +230,12 @@
     </Filter>
     <Filter Include="src\ParticleSystem">
       <UniqueIdentifier>{c3ba7716-9d95-4012-a687-e7b126f7835f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxBeatDetector">
+      <UniqueIdentifier>{d279bb66-a76b-4c25-b316-986dcdd3ee8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxFFT">
+      <UniqueIdentifier>{e786684b-612e-443a-bb44-ca2429c47879}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -386,18 +386,6 @@
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.h">
-      <Filter>addons\ofxFFT\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.h">
-      <Filter>addons\ofxFFT\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.h">
-      <Filter>addons\ofxFFT\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxFFT\libs\fft.h">
-      <Filter>addons\ofxFFT\libs</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxObjLoader\libs\glm.h">
       <Filter>addons\ofxObjLoader</Filter>
     </ClInclude>
@@ -505,6 +493,21 @@
     </ClInclude>
     <ClInclude Include="src\ColorUtil.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxBeatDetector\src\ofxBeatDetector.h">
+      <Filter>addons\ofxBeatDetector</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxFFT\src\ofxFFTBase.h">
+      <Filter>addons\ofxFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxFFT\src\ofxFFTFile.h">
+      <Filter>addons\ofxFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxFFT\src\ofxFFTLive.h">
+      <Filter>addons\ofxFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxFFT\libs\fft.h">
+      <Filter>addons\ofxFFT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

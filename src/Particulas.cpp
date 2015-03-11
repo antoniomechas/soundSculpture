@@ -1,12 +1,13 @@
 #include "Particulas.h"
 
 
-void Particulas::setup(float width, float height)
+void Particulas::setup(float width, float height, ofxBeatDetector *beat)
 {
 	
 	this->width = width;
 	this->height = height;
-	
+	this->beatDetector = beat;
+
 	setupLigths();
 
 	//audioDataAmount = cols * rows;
@@ -123,10 +124,10 @@ void Particulas::update(float average, float *soundData)
 			int pOrg[3];
 			for (int k = 0 ; k < 3 ; k++)
 			{
-				float vz = ofRandom(sistPart.partVelZ1, sistPart.partVelZ2);
-				int p = addParticula(punto2, ofVec3f( 
-						ofRandom(sistPart.partVelXmin,sistPart.partVelXmax),ofRandom(sistPart.partVelYmin,sistPart.partVelYmax),
-						vz), average, cEmitter);
+				float velX = ofRandom(sistPart.partVelXmin,sistPart.partVelXmax);
+				float velY = ofRandom(sistPart.partVelYmin,sistPart.partVelYmax);
+				float velZ = ofRandom(sistPart.partVelZ1, sistPart.partVelZ2);
+				int p = addParticula(punto2, ofVec3f( velX, velY, velZ), average, cEmitter);
 				pOrg[k] = p;
 				punto2 = punto + ofVec3f(ofRandom(5,5 + 10 * average), ofRandom(5,5 + 10 * average),0);
 			}

@@ -30,16 +30,16 @@
 		<part_Alpha_Ini_2>1</part_Alpha_Ini_2>
 		<part_Alpha_Fin_1>0</part_Alpha_Fin_1>
 		<part_Alpha_Fin_2>0</part_Alpha_Fin_2>
-		<part_damping>0.0001</part_damping>
+		<part_damping>0.9925</part_damping>
 		<part_gravedad>0</part_gravedad>
 		<part_Vel_Z_1>0</part_Vel_Z_1>
 		<part_Vel_Z_2>0</part_Vel_Z_2>
 		<part_Porcentaje_Esp>0</part_Porcentaje_Esp>
-	<Multiplicador>3.9805</Multiplicador>
+	<Multiplicador>3.1845</Multiplicador>
 	<DrawMode>1</DrawMode>
-	<part_vel_x_min>-0.3</part_vel_x_min>
-		<part_vel_x_max>0.34</part_vel_x_max>
-		<part_vel_y_min>-0.42</part_vel_y_min>
+	<part_vel_x_min>-0.44</part_vel_x_min>
+		<part_vel_x_max>0.42</part_vel_x_max>
+		<part_vel_y_min>-0.46</part_vel_y_min>
 		<part_vel_y_max>0.44</part_vel_y_max>
 	</Particulas>
 <audio/>

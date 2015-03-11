@@ -13,6 +13,7 @@
 #include "AVGSistPart.h"
 #include "ofxCameraSaveLoad.h"
 #include "Particulas.h"
+#include "ofxBeatDetector.h"
 
 #define PRESET_MODEL 1
 #define PRESET_MATRIX3D 2
@@ -74,46 +75,47 @@ public:
 	ofxToggle			bFXBloom;
 	ofxToggle			bFXFxaa;
 
-    ofxFFTLive fftLive;
-    ofxFFTFile fftFile;
+    ofxFFTLive			fftLive;
+    ofxFFTFile			fftFile;
+	ofxBeatDetector		beatDetector;
 
-    ofEasyCam camera;
+    ofEasyCam			camera;
     
-    ofTexture meshTexture;
+    ofTexture			meshTexture;
     ofxAssimpModelLoader model;
-    vector<ofMesh> meshes;
-    ofMesh meshWarped;
+    vector<ofMesh>		meshes;
+    ofMesh				meshWarped;
 
-	ofSoundPlayer player;
+	ofSoundPlayer		player;
 
-	float cameraDist;
-	float cameraRotation;
+	float				cameraDist;
+	float				cameraRotation;
 
-	ofVec3f current;
+	ofVec3f				current;
 	
-	ofFbo rgbaFboFloat;
-	int fadeAmnt;
+	ofFbo				rgbaFboFloat;
+	int					fadeAmnt;
 
-	bool bGuiVisible;
+	bool				bGuiVisible;
 
-	ofxPostProcessing post;
+	ofxPostProcessing	post;
 	ofIcoSpherePrimitive *icoSphere;
 
-	vector<SoundBox> soundBoxes;
+	vector<SoundBox>	soundBoxes;
 
-	Matrix3D matrix3D;
+	Matrix3D			matrix3D;
 
-    ofEasyCam m_cam;
-    ShadowMapLight m_shadowLight;
+    ofEasyCam			m_cam;
+    ShadowMapLight		m_shadowLight;
     
-    ofShader m_shader;
+    ofShader			m_shader;
     
-    float   m_angle;    
-    bool    m_bDrawDepth;
-    bool    m_bDrawLight;
-	bool	m_bPaused;
+    float				m_angle;    
+    bool				m_bDrawDepth;
+    bool				m_bDrawLight;
+	bool				m_bPaused;
 
-	int		iPresetActual;
+	int					iPresetActual;
 
-	Particulas particulas;
+	Particulas			particulas;
 };

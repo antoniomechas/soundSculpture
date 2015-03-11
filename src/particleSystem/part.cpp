@@ -186,9 +186,13 @@ void part::addDampingForce(){
 	// damping is a force operating in the oposite direction of the 
 	// velocity vector
 	
-    frc.x = frc.x - vel.x * damping;
-    frc.y = frc.y - vel.y * damping;
-    frc.z = frc.z - vel.z * damping;
+    //frc.x = frc.x - vel.x * damping;
+    //frc.y = frc.y - vel.y * damping;
+    //frc.z = frc.z - vel.z * damping;
+
+	vel = vel * damping;
+
+
 }
 
 //------------------------------------------------------------
@@ -280,9 +284,9 @@ void part::update(){
 		//  Particulas que brillan
 		case 3:
 
-			addDampingForce();
 			frc.y = frc.y + gravity;
 			vel = vel + frc;
+			vel = vel * damping;
 			pos = pos + vel;
 			//pos.z = pos.z + ofNoise(
 			//if (pos.y > screenH)

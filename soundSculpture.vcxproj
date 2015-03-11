@@ -75,7 +75,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxGui\libs;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxFFT\libs;..\..\..\addons\ofxFFT\src;..\..\..\addons\ofxObjLoader\libs;..\..\..\addons\ofxObjLoader\src;..\..\..\addons\ofxPostProcessing\src;.\src\particleSystem</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxAssimpModelLoader\libs;..\..\..\addons\ofxAssimpModelLoader\src;..\..\..\addons\ofxAssimpModelLoader\libs\assimp;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\include\Compiler;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib;..\..\..\addons\ofxAssimpModelLoader\libs\assimp\lib\vs;..\..\..\addons\ofxGui\libs;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;.\src\ofxFFT\libs;.\src\ofxFFT\src;..\..\..\addons\ofxObjLoader\libs;..\..\..\addons\ofxObjLoader\src;..\..\..\addons\ofxPostProcessing\src;.\src\particleSystem;.\src\ofxBeatDetector\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -136,11 +136,12 @@
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxFFT\libs\fft.cpp" />
+    <ClCompile Include="src\ofxBeatDetector\src\ofxBeatDetector.cpp" />
     <ClCompile Include="src\ofxCameraSaveLoad.cpp" />
+    <ClCompile Include="src\ofxFFT\libs\fft.cpp" />
+    <ClCompile Include="src\ofxFFT\src\ofxFFTBase.cpp" />
+    <ClCompile Include="src\ofxFFT\src\ofxFFTFile.cpp" />
+    <ClCompile Include="src\ofxFFT\src\ofxFFTLive.cpp" />
     <ClCompile Include="src\particleSystem\AVGSistPart.cpp" />
     <ClCompile Include="src\particleSystem\part.cpp" />
     <ClCompile Include="src\Particulas.cpp" />
@@ -226,11 +227,12 @@
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
-    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTBase.h" />
-    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTFile.h" />
-    <ClInclude Include="..\..\..\addons\ofxFFT\src\ofxFFTLive.h" />
-    <ClInclude Include="..\..\..\addons\ofxFFT\libs\fft.h" />
+    <ClInclude Include="src\ofxBeatDetector\src\ofxBeatDetector.h" />
     <ClInclude Include="src\ofxCameraSaveLoad.h" />
+    <ClInclude Include="src\ofxFFT\libs\fft.h" />
+    <ClInclude Include="src\ofxFFT\src\ofxFFTBase.h" />
+    <ClInclude Include="src\ofxFFT\src\ofxFFTFile.h" />
+    <ClInclude Include="src\ofxFFT\src\ofxFFTLive.h" />
     <ClInclude Include="src\particleSystem\AVGSistPart.h" />
     <ClInclude Include="src\particleSystem\part.h" />
     <ClInclude Include="src\Particulas.h" />
