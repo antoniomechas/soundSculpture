@@ -181,6 +181,9 @@
     <ClCompile Include="src\ofxFFT\libs\fft.cpp">
       <Filter>addons\ofxFFT</Filter>
     </ClCompile>
+    <ClCompile Include="src\Emitter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -508,6 +511,9 @@
     </ClInclude>
     <ClInclude Include="src\ofxFFT\libs\fft.h">
       <Filter>addons\ofxFFT</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Emitter.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

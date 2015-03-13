@@ -152,6 +152,7 @@ void ofApp::setupGui()
     gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
     gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
     gui.add(audioMirror.setup("audioMirror", true));
+	gui.add(paramBeatValue.setup( "Beat Value", 0.1, 0.1, 5.0 ));
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.add(bFXBloom.setup("FX Bloom", true));
     gui.add(bFXFxaa.setup("FX fxaa", true));
@@ -180,13 +181,16 @@ void ofApp::setupGui()
 	gui2.add(particulas.sistPart.partAlphaFin2.setup( "part Alpha Fin 2", 1, 0.0, 1.0 ));
 	gui2.add(particulas.sistPart.partDamping.setup( "part damping",  0.9f, 0.9f, 1.0f ));
 	gui2.add(particulas.sistPart.partGravedad.setup( "part gravedad", 0, -0.1f, 0.1f ));
-	gui2.add(particulas.sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
+	//gui2.add(particulas.sistPart.partPorcentajeEspecial.setup( "part Porcentaje Esp", 1, 0.0, 1.0 ));
 	gui2.add(particulas.sistPart.partVelXmin.setup( "part vel x min", -2.0, -2.0, 2.0 ));
 	gui2.add(particulas.sistPart.partVelXmax.setup( "part vel x max", 2.0, -2.0, 2.0 ));
 	gui2.add(particulas.sistPart.partVelYmin.setup( "part vel y min", -2.0, -2.0, 2.0 ));
 	gui2.add(particulas.sistPart.partVelYmax.setup( "part vel y max", 2.0, -2.0, 2.0 ));
 	gui2.add(particulas.sistPart.partVelZ1.setup( "part Vel Z 1", 0, -2, 2 ));
 	gui2.add(particulas.sistPart.partVelZ2.setup( "part Vel Z 2", 0, -2, 2 ));
+	gui2.add(particulas.paramSpeedInc.setup( "Speed inc", 0.1, 0.1, 20 ));
+	gui2.add(particulas.paramColorNoiseMult.setup( "Color Noise", 0.1, 0.01, 2.0 ));
+	gui2.add(particulas.paramMoveNoiseMult.setup( "Move Noise", 0.1, 0.01, 10.0 ));
 
 }
 
@@ -310,13 +314,14 @@ void ofApp::update(){
 
 	//for (int i = 0; i < beatDetector.getFFTSize() ; i++)
 	//	audioData[i] *= 255.0f;
+	//cout << "ParamBeat Value: " << paramBeatValue << endl;
+	beatDetector.setBeatValue(paramBeatValue);
 	beatDetector.update(audioData);
 
 	post[0]->setEnabled(false);
 	post[1]->setEnabled(false);
 	post[2]->setEnabled(false);
 	post[3]->setEnabled(bFXFxaa);
-	beatDetector.setBeatValue(1.0f);
 	if (bFXBloom)
 	{
 		//if (average < 0.33)
@@ -325,8 +330,12 @@ void ofApp::update(){
 		//	post[1]->setEnabled(true);
 		//if (average <= 1.0)
 		//	post[2]->setEnabled(true);
-		if (beatDetector.isBeat(0))
+		if (beatDetector.isHigh())
 			post[0]->setEnabled(true);
+		if (beatDetector.isMid())
+			post[1]->setEnabled(true);
+		if (beatDetector.isLow())
+			post[2]->setEnabled(true);
 	}
 
 	delete [] audioData;

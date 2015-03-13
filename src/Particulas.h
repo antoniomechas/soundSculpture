@@ -4,6 +4,7 @@
 #include "AVGSistPart.h"
 #include "ColorUtil.h"
 #include "ofxBeatDetector.h"
+#include "Emitter.h"
 
 class Particulas
 {
@@ -19,6 +20,9 @@ class Particulas
 		ofxFloatSlider	paramMult;
 		ofxIntSlider	paramLightDistance;
 		ofxIntSlider	paramDrawMode;
+		ofxFloatSlider	paramSpeedInc;
+		ofxFloatSlider	paramColorNoiseMult;
+		ofxFloatSlider	paramMoveNoiseMult;
 
 		//ofxFloatSlider	paramDamp;
 
@@ -60,6 +64,7 @@ class Particulas
 
 		struct CIRCULO
 		{
+			ofVec3f		direccion;
 			ofPoint		centro;
 			float		radio;
 			ofColor		color;
@@ -67,15 +72,7 @@ class Particulas
 		};
 		vector<CIRCULO> circulos;
 
-		struct EMITTER
-		{
-			ofFloatColor color;
-			//Current circle state
-			ofPoint pos;				//Circle center
-			ofPoint axeX, axyY, axyZ;	//Circle's coordinate system
-			ofVec2f dir;
-		};
-		EMITTER emitter[4];
+		vector<Emitter> emitters;
 
 		ofxBeatDetector *beatDetector;
 };

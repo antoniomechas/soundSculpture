@@ -17,14 +17,12 @@ void Particulas::setup(float width, float height, ofxBeatDetector *beat)
 	sistPart.CargaTextura("spark.png");
 
 	colorUtil.setup();
-	for (int i = 0 ; i < 4 ; i++)
+	Emitter *e;
+	for (int i = 0 ; i < 6 ; i++)
 	{
-		emitter[i].pos = ofPoint( 0, 0, 0 );	//Start from center of coordinate
-		emitter[i].axeX = ofPoint( 1, 0, 0 );	//Set initial coordinate system
-		emitter[i].axyY = ofPoint( 0, 1, 0 );
-		emitter[i].axyZ = ofPoint( 0, 0, 1 );
-		emitter[i].dir = ofVec2f(0,0);
-		emitter[i].color = colorUtil.getRandomBrightColor();
+		e = new Emitter;
+		e->setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil);
+		emitters.push_back(*e);
 	}
 }
 
@@ -109,6 +107,8 @@ void Particulas::update(float average, float *soundData)
 {
 	//for (int i = 0 ; i < audioDataAmount ; i++)
 	int a = MAX(1,(int)(average * paramMult));
+	//if (beatDetector->isHigh())
+	//	a = 1;
 	for (int i = 0 ; i < a ; i++)
 	{
 		//float vel = sistPart.part2ColorAutoDelay * 100.0f;
@@ -116,10 +116,9 @@ void Particulas::update(float average, float *soundData)
 		//velo.rescale(vel);
 		// se crean 3 particulas para formar el triángulo
 		//ofVec3f punto(ofRandom(-width/2, width/2), ofRandom(-height/2, height/2), 0);
-		for (int iEmitter = 0 ; iEmitter < 4 ; iEmitter++)
+		for (int iEmitter = 0 ; iEmitter < emitters.size() ; iEmitter++)
 		{
-			ofVec3f punto = emitter[iEmitter].pos;
-			ofColor cEmitter = colorUtil.getNoiseAround(emitter[iEmitter].color, 255, iEmitter*100 + ofGetElapsedTimef() * sistPart.partColorAutoDelay);
+			ofVec3f punto = emitters[iEmitter].pos;
 			ofVec3f punto2 = punto;
 			int pOrg[3];
 			for (int k = 0 ; k < 3 ; k++)
@@ -127,17 +126,17 @@ void Particulas::update(float average, float *soundData)
 				float velX = ofRandom(sistPart.partVelXmin,sistPart.partVelXmax);
 				float velY = ofRandom(sistPart.partVelYmin,sistPart.partVelYmax);
 				float velZ = ofRandom(sistPart.partVelZ1, sistPart.partVelZ2);
-				if (beatDetector->isHigh())
-				{
-					velX *= 5.0;
-					velY *= 5.0;
-				}
-				int p = addParticula(punto2, ofVec3f( velX, velY, velZ), average, cEmitter);
-				if (beatDetector->isHigh())
-				{
-					sistPart.particulas[p].clicksMuerte = ofRandom(30,40);
-					sistPart.particulas[p].setColor(1.0,1.0,1.0);
-				}
+				//if (beatDetector->isHigh())
+				//{
+				//	velX *= 2.0;
+				//	velY *= 2.0;
+				//}
+				int p = addParticula(punto2, ofVec3f( velX, velY, velZ), average, emitters[iEmitter].color);
+				//if (beatDetector->isHigh())
+				//{
+				//	sistPart.particulas[p].clicksMuerte = ofRandom(30,40);
+				//	sistPart.particulas[p].setColor(1.0,1.0,1.0);
+				//}
 				pOrg[k] = p;
 				punto2 = punto + ofVec3f(ofRandom(5,5 + 10 * average), ofRandom(5,5 + 10 * average),0);
 			}
@@ -192,44 +191,15 @@ int Particulas::addParticula(ofVec3f pos, ofVec3f vel, float audioAverage, ofCol
 
 void Particulas::updatePosicion()
 {
-	float time = ofGetElapsedTimef();	//Time
-	/*
-	//Parameters – twisting and rotating angles and color
-	float twistAngle = 5.0 * ofSignedNoise( time * 0.3 + 332.4 );
-	float rotateAngle = 1.5;
-	ofFloatColor colorPosicion( ofNoise( time * 0.05 ),
-		ofNoise( time * 0.1 ),
-		ofNoise( time * 0.15 ));
-	emitter.color = colorPosicion;
-	emitter.color.setSaturation( 1.0 );			//Make the color maximally colorful
-
-	//Rotate the coordinate system of the circle
-	emitter.axeX.rotate( twistAngle, emitter.axyZ );
-	emitter.axyY.rotate( twistAngle, emitter.axyZ );
-
-	emitter.axeX.rotate( rotateAngle, emitter.axyY );
-	emitter.axyZ.rotate( rotateAngle, emitter.axyY );
-
-	//Move the circle on a step
-	float circleStep = 3;		//Step size for circle motion
-	ofPoint move = emitter.axyZ * circleStep;
-	//emitter.pos += move;
-	*/
-	for (int i = 0 ; i < 4 ; i ++)
+	for (int i = 0 ; i < emitters.size(); i++)
 	{
-		emitter[i].dir.x = ofSignedNoise(time * 0.1,i);
-		emitter[i].dir.y = ofSignedNoise(i,time * 0.1);
+		if (beatDetector->isLow())
+			emitters[i].setMoveSeed( emitters[i].getMoveSeed() + 1);
 
-		emitter[i].pos += emitter[i].dir * 10.0f;
-
-		if (emitter[i].pos.z < 100 || emitter[i].pos.z > 100)
-			emitter[i].pos.z *= -1.0;
-
-		if (emitter[i].pos.x < -width/2 || emitter[i].pos.x > width/2)
-			emitter[i].pos.x *= -1.0;
-
-		if (emitter[i].pos.y < -height/2 || emitter[i].pos.y > height/2)
-			emitter[i].pos.y *= -1.0;
+		emitters[i].setSpeedInc(paramSpeedInc);
+		emitters[i].setMoveNoise(paramMoveNoiseMult);
+		emitters[i].setColorNoiseMult(paramColorNoiseMult);
+		emitters[i].update();
 	}
 }
 

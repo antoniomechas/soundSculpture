@@ -85,7 +85,10 @@ int ofxBeatDetector::getFFTSize()
 
 bool ofxBeatDetector::isBeat(int subband)
 {
-    return fftSubbands[subband] > averageEnergy[subband]*beatValue;
+	//cout << "Beat: " << fftSubbands[subband] << ", " << "Average: " << averageEnergy[subband] << 
+	//	", " << "Multiplicado: " << averageEnergy[subband]*beatValue << endl;
+	//cout << "BeatValue: " << beatValue << endl;
+	return fftSubbands[subband] > averageEnergy[subband]*beatValue;
 }
 
 bool ofxBeatDetector::isKick()

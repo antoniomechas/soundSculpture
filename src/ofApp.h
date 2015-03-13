@@ -74,6 +74,7 @@ public:
 	ofxFloatSlider		lineWidth;
 	ofxToggle			bFXBloom;
 	ofxToggle			bFXFxaa;
+	ofxFloatSlider		paramBeatValue;
 
     ofxFFTLive			fftLive;
     ofxFFTFile			fftFile;
