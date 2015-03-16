@@ -42,13 +42,25 @@ void ofApp::setup(){
     //--------------------------------------------------------------
 	//--------------------------------------------------------------
     meshes.push_back(icoSphere->getMesh());
+	//setNormals(meshes.back());
     meshes.push_back(customMesh);
+	//setNormals(meshes.back());
     meshes.push_back(sphere.getMesh());
+	//setNormals(meshes.back());
     //meshes.push_back(plane.getMesh());
 
-	//model.loadModel("dinosaur.dae");
- //   meshes.push_back(model.getMesh(0));
- //   
+	//model.loadModel("mesh/dinosaur.dae");
+    //meshes.push_back(model.getMesh(0));
+	//setNormals(meshes.back());
+
+	model.loadModel("mesh/Nico-Robin2.dae");
+    meshes.push_back(model.getMesh(0));
+ //   meshes.push_back(model.getMesh(1));
+ //   meshes.push_back(model.getMesh(2));
+ //   meshes.push_back(model.getMesh(3));
+ //   meshes.push_back(model.getMesh(4));
+	//
+	//   
 	//model.clear();
 	//model.loadModel("head.dae");
  //   meshes.push_back(model.getMesh(0));
@@ -134,6 +146,19 @@ void ofApp::setup(){
 	loadSettings(iPresetActual);
 
 	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
+	soundShader.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
+}
+
+void ofApp::setupLigths() {
+    
+    light.setAmbientColor( ofFloatColor( 0.0f, 0.0f, 0.0f, 1.0f ) );
+    light.setDiffuseColor( ofFloatColor( 0.9f, 0.9f, 0.9f, 1.0f ) );
+    light.setSpecularColor( ofFloatColor( 1.0f, 1.0f, 1.0f, 1.0f ) );
+    
+    light.setPosition( 0,0, 200.0f);
+	light.lookAt(ofVec3f(0,0,0));
+    
+    ofSetGlobalAmbientColor( ofFloatColor( 0.05f, 0.05f, 0.05f ) );
 }
 
 void ofApp::setupGui()
@@ -156,6 +181,8 @@ void ofApp::setupGui()
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.add(bFXBloom.setup("FX Bloom", true));
     gui.add(bFXFxaa.setup("FX fxaa", true));
+    gui.add(paramLightEnable.setup("ligth", true));
+    gui.add(paramLightDistance.setup("light distance", 1.0, 1.0, 1000.0));
 	gui.add(matrix3D.paramLightDistance.setup("matrix Light Dist",100,50,1000));
 	gui.add(matrix3D.paramMaxLenght.setup("matrix Max Lenght",100,5,500));
 	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
@@ -254,50 +281,62 @@ void ofApp::update(){
     ofMesh & meshOriginal = meshes[meshIndex];
     meshWarped = meshOriginal;
     
-    if(bUseAudioInput == false) {
-        return;
-    }
+    //if(bUseAudioInput == false) {
+    //    return;
+    //}
     
-    vector<ofVec3f> & vertsOriginal = meshOriginal.getVertices();
-    vector<ofVec3f> & vertsWarped = meshWarped.getVertices();
-    int numOfVerts = meshOriginal.getNumVertices();
-    
-    float * audioData = new float[numOfVerts];
-    //fftLive.getFftPeakData(audioData, numOfVerts);
-
-	fftFile.getFftPeakData(audioData, numOfVerts);
     
 	float average = fftFile.getAveragePeak();
-
-  
+	float *audioData;
+	vector<ofVec3f> & vertsOriginal = meshOriginal.getVertices();
+	vector<ofVec3f> & vertsWarped = meshWarped.getVertices();
+	int numOfVerts = meshOriginal.getNumVertices();
 	float meshDisplacement = 100;
-    meshWarped.clearColors();
-    for(int i=0; i<numOfVerts; i++) {
 
-		float t = (2 + ofGetElapsedTimef()) * .1;
+	switch (presetType)
+	{
+		case PRESET_MODEL:
 
-		float audioValue = audioData[i];
-		ofVec3f & vertOriginal = vertsOriginal[i] * scale;
-        ofVec3f & vertWarped = vertsWarped[i];
-        ofVec3f dir = vertOriginal;
-		float mult = 100;
-		dir.x = dir.x + ofNoise(vertOriginal.x + t,0,0) * mult;
-		dir.y = dir.y + ofNoise(0,vertOriginal.y + t,0) * mult;
-		dir.z = dir.z + ofNoise(0,0,vertOriginal.z + t) * mult;
-		ofVec3f direction = dir.getNormalized();
-        //ofVec3f direction = vertOriginal.getNormalized();
-        vertWarped = vertOriginal + direction * meshDisplacement * (audioValue * audioMult);
-
-		float r = ofNoise(t,0,0) * audioValue * vertOriginal.normalized().x * 2.0;
-		float g = ofNoise(0,t,0) * audioValue * vertOriginal.normalized().y * 2.0;
-		float b = ofNoise(0,0,t) * audioValue * vertOriginal.normalized().z * 2.0;
-		r = MAX(0.1, r);
-		g = MAX(0.1, g);
-		b = MAX(0.1, b);
-		meshWarped.addColor(ofFloatColor(r, g, b));
-    }
     
-    delete[] audioData;
+			audioData = new float[numOfVerts];
+			//fftLive.getFftPeakData(audioData, numOfVerts);
+			fftFile.getFftPeakData(audioData, numOfVerts);
+			meshWarped.clearColors();
+			for(int i=0; i<numOfVerts; i++) {
+
+				float t = (2 + ofGetElapsedTimef()) * .1;
+
+				float audioValue = audioData[i];
+				ofVec3f & vertOriginal = vertsOriginal[i] * scale;
+				ofVec3f & vertWarped = vertsWarped[i];
+				ofVec3f dir = vertOriginal;
+				float mult = 100;
+				dir.x = dir.x + ofNoise(vertOriginal.x + t,0,0) * mult;
+				dir.y = dir.y + ofNoise(0,vertOriginal.y + t,0) * mult;
+				dir.z = dir.z + ofNoise(0,0,vertOriginal.z + t) * mult;
+				//ofVec3f direction = dir.getNormalized();
+				ofVec3f direction = meshOriginal.getNormals()[i];
+				vertWarped = vertOriginal + direction * meshDisplacement * (audioValue * audioMult);
+
+				float r = ofNoise(t,0,0) * audioValue * vertOriginal.normalized().x * 2.0;
+				float g = ofNoise(0,t,0) * audioValue * vertOriginal.normalized().y * 2.0;
+				float b = ofNoise(0,0,t) * audioValue * vertOriginal.normalized().z * 2.0;
+				r = MAX(0.1, r);
+				g = MAX(0.1, g);
+				b = MAX(0.1, b);
+				//meshWarped.addColor(ofFloatColor(r, g, b));
+				meshWarped.addColor(ofFloatColor(1.0, 1.0, 1.0));
+			}
+			setNormals(meshWarped);
+		    delete[] audioData;
+		
+			break;
+		
+		case PRESET_AUDIO_SHADER:
+			soundShader.update();
+			break;
+	}
+
 
  //   ofEnableAlphaBlending();
 	////
@@ -311,10 +350,6 @@ void ofApp::update(){
 	
 	audioData = new float[beatDetector.getFFTSize()];
 	fftFile.getRawFftData(audioData, beatDetector.getFFTSize());
-
-	//for (int i = 0; i < beatDetector.getFFTSize() ; i++)
-	//	audioData[i] *= 255.0f;
-	//cout << "ParamBeat Value: " << paramBeatValue << endl;
 	beatDetector.setBeatValue(paramBeatValue);
 	beatDetector.update(audioData);
 
@@ -519,6 +554,10 @@ void ofApp::draw(){
 			case PRESET_AUDIO_OBJECTS:
 				drawPresetAudioObjects();
 				break;
+
+			case PRESET_AUDIO_SHADER:
+				soundShader.draw();
+				break;
 		}
 
 	post.end();
@@ -669,12 +708,25 @@ void ofApp::drawScene()
  //   camera.setGlobalPosition(current);
 	//camera.lookAt(ofVec3f(0,0,0));
 
+	if (paramLightEnable)
+	{
+		//light.setPosition( 0,0, paramLightDistance);
+		ofEnableLighting();
+		ofSetSmoothLighting(true);
+		light.orbit(ofGetFrameNum() % 360, 0, paramLightDistance);
+		light.enable();
+		//cout << ofGetFrameNum() % 90 << endl;
+	}
+
 	camera.begin();
     
     if(bUseTexture == true) {
         ofEnableNormalizedTexCoords();
         meshTexture.bind();
     }
+
+	if (paramLightEnable)
+		light.draw();
 
     ofSetColor(ofColor::white);
     //meshWarped.setMode(OF_PRIMITIVE_POINTS);
@@ -705,7 +757,14 @@ void ofApp::drawScene()
     //meshWarped.drawWireframe();
     
     camera.end();
-    
+
+	if (paramLightEnable)
+	{
+		ofDisableLighting();
+		light.disable();
+	}
+
+
     ofDisableDepthTest();
 
 }
@@ -813,4 +872,49 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
+}
+
+//--------------------------------------------------------------
+//Universal function which sets normals for the triangle mesh
+void ofApp::setNormals( ofMesh &mesh ){
+
+	//The number of the vertices
+	int nV = mesh.getNumVertices();
+	
+	//The number of the triangles
+	int nT = mesh.getNumIndices() / 3;
+
+	vector<ofPoint> norm( nV ); //Array for the normals
+
+	//Scan all the triangles. For each triangle add its
+	//normal to norm's vectors of triangle's vertices
+	for (int t=0; t<nT; t++) {
+
+		//Get indices of the triangle t
+		int i1 = mesh.getIndex( 3 * t );
+		int i2 = mesh.getIndex( 3 * t + 1 );
+		int i3 = mesh.getIndex( 3 * t + 2 );
+		
+		//Get vertices of the triangle
+		const ofPoint &v1 = mesh.getVertex( i1 );
+		const ofPoint &v2 = mesh.getVertex( i2 );
+		const ofPoint &v3 = mesh.getVertex( i3 );
+		
+		//Compute the triangle's normal
+		ofPoint dir = ( (v2 - v1).crossed( v3 - v1 ) ).normalized();
+		
+		//Accumulate it to norm array for i1, i2, i3
+		norm[ i1 ] += dir;
+		norm[ i2 ] += dir;
+		norm[ i3 ] += dir;
+	}
+
+	//Normalize the normal's length
+	for (int i=0; i<nV; i++) {
+		norm[i].normalize();
+	}
+
+	//Set the normals to mesh
+	mesh.clearNormals();
+	mesh.addNormals( norm );
 }

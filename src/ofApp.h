@@ -14,12 +14,14 @@
 #include "ofxCameraSaveLoad.h"
 #include "Particulas.h"
 #include "ofxBeatDetector.h"
+#include "SoundShader.h"
 
 #define PRESET_MODEL 1
 #define PRESET_MATRIX3D 2
 #define PRESET_PARTICLES 3
 #define PRESET_AUDIO_OBJECTS 4
-#define PRESET_MAX 5
+#define PRESET_AUDIO_SHADER 5
+#define PRESET_MAX 6
 
 class ofApp : public ofBaseApp{
 
@@ -29,7 +31,9 @@ public:
     void setupGui();
 	void update();
     void draw();
-	
+	void setNormals( ofMesh &mesh );
+	void setupLigths();
+
 	void drawPresetMatrix3D();
 	void drawPresetModel();
 	void drawPresetParticles();
@@ -75,6 +79,8 @@ public:
 	ofxToggle			bFXBloom;
 	ofxToggle			bFXFxaa;
 	ofxFloatSlider		paramBeatValue;
+	ofxToggle			paramLightEnable;
+	ofxFloatSlider		paramLightDistance;
 
     ofxFFTLive			fftLive;
     ofxFFTFile			fftFile;
@@ -119,4 +125,8 @@ public:
 	int					iPresetActual;
 
 	Particulas			particulas;
+	ofLight				light;
+
+	SoundShader			soundShader;
+
 };

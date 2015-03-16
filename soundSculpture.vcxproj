@@ -149,6 +149,7 @@
     <ClCompile Include="src\shadowMapLight.cpp" />
     <ClCompile Include="src\SoundBox.cpp" />
     <ClCompile Include="src\SoundObject.cpp" />
+    <ClCompile Include="src\SoundShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\addons\ofxObjLoader\libs\glm.h" />
@@ -241,6 +242,7 @@
     <ClInclude Include="src\shadowMapLight.h" />
     <ClInclude Include="src\SoundBox.h" />
     <ClInclude Include="src\SoundObject.h" />
+    <ClInclude Include="src\SoundShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
