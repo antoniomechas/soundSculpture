@@ -16,7 +16,20 @@ class Emitter
 		ofPoint			pos;	
 		ofVec3f			dir;
 		ofFloatColor	color;
-	
+
+		// Beat reaction 
+		enum BeatReaction{
+			BEAT_REACTION_LOW = 0,
+			BEAT_REACTION_MID = 1,
+			BEAT_REACTION_HIGH = 2,
+			BEAT_REACTION_KICK = 3,
+			BEAT_REACTION_SNARE = 4,
+			BEAT_REACTION_HAT = 5
+		};
+
+		BeatReaction	beatReaction;
+
+
 	protected:
 		
 		float			width;
@@ -28,4 +41,7 @@ class Emitter
 		float			colorNoiseMult;
 		float			speedInc;
 		float			moveNoise;
+
+
+
 };

@@ -1,12 +1,13 @@
 #include "Particulas.h"
 
 
-void Particulas::setup(float width, float height, ofxBeatDetector *beat)
+void Particulas::setup(float width, float height, ofxBeatDetector *beat, ofEasyCam *camera)
 {
 	
 	this->width = width;
 	this->height = height;
 	this->beatDetector = beat;
+	this->camera = camera;
 
 	setupLigths();
 
@@ -22,8 +23,16 @@ void Particulas::setup(float width, float height, ofxBeatDetector *beat)
 	{
 		e = new Emitter;
 		e->setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil);
+		e->beatReaction = (Emitter::BeatReaction)((i % 3) + 3);
+		//e->beatReaction = (Emitter::BeatReaction::BEAT_REACTION_HAT);
 		emitters.push_back(*e);
 	}
+
+	post.init(width, height);
+    post.createPass<BloomPass>()->setEnabled(true);
+    post.createPass<BloomPass>()->setEnabled(true);
+    post.createPass<BloomPass>()->setEnabled(true);
+	post2.init(width, height);
 }
 
 void Particulas::draw()
@@ -34,11 +43,25 @@ void Particulas::draw()
 	//ofSetSmoothLighting(true);
 	//light.setPosition(300,-300,paramLightDistance);
 	//light.enable();
-	drawAsociaciones();
-	ofNoFill();
-	ofRect(-width/2,-height/2,width,height);
-	sistPart.dibuja();
-	
+	ofBackground(0,0,0);
+	ofSetColor(255,255,255);
+	ofEnableAlphaBlending();
+	ofEnableBlendMode(OF_BLENDMODE_ADD);
+
+	post.begin();
+		camera->begin();
+			drawAsociaciones(true);
+		camera->end();
+	post.end();
+
+	post2.begin();
+		camera->begin();
+			drawAsociaciones(false);
+			ofNoFill();
+			ofRect(-width/2,-height/2,width,height);
+			sistPart.dibuja();
+		camera->end();	
+	post2.end();
 	//draw
 
 	//light.disable();
@@ -47,7 +70,7 @@ void Particulas::draw()
 
 }
 
-void Particulas::drawAsociaciones()
+void Particulas::drawAsociaciones(bool postPass)
 {
 	mesh.clear();
 	ofSetColor(255,255,255);
@@ -74,13 +97,16 @@ void Particulas::drawAsociaciones()
 						sistPart.particulas[asociaciones[i].nodo2].a +
 						sistPart.particulas[asociaciones[i].nodo3].a;
 		alpha = (alpha / 3.0) * 255.0;
-		mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
-		mesh.addVertex(sistPart.particulas[asociaciones[i].nodo2].pos);
-		mesh.addVertex(sistPart.particulas[asociaciones[i].nodo3].pos);
-		mesh.addColor(ofColor(asociaciones[i].color1, alpha));
-		mesh.addColor(ofColor(asociaciones[i].color2, alpha));
-		mesh.addColor(ofColor(asociaciones[i].color3, alpha));
-		mesh.addTriangle(mesh.getNumVertices()-3, mesh.getNumVertices()-2, mesh.getNumVertices()-1);
+		if (!postPass || (postPass && asociaciones[i].bloomLife > 0))
+		{
+			mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
+			mesh.addVertex(sistPart.particulas[asociaciones[i].nodo2].pos);
+			mesh.addVertex(sistPart.particulas[asociaciones[i].nodo3].pos);
+			mesh.addColor(ofColor(asociaciones[i].color1, alpha));
+			mesh.addColor(ofColor(asociaciones[i].color2, alpha));
+			mesh.addColor(ofColor(asociaciones[i].color3, alpha));
+			mesh.addTriangle(mesh.getNumVertices()-3, mesh.getNumVertices()-2, mesh.getNumVertices()-1);
+		}
 		//mesh.addIndex(mesh.getNumVertices()-1);
 		//mesh.addIndex(mesh.getNumVertices());
 	}
@@ -138,9 +164,11 @@ void Particulas::update(float average, float *soundData)
 				//	sistPart.particulas[p].setColor(1.0,1.0,1.0);
 				//}
 				pOrg[k] = p;
-				punto2 = punto + ofVec3f(ofRandom(5,5 + 10 * average), ofRandom(5,5 + 10 * average),0);
+				float maxDist = 5;
+				float minDist = 2;
+				punto2 = punto + ofVec3f(ofRandom(minDist, maxDist * average), ofRandom(minDist, maxDist * average),0);
 			}
-			addAsociacion(pOrg, 6.0f * average); //añade una asociacion a partir del indice de partícula especificada
+			addAsociacion(emitters[iEmitter], pOrg, 6.0f * average); //añade una asociacion a partir del indice de partícula especificada
 		}
 	}
 
@@ -203,7 +231,7 @@ void Particulas::updatePosicion()
 	}
 }
 
-void Particulas::addAsociacion(int *pos, float lineWidht)
+void Particulas::addAsociacion(Emitter &emitter, int *pos, float lineWidht)
 {
 		ASOCIACION a;
 		
@@ -235,9 +263,49 @@ void Particulas::addAsociacion(int *pos, float lineWidht)
 		//ofVec3f p2 = sistPart.particulas[a.nodo2].pos;
 		//ofVec3f p3 = sistPart.particulas[a.nodo3].pos;
 		//float dMax = 200;
-	
-		//if (p1.distance(p2) < dMax && p2.distance(p3) < dMax && p3.distance(p1) < dMax)
-			asociaciones.push_back(a);
+		bool bloom = false;
+		//cout << "beatReaction: " << emitter.beatReaction << endl;
+		switch (emitter.beatReaction)
+		{
+			case Emitter::BeatReaction::BEAT_REACTION_HAT:
+				beatDetector->setBeatValue(beatHatValue);
+				//cout << "Hatvalue: " << beatHatValue << endl;
+				if (beatDetector->isHat())
+					bloom = true;
+				break;
+			case Emitter::BeatReaction::BEAT_REACTION_KICK:
+				beatDetector->setBeatValue(beatKickValue);
+				//cout << "Kickvalue: " << beatHatValue << endl;
+				if (beatDetector->isKick())
+					bloom = true;
+				break;
+			case Emitter::BeatReaction::BEAT_REACTION_SNARE:
+				beatDetector->setBeatValue(beatSnareValue);
+				//cout << "Snarevalue: " << beatHatValue << endl;
+				if (beatDetector->isSnare())
+					bloom = true;
+				break;
+			//case Emitter::BeatReaction::BEAT_REACTION_LOW:
+			//	if (beatDetector->isLow())
+			//		bloom = true;
+			//	break;
+			//case Emitter::BeatReaction::BEAT_REACTION_MID:
+			//	if (beatDetector->isMid())
+			//		bloom = true;
+			//	break;
+			//case Emitter::BeatReaction::BEAT_REACTION_HIGH:
+			//	if (beatDetector->isHigh())
+			//		bloom = true;
+			//	break;
+
+		}
+		
+		if (bloom)
+			a.bloomLife = sistPart.particulas[a.nodo1].clicksMuerte;
+		else
+			a.bloomLife = 0;
+
+		asociaciones.push_back(a);
 }
 
 void Particulas::updateMesh(float average, float *soundData)
@@ -297,6 +365,7 @@ void Particulas::updateMesh(float average, float *soundData)
 	for (int i = 0 ; i < asociaciones.size() ; i++)
 	{
 		asociaciones[i].vida--;
+		asociaciones[i].bloomLife--;
 		if (asociaciones[i].vida <= 0 || !sistPart.particulas[asociaciones[i].nodo1].viva
 										|| !sistPart.particulas[asociaciones[i].nodo2].viva 
 										|| !sistPart.particulas[asociaciones[i].nodo3].viva )

@@ -78,7 +78,9 @@ public:
 	ofxFloatSlider		lineWidth;
 	ofxToggle			bFXBloom;
 	ofxToggle			bFXFxaa;
-	ofxFloatSlider		paramBeatValue;
+	ofxFloatSlider		paramBeatHatValue;
+	ofxFloatSlider		paramBeatSnareValue;
+	ofxFloatSlider		paramBeatKickValue;
 	ofxToggle			paramLightEnable;
 	ofxFloatSlider		paramLightDistance;
 

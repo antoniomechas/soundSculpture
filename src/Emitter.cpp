@@ -32,10 +32,17 @@ void Emitter::update()
 		pos.z *= -1.0;
 
 	if (pos.x < -width/2 || pos.x > width/2)
+	{
+		pos.x -= dir.x * speedInc;
 		pos.x *= -1.0;
 
+	}
+
 	if (pos.y < -height/2 || pos.y > height/2)
+	{
+		pos.y -= dir.y * speedInc;
 		pos.y *= -1.0;
+	}
 
 }
 

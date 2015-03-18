@@ -87,7 +87,7 @@ bool ofxBeatDetector::isBeat(int subband)
 {
 	//cout << "Beat: " << fftSubbands[subband] << ", " << "Average: " << averageEnergy[subband] << 
 	//	", " << "Multiplicado: " << averageEnergy[subband]*beatValue << endl;
-	//cout << "BeatValue: " << beatValue << endl;
+	//cout << "BeatValue: " << beatValue << ",subband: " << fftSubbands[subband] << ",Energy" << averageEnergy[subband]*beatValue << endl;
 	return fftSubbands[subband] > averageEnergy[subband]*beatValue;
 }
 

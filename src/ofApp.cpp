@@ -84,7 +84,7 @@ void ofApp::setup(){
 
 	fftFile.setup();
 
-	player.loadSound("music/3.mp3");
+	player.loadSound("music/1.mp3");
 	player.setLoop(true);
 	//player.setVolume(0.05);
 	player.play();
@@ -145,7 +145,7 @@ void ofApp::setup(){
 	setupGui();
 	loadSettings(iPresetActual);
 
-	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
+	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector, &camera);
 	soundShader.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
 }
 
@@ -177,7 +177,9 @@ void ofApp::setupGui()
     gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
     gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
     gui.add(audioMirror.setup("audioMirror", true));
-	gui.add(paramBeatValue.setup( "Beat Value", 0.1, 0.1, 5.0 ));
+	gui.add(paramBeatHatValue.setup( "Beat Hat Value", 0.1, 0.1, 20.0 ));
+	gui.add(paramBeatKickValue.setup( "Beat Kick Value", 0.1, 0.1, 20.0 ));
+	gui.add(paramBeatSnareValue.setup( "Beat Snare Value", 0.1, 0.1, 20.0 ));
     gui.add(lineWidth.setup("linewidth", 1.0, 0.5, 10.0));
     gui.add(bFXBloom.setup("FX Bloom", true));
     gui.add(bFXFxaa.setup("FX fxaa", true));
@@ -350,7 +352,7 @@ void ofApp::update(){
 	
 	audioData = new float[beatDetector.getFFTSize()];
 	fftFile.getRawFftData(audioData, beatDetector.getFFTSize());
-	beatDetector.setBeatValue(paramBeatValue);
+	//beatDetector.setBeatValue(paramBeatValue);
 	beatDetector.update(audioData);
 
 	post[0]->setEnabled(false);
@@ -450,26 +452,31 @@ void ofApp::updateSoundObjects()
 {
 	int amount = soundBoxes[0].getAudioDataAmount();
 	float * audioData = new float[amount];
-	fftFile.getFftPeakData(audioData, amount);
-    
 	float average = fftFile.getAveragePeak();
-	for (int i = 0 ; i < soundBoxes.size() ; i++)
-		soundBoxes[i].update(average, audioData, audioMult);
 
-	delete [] audioData;
+	if (presetType == PRESET_AUDIO_OBJECTS)
+	{
+		fftFile.getFftPeakData(audioData, amount);
+		for (int i = 0 ; i < soundBoxes.size() ; i++)
+			soundBoxes[i].update(average, audioData, audioMult);
+		delete [] audioData;
+	}
 
-	amount = matrix3D.getAudioDataAmount();
-	audioData = new float[amount];
-	fftFile.getFftPeakData(audioData, amount);
-	matrix3D.update(average, audioData);    
-
-	amount = particulas.getAudioDataAmount();
-	audioData = new float[amount];
-	fftFile.getFftPeakData(audioData, amount);
-	matrix3D.update(average, audioData);    
+	if (presetType == PRESET_MATRIX3D)
+	{
+		amount = matrix3D.getAudioDataAmount();
+		audioData = new float[amount];
+		fftFile.getFftPeakData(audioData, amount);
+		matrix3D.update(average, audioData);    
+	}
 
 	if (presetType == PRESET_PARTICLES)
+	{
+		particulas.beatHatValue = paramBeatHatValue;
+		particulas.beatSnareValue = paramBeatSnareValue;
+		particulas.beatKickValue = paramBeatKickValue;
 		particulas.update(average, audioData);
+	}
 
 	
 
@@ -535,7 +542,7 @@ void ofApp::draw(){
 	//rgbaFboFloat.draw(0,0);
 	ofPushMatrix();
 	
-	post.begin();
+	//post.begin();
 	
 		switch (presetType)
 		{
@@ -560,7 +567,7 @@ void ofApp::draw(){
 				break;
 		}
 
-	post.end();
+	//post.end();
 	ofPopMatrix();
 	ofSetColor(255,255,255);
 	
@@ -586,10 +593,11 @@ void ofApp::draw(){
 
 void ofApp::drawPresetParticles()
 {
-    if (bUseDepthTest)
+
+	if (bUseDepthTest)
 		ofEnableDepthTest();
 
-	camera.begin();
+	//camera.begin();
     
     if(bUseTexture == true) {
         ofEnableNormalizedTexCoords();
@@ -605,9 +613,10 @@ void ofApp::drawPresetParticles()
         ofDisableNormalizedTexCoords();
     }
 
-    camera.end();
+    //camera.end();
     
     ofDisableDepthTest();	
+
 }
 
 void ofApp::drawPresetAudioObjects()

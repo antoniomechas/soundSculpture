@@ -5,13 +5,14 @@
 #include "ColorUtil.h"
 #include "ofxBeatDetector.h"
 #include "Emitter.h"
+#include "ofxPostProcessing.h"
 
 class Particulas
 {
 
 	public:
 		
-		void	setup				(float width, float height, ofxBeatDetector *beatDetector);
+		void	setup				(float width, float height, ofxBeatDetector *beatDetector, ofEasyCam *camera);
 		void	update				(float average, float *soundData);
 		void	draw				( );
 		int		getAudioDataAmount	( );
@@ -24,6 +25,9 @@ class Particulas
 		ofxFloatSlider	paramColorNoiseMult;
 		ofxFloatSlider	paramMoveNoiseMult;
 
+		float			beatHatValue;
+		float			beatKickValue;
+		float			beatSnareValue;
 		//ofxFloatSlider	paramDamp;
 
 		AVGSistPart		sistPart;
@@ -32,8 +36,8 @@ class Particulas
 
 		void	updateMesh			( float average, float *soundData );
 		void	setupLigths			( );
-		void	drawAsociaciones	( );
-		void	addAsociacion		( int *pos, float lineWidth );
+		void	drawAsociaciones	( bool postPass );
+		void	addAsociacion		( Emitter &emitter, int *pos, float lineWidth );
 		void	updatePosicion		( );
 		int		addParticula		( ofVec3f pos, ofVec3f vel, float audioAverage, ofColor color );
 
@@ -57,6 +61,7 @@ class Particulas
 			ofColor	color2;
 			ofColor	color3;
 			float	lineWidth;
+			int		bloomLife;
 		};
 
 		vector <int> pVivas;
@@ -75,4 +80,7 @@ class Particulas
 		vector<Emitter> emitters;
 
 		ofxBeatDetector *beatDetector;
+		ofxPostProcessing post;
+		ofxPostProcessing post2;
+		ofEasyCam		*camera;
 };
