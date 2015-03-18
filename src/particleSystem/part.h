@@ -78,7 +78,7 @@ class part
 		float	fPorcentajeEspecial;	// Para determinar el porcentaje de particulas que se vuelven especiales
 		float	perlinSeed;
 		bool	bPerlin;
-		ofVec2f posIni;
+		ofVec3f posIni;
 		ofVec2f posFin;					// Establece la posición final a donde tiene que llegar la partícula
 		float	multVelocidad;
 		int		perlinRadio;

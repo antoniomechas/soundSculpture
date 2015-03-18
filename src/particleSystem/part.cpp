@@ -201,6 +201,8 @@ void part::setInitialCondition(ofVec3f p, ofVec3f v){
 	pos = p;
 	vel = v;
 	
+	posIni = p;
+
 	tipo = 0;
 	viva = true;
 	clicksVida = 0;

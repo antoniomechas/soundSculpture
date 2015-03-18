@@ -74,23 +74,24 @@ void Particulas::drawAsociaciones(bool postPass)
 {
 	mesh.clear();
 	ofSetColor(255,255,255);
-	//for (int i = 0 ; i < asociaciones.size() ; i++)
-	//{
-	//	float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 
-	//					sistPart.particulas[asociaciones[i].nodo2].a +
-	//					sistPart.particulas[asociaciones[i].nodo3].a;
-	//	alpha = (alpha / 3.0) * 255.0;
-	//	ofSetColor(asociaciones[i].color1, alpha);
-	//	ofSetLineWidth(asociaciones[i].lineWidth);
-	//	ofLine(sistPart.particulas[asociaciones[i].nodo1].pos, 
-	//			sistPart.particulas[asociaciones[i].nodo2].pos);
-	//	ofSetColor(asociaciones[i].color2, alpha);
-	//	ofLine(sistPart.particulas[asociaciones[i].nodo2].pos, 
-	//			sistPart.particulas[asociaciones[i].nodo3].pos);
-	//	ofSetColor(asociaciones[i].color3, alpha);
-	//	ofLine(sistPart.particulas[asociaciones[i].nodo3].pos, 
-	//			sistPart.particulas[asociaciones[i].nodo1].pos);
-	//}
+	ofSetCircleResolution(100);
+	for (int i = 0 ; i < asociaciones.size() ; i++)
+	{
+		float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 
+						sistPart.particulas[asociaciones[i].nodo2].a +
+						sistPart.particulas[asociaciones[i].nodo3].a;
+		alpha = (alpha / 3.0) * 255.0;
+		if (!postPass || (postPass && asociaciones[i].bloomLife > 0))
+		{
+			mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
+			float dist = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo1].posIni); 
+			float dist2 = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo2].pos); 
+			ofSetColor(ofColor(asociaciones[i].color1, alpha));
+			ofEllipse(sistPart.particulas[asociaciones[i].nodo1].posIni, dist, dist2);
+			ofCircle(sistPart.particulas[asociaciones[i].nodo1].posIni, dist);
+		}
+	}
+	return;
 	for (int i = 0 ; i < asociaciones.size() ; i++)
 	{
 		float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 

@@ -217,7 +217,7 @@ void ofApp::setupGui()
 	gui2.add(particulas.sistPart.partVelYmax.setup( "part vel y max", 2.0, -2.0, 2.0 ));
 	gui2.add(particulas.sistPart.partVelZ1.setup( "part Vel Z 1", 0, -2, 2 ));
 	gui2.add(particulas.sistPart.partVelZ2.setup( "part Vel Z 2", 0, -2, 2 ));
-	gui2.add(particulas.paramSpeedInc.setup( "Speed inc", 0.1, 0.1, 20 ));
+	gui2.add(particulas.paramSpeedInc.setup( "Speed inc", 0.1, 0.1, 100 ));
 	gui2.add(particulas.paramColorNoiseMult.setup( "Color Noise", 0.1, 0.01, 2.0 ));
 	gui2.add(particulas.paramMoveNoiseMult.setup( "Move Noise", 0.1, 0.01, 10.0 ));
 
