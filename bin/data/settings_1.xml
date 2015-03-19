@@ -13,10 +13,10 @@
 <drawMode>3</drawMode>
 <FX_Bloom>1</FX_Bloom>
 	<FX_fxaa>0</FX_fxaa>
-<matrix_Light_Dist>705</matrix_Light_Dist>
-	<matrix_Max_Lenght>59</matrix_Max_Lenght>
+<matrix_Light_Dist>325</matrix_Light_Dist>
+	<matrix_Max_Lenght>106</matrix_Max_Lenght>
 	<matrix_Mult>2.52</matrix_Mult>
-<matrix_Damp>0.01</matrix_Damp>
+<matrix_Damp>0.307</matrix_Damp>
 <presetType>2</presetType>
 <Particulas>
 		<part_Tipo>0</part_Tipo>
@@ -37,14 +37,22 @@
 		<part_Vel_Z_1>0</part_Vel_Z_1>
 		<part_Vel_Z_2>0</part_Vel_Z_2>
 		<part_Porcentaje_Esp>1</part_Porcentaje_Esp>
-	<DrawMode>1</DrawMode>
-		<Multiplicador>1</Multiplicador>
-		<part_vel_x_min>-2</part_vel_x_min>
-		<part_vel_x_max>2</part_vel_x_max>
-		<part_vel_y_min>-2</part_vel_y_min>
-		<part_vel_y_max>2</part_vel_y_max>
+	<DrawMode>1</DrawMode>
+		<Multiplicador>1</Multiplicador>
+		<part_vel_x_min>-2</part_vel_x_min>
+		<part_vel_x_max>2</part_vel_x_max>
+		<part_vel_y_min>-2</part_vel_y_min>
+		<part_vel_y_max>2</part_vel_y_max>
+	<Speed_inc>0.1</Speed_inc>
+		<Color_Noise>0.1</Color_Noise>
+		<Move_Noise>0.1</Move_Noise>
 	</Particulas>
-<use_Depth_Test>0</use_Depth_Test>
+<use_Depth_Test>1</use_Depth_Test>
 	<use_Texture>0</use_Texture>
-	<matrix_width_mult>1</matrix_width_mult>
+	<matrix_width_mult>0.3755</matrix_width_mult>
+<Beat_Hat_Value>2.9855</Beat_Hat_Value>
+	<Beat_Kick_Value>2.7865</Beat_Kick_Value>
+	<Beat_Snare_Value>2.7865</Beat_Snare_Value>
+	<ligth>1</ligth>
+	<light_distance>1000</light_distance>
 </audio>

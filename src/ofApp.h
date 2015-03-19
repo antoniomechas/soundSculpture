@@ -130,5 +130,6 @@ public:
 	ofLight				light;
 
 	SoundShader			soundShader;
+	bool				bFullScreen;
 
 };
