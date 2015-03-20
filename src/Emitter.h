@@ -41,6 +41,7 @@ class Emitter
 		float			colorNoiseMult;
 		float			speedInc;
 		float			moveNoise;
+		//ofPoint			posAnt;	
 
 
 

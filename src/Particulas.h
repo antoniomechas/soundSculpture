@@ -39,7 +39,7 @@ class Particulas
 		void	drawAsociaciones	( bool postPass );
 		void	addAsociacion		( Emitter &emitter, int *pos, float lineWidth );
 		void	updatePosicion		( );
-		int		addParticula		( ofVec3f pos, ofVec3f vel, float audioAverage, ofColor color );
+		int		addParticula		( ofVec3f pos, ofVec3f vel, ofVec3f dirIni, float audioAverage, ofColor color );
 
 		float			width;
 		float			height;

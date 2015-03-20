@@ -9,6 +9,7 @@ void Emitter::setup(float width, float height, ofPoint pos, ofVec3f dir, ofFloat
 	this->colorIni = color;
 	this->colorUtil = colorUtil;
 	
+	//posAnt = pos;
 	colorNoiseMult = 1.0f;
 	speedInc = 10.0f;
 	moveNoise = 1.0f;
@@ -43,6 +44,8 @@ void Emitter::update()
 		pos.y -= dir.y * speedInc;
 		pos.y *= -1.0;
 	}
+
+	//posAnt = pos;
 
 }
 

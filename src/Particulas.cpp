@@ -83,12 +83,19 @@ void Particulas::drawAsociaciones(bool postPass)
 		alpha = (alpha / 3.0) * 255.0;
 		if (!postPass || (postPass && asociaciones[i].bloomLife > 0))
 		{
-			mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
+			//mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
 			float dist = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo1].posIni); 
 			float dist2 = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo2].pos); 
 			ofSetColor(ofColor(asociaciones[i].color1, alpha));
-			ofEllipse(sistPart.particulas[asociaciones[i].nodo1].posIni, dist, dist2);
-			ofCircle(sistPart.particulas[asociaciones[i].nodo1].posIni, dist);
+			ofPushMatrix();
+			ofTranslate(sistPart.particulas[asociaciones[i].nodo1].posIni);
+			//ofRotateX(sistPart.particulas[asociaciones[i].nodo1].dirIni.x);
+			ofRotateZ(asin(sistPart.particulas[asociaciones[i].nodo1].dirIni.y));
+			//ofEllipse(ofPoint(0,0,0), dist, dist2);
+			ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
+			//ofEllipse(sistPart.particulas[asociaciones[i].nodo1].posIni, dist, dist2);
+			ofPopMatrix();
+			//ofCircle(sistPart.particulas[asociaciones[i].nodo1].posIni, dist);
 		}
 	}
 	return;
@@ -158,7 +165,7 @@ void Particulas::update(float average, float *soundData)
 				//	velX *= 2.0;
 				//	velY *= 2.0;
 				//}
-				int p = addParticula(punto2, ofVec3f( velX, velY, velZ), average, emitters[iEmitter].color);
+				int p = addParticula(punto2, ofVec3f( velX, velY, velZ), emitters[iEmitter].dir, average, emitters[iEmitter].color);
 				//if (beatDetector->isHigh())
 				//{
 				//	sistPart.particulas[p].clicksMuerte = ofRandom(30,40);
@@ -181,7 +188,7 @@ void Particulas::update(float average, float *soundData)
 
 }
 
-int Particulas::addParticula(ofVec3f pos, ofVec3f vel, float audioAverage, ofColor color)
+int Particulas::addParticula(ofVec3f pos, ofVec3f vel, ofVec3f dirIni, float audioAverage, ofColor color)
 {
 	int p = sistPart.añadeParticula(pos, vel);
 	sistPart.particulas[p].tipo = sistPart.partTipo;
@@ -213,6 +220,7 @@ int Particulas::addParticula(ofVec3f pos, ofVec3f vel, float audioAverage, ofCol
 	c2.setBrightness(c2.getBrightness() + audioAverage);
 	//sistPart.particulas[p].setColorRange(c1, c2);
 	sistPart.particulas[p].setColorRange(color, color);
+	sistPart.particulas[p].dirIni = dirIni;
 
 	return p;
 
