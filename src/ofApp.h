@@ -81,6 +81,9 @@ public:
 	ofxFloatSlider		paramBeatHatValue;
 	ofxFloatSlider		paramBeatSnareValue;
 	ofxFloatSlider		paramBeatKickValue;
+	ofxFloatSlider		paramBeatLowValue;
+	ofxFloatSlider		paramBeatMidValue;
+	ofxFloatSlider		paramBeatHighValue;
 	ofxToggle			paramLightEnable;
 	ofxFloatSlider		paramLightDistance;
 

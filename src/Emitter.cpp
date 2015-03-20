@@ -1,6 +1,6 @@
 #include "Emitter.h"
 
-void Emitter::setup(float width, float height, ofPoint pos, ofVec3f dir, ofFloatColor color, ColorUtil *colorUtil)
+void Emitter::setup(float width, float height, ofPoint pos, ofVec3f dir, ofFloatColor color, ColorUtil *colorUtil, ofxBeatDetector *beat)
 {
 	this->height = height;
 	this->width = width;
@@ -8,7 +8,8 @@ void Emitter::setup(float width, float height, ofPoint pos, ofVec3f dir, ofFloat
 	this->dir = dir;
 	this->colorIni = color;
 	this->colorUtil = colorUtil;
-	
+	this->beatDetector = beatDetector;
+
 	//posAnt = pos;
 	colorNoiseMult = 1.0f;
 	speedInc = 10.0f;
@@ -72,4 +73,76 @@ void Emitter::setMoveSeed( float seed )
 float Emitter::getMoveSeed( )
 {
 	return(seedMove);
+}
+
+bool Emitter::isBeat()
+{
+	switch (beatReaction)
+	{
+		case Emitter::BeatReaction::BEAT_REACTION_HAT:
+			beatDetector->setBeatValue(beatHatValue);
+			//cout << "Hatvalue: " << beatHatValue << endl;
+			if (beatDetector->isHat())
+				return true;
+			break;
+
+		case Emitter::BeatReaction::BEAT_REACTION_KICK:
+			beatDetector->setBeatValue(beatKickValue);
+			//cout << "Kickvalue: " << beatHatValue << endl;
+			if (beatDetector->isKick())
+				return true;
+			break;
+
+		case Emitter::BeatReaction::BEAT_REACTION_SNARE:
+			beatDetector->setBeatValue(beatSnareValue);
+			//cout << "Snarevalue: " << beatHatValue << endl;
+			if (beatDetector->isSnare())
+				return true;
+			break;
+
+		case Emitter::BeatReaction::BEAT_REACTION_LOW:
+			if (beatDetector->isLow())
+				return true;
+			break;
+
+		case Emitter::BeatReaction::BEAT_REACTION_MID:
+			if (beatDetector->isMid())
+				return true;
+			break;
+
+		case Emitter::BeatReaction::BEAT_REACTION_HIGH:
+			if (beatDetector->isHigh())
+				return true;
+			break;
+	}
+}
+
+void Emitter::setBeatLowValue ( float value )
+{
+	beatLowValue = value;
+}
+
+void Emitter::setBeatMidValue ( float value )
+{
+	beatMidValue = value;
+}
+
+void Emitter::setBeatHighValue ( float value )
+{
+	beatHighValue = value;
+}
+
+void Emitter::setBeatSnareValue ( float value )
+{
+	beatSnareValue = value;
+}
+
+void Emitter::setBeatKickValue ( float value )
+{
+	beatKickValue = value;
+}
+
+void Emitter::setBeatHatValue ( float value )
+{
+	beatHatValue = value;
 }

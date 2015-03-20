@@ -19,10 +19,10 @@ void Particulas::setup(float width, float height, ofxBeatDetector *beat, ofEasyC
 
 	colorUtil.setup();
 	Emitter *e;
-	for (int i = 0 ; i < 6 ; i++)
+	for (int i = 0 ; i < 2 ; i++)
 	{
 		e = new Emitter;
-		e->setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil);
+		e->setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil, beatDetector);
 		e->beatReaction = (Emitter::BeatReaction)((i % 3) + 3);
 		//e->beatReaction = (Emitter::BeatReaction::BEAT_REACTION_HAT);
 		emitters.push_back(*e);
@@ -88,14 +88,16 @@ void Particulas::drawAsociaciones(bool postPass)
 			float dist2 = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo2].pos); 
 			ofSetColor(ofColor(asociaciones[i].color1, alpha));
 			ofPushMatrix();
+			ofVec3f dir = sistPart.particulas[asociaciones[i].nodo1].dirIni.getNormalized();
 			ofTranslate(sistPart.particulas[asociaciones[i].nodo1].posIni);
 			//ofRotateX(sistPart.particulas[asociaciones[i].nodo1].dirIni.x);
-			ofRotateZ(asin(sistPart.particulas[asociaciones[i].nodo1].dirIni.y));
+			ofRotateZ(atan(dir.y / dir.x));
+			ofRotateY(90);
 			//ofEllipse(ofPoint(0,0,0), dist, dist2);
-			ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
+			//ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
 			//ofEllipse(sistPart.particulas[asociaciones[i].nodo1].posIni, dist, dist2);
+			ofCircle(ofVec3f(0,0,0), dist);
 			ofPopMatrix();
-			//ofCircle(sistPart.particulas[asociaciones[i].nodo1].posIni, dist);
 		}
 	}
 	return;
@@ -139,6 +141,16 @@ void Particulas::drawAsociaciones(bool postPass)
 
 void Particulas::update(float average, float *soundData)
 {
+	for (int iEmitter = 0 ; iEmitter < emitters.size() ; iEmitter++)
+	{
+		emitters[iEmitter].setBeatHatValue(beatHatValue);
+		emitters[iEmitter].setBeatKickValue(beatKickValue);
+		emitters[iEmitter].setBeatSnareValue(beatSnareValue);
+		emitters[iEmitter].setBeatLowValue(beatLowValue);
+		emitters[iEmitter].setBeatMidValue(beatLowValue);
+		emitters[iEmitter].setBeatHighValue(beatLowValue);
+	}
+
 	//for (int i = 0 ; i < audioDataAmount ; i++)
 	int a = MAX(1,(int)(average * paramMult));
 	//if (beatDetector->isHigh())
@@ -230,8 +242,8 @@ void Particulas::updatePosicion()
 {
 	for (int i = 0 ; i < emitters.size(); i++)
 	{
-		if (beatDetector->isLow())
-			emitters[i].setMoveSeed( emitters[i].getMoveSeed() + 1);
+		//if (beatDetector->isLow())
+		//	emitters[i].setMoveSeed( emitters[i].getMoveSeed() + 1);
 
 		emitters[i].setSpeedInc(paramSpeedInc);
 		emitters[i].setMoveNoise(paramMoveNoiseMult);
@@ -272,44 +284,8 @@ void Particulas::addAsociacion(Emitter &emitter, int *pos, float lineWidht)
 		//ofVec3f p2 = sistPart.particulas[a.nodo2].pos;
 		//ofVec3f p3 = sistPart.particulas[a.nodo3].pos;
 		//float dMax = 200;
-		bool bloom = false;
-		//cout << "beatReaction: " << emitter.beatReaction << endl;
-		switch (emitter.beatReaction)
-		{
-			case Emitter::BeatReaction::BEAT_REACTION_HAT:
-				beatDetector->setBeatValue(beatHatValue);
-				//cout << "Hatvalue: " << beatHatValue << endl;
-				if (beatDetector->isHat())
-					bloom = true;
-				break;
-			case Emitter::BeatReaction::BEAT_REACTION_KICK:
-				beatDetector->setBeatValue(beatKickValue);
-				//cout << "Kickvalue: " << beatHatValue << endl;
-				if (beatDetector->isKick())
-					bloom = true;
-				break;
-			case Emitter::BeatReaction::BEAT_REACTION_SNARE:
-				beatDetector->setBeatValue(beatSnareValue);
-				//cout << "Snarevalue: " << beatHatValue << endl;
-				if (beatDetector->isSnare())
-					bloom = true;
-				break;
-			//case Emitter::BeatReaction::BEAT_REACTION_LOW:
-			//	if (beatDetector->isLow())
-			//		bloom = true;
-			//	break;
-			//case Emitter::BeatReaction::BEAT_REACTION_MID:
-			//	if (beatDetector->isMid())
-			//		bloom = true;
-			//	break;
-			//case Emitter::BeatReaction::BEAT_REACTION_HIGH:
-			//	if (beatDetector->isHigh())
-			//		bloom = true;
-			//	break;
-
-		}
 		
-		if (bloom)
+		if (emitter.isBeat())
 			a.bloomLife = sistPart.particulas[a.nodo1].clicksMuerte;
 		else
 			a.bloomLife = 0;

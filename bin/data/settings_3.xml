@@ -35,15 +35,15 @@
 		<part_Vel_Z_1>0</part_Vel_Z_1>
 		<part_Vel_Z_2>0</part_Vel_Z_2>
 		<part_Porcentaje_Esp>0</part_Porcentaje_Esp>
-	<Multiplicador>3.7815</Multiplicador>
+	<Multiplicador>11.1445</Multiplicador>
 	<DrawMode>1</DrawMode>
 	<part_vel_x_min>-0.76</part_vel_x_min>
 		<part_vel_x_max>0.74</part_vel_x_max>
-		<part_vel_y_min>-0.26</part_vel_y_min>
-		<part_vel_y_max>0.22</part_vel_y_max>
+		<part_vel_y_min>-0.72</part_vel_y_min>
+		<part_vel_y_max>0.72</part_vel_y_max>
 	<Speed_inc>8.5915</Speed_inc>
 		<Color_Noise>0.09955</Color_Noise>
-	<Move_Noise>0.7093</Move_Noise>
+	<Move_Noise>5.95405</Move_Noise>
 	</Particulas>
 <audio/>
 <matrix_width_mult>1</matrix_width_mult>

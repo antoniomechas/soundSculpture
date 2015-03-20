@@ -1,17 +1,25 @@
 #include "ofMain.h"
 #include "ColorUtil.h"
+#include "ofxBeatDetector.h"
 
 class Emitter
 {
 	public:
 
-		void			setup					( float width, float height, ofPoint pos, ofVec3f dir, ofFloatColor color, ColorUtil *colorUtil );
+		void			setup					( float width, float height, ofPoint pos, ofVec3f dir, ofFloatColor color, ColorUtil *colorUtil, ofxBeatDetector *beat );
 		void			update					( );
 		void			setColorNoiseMult		( float noiseMult );
 		void			setSpeedInc				( float speedInc );
 		void			setMoveNoise			( float moveNoise );
 		float			getMoveSeed				( );
 		void			setMoveSeed				( float seed );
+		bool			isBeat					( );
+		void			setBeatLowValue			( float value );
+		void			setBeatHighValue		( float value );
+		void			setBeatMidValue			( float value );
+		void			setBeatSnareValue		( float value );
+		void			setBeatHatValue			( float value );
+		void			setBeatKickValue		( float value );
 
 		ofPoint			pos;	
 		ofVec3f			dir;
@@ -41,8 +49,14 @@ class Emitter
 		float			colorNoiseMult;
 		float			speedInc;
 		float			moveNoise;
+		float			beatLowValue;
+		float			beatMidValue;
+		float			beatHighValue;
+		float			beatSnareValue;
+		float			beatKickValue;
+		float			beatHatValue;
 		//ofPoint			posAnt;	
 
-
+		ofxBeatDetector *beatDetector;
 
 };

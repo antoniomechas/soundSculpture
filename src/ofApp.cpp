@@ -179,6 +179,9 @@ void ofApp::setupGui()
     gui.add(audioPeakDecay.setup("audioPeakDecay", 0.915, 0.9, 1.0));
     gui.add(audioMaxDecay.setup("audioMaxDecay", 0.995, 0.9, 1.0));
     gui.add(audioMirror.setup("audioMirror", true));
+	gui.add(paramBeatLowValue.setup( "Beat Low Value", 0.1, 0.1, 20.0 ));
+	gui.add(paramBeatMidValue.setup( "Beat Mid Value", 0.1, 0.1, 20.0 ));
+	gui.add(paramBeatHighValue.setup( "Beat High Value", 0.1, 0.1, 20.0 ));
 	gui.add(paramBeatHatValue.setup( "Beat Hat Value", 0.1, 0.1, 20.0 ));
 	gui.add(paramBeatKickValue.setup( "Beat Kick Value", 0.1, 0.1, 20.0 ));
 	gui.add(paramBeatSnareValue.setup( "Beat Snare Value", 0.1, 0.1, 20.0 ));
@@ -477,6 +480,9 @@ void ofApp::updateSoundObjects()
 		particulas.beatHatValue = paramBeatHatValue;
 		particulas.beatSnareValue = paramBeatSnareValue;
 		particulas.beatKickValue = paramBeatKickValue;
+		particulas.beatLowValue = paramBeatLowValue;
+		particulas.beatMidValue = paramBeatMidValue;
+		particulas.beatHighValue = paramBeatHighValue;
 		particulas.update(average, audioData);
 	}
 

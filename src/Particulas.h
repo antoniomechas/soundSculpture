@@ -28,6 +28,9 @@ class Particulas
 		float			beatHatValue;
 		float			beatKickValue;
 		float			beatSnareValue;
+		float			beatLowValue;
+		float			beatHighValue;
+		float			beatMidValue;
 		//ofxFloatSlider	paramDamp;
 
 		AVGSistPart		sistPart;
