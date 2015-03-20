@@ -35,6 +35,23 @@
 		<part_Vel_Z_1>0</part_Vel_Z_1>
 		<part_Vel_Z_2>0</part_Vel_Z_2>
 		<part_Porcentaje_Esp>1</part_Porcentaje_Esp>
+	<DrawMode>1</DrawMode>
+		<Multiplicador>3.7815</Multiplicador>
+		<part_vel_x_min>-0.76</part_vel_x_min>
+		<part_vel_x_max>0.74</part_vel_x_max>
+		<part_vel_y_min>-0.86</part_vel_y_min>
+		<part_vel_y_max>0.8</part_vel_y_max>
+		<Speed_inc>8.5915</Speed_inc>
+		<Color_Noise>0.09955</Color_Noise>
+		<Move_Noise>0.7093</Move_Noise>
 	</Particulas>
 <audio/>
+<use_Depth_Test>0</use_Depth_Test>
+	<use_Texture>0</use_Texture>
+	<Beat_Hat_Value>1.7915</Beat_Hat_Value>
+	<Beat_Kick_Value>1.7915</Beat_Kick_Value>
+	<Beat_Snare_Value>1.9905</Beat_Snare_Value>
+	<ligth>0</ligth>
+	<light_distance>1</light_distance>
+	<matrix_width_mult>1</matrix_width_mult>
 </audio>

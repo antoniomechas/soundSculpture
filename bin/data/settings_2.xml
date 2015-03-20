@@ -1,12 +1,12 @@
 <audio>
-	<drawMode>3</drawMode>
+	<drawMode>2</drawMode>
 	<meshIndex>0</meshIndex>
 	<bUseTexture>0</bUseTexture>
 	<scale>4.096</scale>
 	<bUseAudioInput>1</bUseAudioInput>
-	<audioMult>1.35695</audioMult>
-	<audioPeakDecay>0.947</audioPeakDecay>
-	<audioMaxDecay>0.9</audioMaxDecay>
+	<audioMult>2.77505</audioMult>
+	<audioPeakDecay>0.9225</audioPeakDecay>
+	<audioMaxDecay>0.941</audioMaxDecay>
 	<audioMirror>1</audioMirror>
 	<linewidth>4.49</linewidth>
 	<FX_Bloom>0</FX_Bloom>
@@ -52,4 +52,7 @@
 	<matrix_width_mult>1</matrix_width_mult>
 <ligth>1</ligth>
 	<light_distance>1000</light_distance>
+<Beat_Hat_Value>2.9855</Beat_Hat_Value>
+	<Beat_Kick_Value>2.7865</Beat_Kick_Value>
+	<Beat_Snare_Value>2.7865</Beat_Snare_Value>
 </audio>

@@ -53,8 +53,8 @@ void ofApp::setup(){
     //meshes.push_back(model.getMesh(0));
 	//setNormals(meshes.back());
 
-	model.loadModel("mesh/Nico-Robin2.dae");
-    meshes.push_back(model.getMesh(0));
+	//model.loadModel("mesh/Nico-Robin2.dae");
+    //meshes.push_back(model.getMesh(0));
  //   meshes.push_back(model.getMesh(1));
  //   meshes.push_back(model.getMesh(2));
  //   meshes.push_back(model.getMesh(3));
@@ -147,6 +147,8 @@ void ofApp::setup(){
 
 	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector, &camera);
 	soundShader.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
+
+	bFullScreen = false;
 }
 
 void ofApp::setupLigths() {
@@ -835,6 +837,12 @@ void ofApp::keyPressed(int key){
 		iPresetActual = key - '0';
 		loadSettings(iPresetActual);
 	}	
+
+	if (key == 'f')
+	{
+		bFullScreen = !bFullScreen;
+		ofSetFullscreen(bFullScreen);
+	}
 }
 
 //--------------------------------------------------------------
