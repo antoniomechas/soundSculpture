@@ -383,6 +383,8 @@ void ofApp::update(){
 	delete [] audioData;
 
 	updateSoundObjects();
+
+	ofSetWindowTitle(ofToString(ofGetFrameRate()));
 }
 
 void ofApp::drawShadow()
@@ -483,7 +485,7 @@ void ofApp::updateSoundObjects()
 		particulas.beatLowValue = paramBeatLowValue;
 		particulas.beatMidValue = paramBeatMidValue;
 		particulas.beatHighValue = paramBeatHighValue;
-		particulas.update(average, audioData);
+		particulas.update(average);
 	}
 
 	

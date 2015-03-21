@@ -36,6 +36,7 @@ class Emitter
 		};
 
 		BeatReaction	beatReaction;
+		ofxBeatDetector *beatDetector;
 
 
 	protected:
@@ -57,6 +58,5 @@ class Emitter
 		float			beatHatValue;
 		//ofPoint			posAnt;	
 
-		ofxBeatDetector *beatDetector;
 
 };

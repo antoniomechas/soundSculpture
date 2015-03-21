@@ -8,7 +8,7 @@ void Emitter::setup(float width, float height, ofPoint pos, ofVec3f dir, ofFloat
 	this->dir = dir;
 	this->colorIni = color;
 	this->colorUtil = colorUtil;
-	this->beatDetector = beatDetector;
+	this->beatDetector = beat;
 
 	//posAnt = pos;
 	colorNoiseMult = 1.0f;
@@ -77,44 +77,51 @@ float Emitter::getMoveSeed( )
 
 bool Emitter::isBeat()
 {
+	//cout << "BeatReaction: " << (int)beatReaction << endl;
+
 	switch (beatReaction)
 	{
-		case Emitter::BeatReaction::BEAT_REACTION_HAT:
+		case BEAT_REACTION_HAT:
 			beatDetector->setBeatValue(beatHatValue);
 			//cout << "Hatvalue: " << beatHatValue << endl;
 			if (beatDetector->isHat())
 				return true;
 			break;
 
-		case Emitter::BeatReaction::BEAT_REACTION_KICK:
+		case BEAT_REACTION_KICK:
 			beatDetector->setBeatValue(beatKickValue);
 			//cout << "Kickvalue: " << beatHatValue << endl;
 			if (beatDetector->isKick())
 				return true;
 			break;
 
-		case Emitter::BeatReaction::BEAT_REACTION_SNARE:
+		case BEAT_REACTION_SNARE:
 			beatDetector->setBeatValue(beatSnareValue);
 			//cout << "Snarevalue: " << beatHatValue << endl;
 			if (beatDetector->isSnare())
 				return true;
 			break;
 
-		case Emitter::BeatReaction::BEAT_REACTION_LOW:
+		case BEAT_REACTION_LOW:
+			beatDetector->setBeatValue(beatLowValue);
 			if (beatDetector->isLow())
 				return true;
 			break;
 
-		case Emitter::BeatReaction::BEAT_REACTION_MID:
+		case BEAT_REACTION_MID:
+			beatDetector->setBeatValue(beatMidValue);
 			if (beatDetector->isMid())
 				return true;
 			break;
 
-		case Emitter::BeatReaction::BEAT_REACTION_HIGH:
+		case BEAT_REACTION_HIGH:
+			beatDetector->setBeatValue(beatHighValue);
 			if (beatDetector->isHigh())
 				return true;
 			break;
 	}
+
+	return false;
 }
 
 void Emitter::setBeatLowValue ( float value )

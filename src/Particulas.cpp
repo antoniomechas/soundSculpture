@@ -19,13 +19,13 @@ void Particulas::setup(float width, float height, ofxBeatDetector *beat, ofEasyC
 
 	colorUtil.setup();
 	Emitter *e;
-	for (int i = 0 ; i < 2 ; i++)
+	for (int i = 0 ; i < 6 ; i++)
 	{
 		e = new Emitter;
-		e->setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil, beatDetector);
-		e->beatReaction = (Emitter::BeatReaction)((i % 3) + 3);
-		//e->beatReaction = (Emitter::BeatReaction::BEAT_REACTION_HAT);
 		emitters.push_back(*e);
+		emitters.back().setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil, beat);
+		emitters.back().beatReaction = (Emitter::BeatReaction)((i));
+		//emitters.back().beatReaction = (Emitter::BeatReaction::BEAT_REACTION_HAT);
 	}
 
 	post.init(width, height);
@@ -75,32 +75,32 @@ void Particulas::drawAsociaciones(bool postPass)
 	mesh.clear();
 	ofSetColor(255,255,255);
 	ofSetCircleResolution(100);
-	for (int i = 0 ; i < asociaciones.size() ; i++)
-	{
-		float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 
-						sistPart.particulas[asociaciones[i].nodo2].a +
-						sistPart.particulas[asociaciones[i].nodo3].a;
-		alpha = (alpha / 3.0) * 255.0;
-		if (!postPass || (postPass && asociaciones[i].bloomLife > 0))
-		{
-			//mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
-			float dist = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo1].posIni); 
-			float dist2 = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo2].pos); 
-			ofSetColor(ofColor(asociaciones[i].color1, alpha));
-			ofPushMatrix();
-			ofVec3f dir = sistPart.particulas[asociaciones[i].nodo1].dirIni.getNormalized();
-			ofTranslate(sistPart.particulas[asociaciones[i].nodo1].posIni);
-			//ofRotateX(sistPart.particulas[asociaciones[i].nodo1].dirIni.x);
-			ofRotateZ(atan(dir.y / dir.x));
-			ofRotateY(90);
-			//ofEllipse(ofPoint(0,0,0), dist, dist2);
-			//ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
-			//ofEllipse(sistPart.particulas[asociaciones[i].nodo1].posIni, dist, dist2);
-			ofCircle(ofVec3f(0,0,0), dist);
-			ofPopMatrix();
-		}
-	}
-	return;
+	//for (int i = 0 ; i < asociaciones.size() ; i++)
+	//{
+	//	float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 
+	//					sistPart.particulas[asociaciones[i].nodo2].a +
+	//					sistPart.particulas[asociaciones[i].nodo3].a;
+	//	alpha = (alpha / 3.0) * 255.0;
+	//	if (!postPass || (postPass && asociaciones[i].bloomLife > 0))
+	//	{
+	//		//mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
+	//		float dist = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo1].posIni); 
+	//		float dist2 = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo2].pos); 
+	//		ofSetColor(ofColor(asociaciones[i].color1, alpha));
+	//		ofPushMatrix();
+	//		ofVec3f dir = sistPart.particulas[asociaciones[i].nodo1].dirIni.getNormalized();
+	//		ofTranslate(sistPart.particulas[asociaciones[i].nodo1].posIni);
+	//		//ofRotateX(sistPart.particulas[asociaciones[i].nodo1].dirIni.x);
+	//		ofRotateZ(atan(dir.y / dir.x));
+	//		ofRotateY(90);
+	//		//ofEllipse(ofPoint(0,0,0), dist, dist2);
+	//		//ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
+	//		//ofEllipse(sistPart.particulas[asociaciones[i].nodo1].posIni, dist, dist2);
+	//		ofCircle(ofVec3f(0,0,0), dist);
+	//		ofPopMatrix();
+	//	}
+	//}
+	//return;
 	for (int i = 0 ; i < asociaciones.size() ; i++)
 	{
 		float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 
@@ -139,7 +139,7 @@ void Particulas::drawAsociaciones(bool postPass)
 	}
 }
 
-void Particulas::update(float average, float *soundData)
+void Particulas::update(float average)
 {
 	for (int iEmitter = 0 ; iEmitter < emitters.size() ; iEmitter++)
 	{
@@ -147,8 +147,8 @@ void Particulas::update(float average, float *soundData)
 		emitters[iEmitter].setBeatKickValue(beatKickValue);
 		emitters[iEmitter].setBeatSnareValue(beatSnareValue);
 		emitters[iEmitter].setBeatLowValue(beatLowValue);
-		emitters[iEmitter].setBeatMidValue(beatLowValue);
-		emitters[iEmitter].setBeatHighValue(beatLowValue);
+		emitters[iEmitter].setBeatMidValue(beatMidValue);
+		emitters[iEmitter].setBeatHighValue(beatHighValue);
 	}
 
 	//for (int i = 0 ; i < audioDataAmount ; i++)
@@ -188,13 +188,13 @@ void Particulas::update(float average, float *soundData)
 				float minDist = 2;
 				punto2 = punto + ofVec3f(ofRandom(minDist, maxDist * average), ofRandom(minDist, maxDist * average),0);
 			}
-			addAsociacion(emitters[iEmitter], pOrg, 6.0f * average); //añade una asociacion a partir del indice de partícula especificada
+			addAsociacion(&emitters[iEmitter], pOrg, 6.0f * average); //añade una asociacion a partir del indice de partícula especificada
 		}
 	}
 
 	sistPart.actualiza();
 
-	updateMesh( average, soundData);
+	updateMesh( average);
 	
 	updatePosicion();
 
@@ -252,7 +252,7 @@ void Particulas::updatePosicion()
 	}
 }
 
-void Particulas::addAsociacion(Emitter &emitter, int *pos, float lineWidht)
+void Particulas::addAsociacion(Emitter *emitter, int *pos, float lineWidht)
 {
 		ASOCIACION a;
 		
@@ -285,15 +285,20 @@ void Particulas::addAsociacion(Emitter &emitter, int *pos, float lineWidht)
 		//ofVec3f p3 = sistPart.particulas[a.nodo3].pos;
 		//float dMax = 200;
 		
-		if (emitter.isBeat())
+		if (emitter->isBeat())
+		{
 			a.bloomLife = sistPart.particulas[a.nodo1].clicksMuerte;
+			sistPart.particulas[a.nodo1].vel *= 2.0;
+			sistPart.particulas[a.nodo2].vel *= 2.0;
+			sistPart.particulas[a.nodo3].vel *= 2.0;
+		}
 		else
 			a.bloomLife = 0;
 
 		asociaciones.push_back(a);
 }
 
-void Particulas::updateMesh(float average, float *soundData)
+void Particulas::updateMesh(float average)
 {
 	/*
 	pVivas.clear();
@@ -377,3 +382,51 @@ int Particulas::getAudioDataAmount ()
 }
 
 
+bool Particulas::isEmitterBeat(Emitter *emitter)
+{
+
+	switch (emitter->beatReaction)
+	{
+		case Emitter::BEAT_REACTION_HAT:
+			beatDetector->setBeatValue(beatHatValue);
+			//cout << "Hatvalue: " << beatHatValue << endl;
+			if (beatDetector->isHat())
+				return true;
+			break;
+
+		case Emitter::BEAT_REACTION_KICK:
+			beatDetector->setBeatValue(beatKickValue);
+			//cout << "Kickvalue: " << beatHatValue << endl;
+			if (beatDetector->isKick())
+				return true;
+			break;
+
+		case Emitter::BEAT_REACTION_SNARE:
+			beatDetector->setBeatValue(beatSnareValue);
+			//cout << "Snarevalue: " << beatHatValue << endl;
+			if (beatDetector->isSnare())
+				return true;
+			break;
+
+		case Emitter::BEAT_REACTION_LOW:
+			beatDetector->setBeatValue(beatLowValue);
+			if (beatDetector->isLow())
+				return true;
+			break;
+
+		case Emitter::BEAT_REACTION_MID:
+			beatDetector->setBeatValue(beatMidValue);
+			if (beatDetector->isMid())
+				return true;
+			break;
+
+		case Emitter::BEAT_REACTION_HIGH:
+			beatDetector->setBeatValue(beatHighValue);
+			if (beatDetector->isHigh())
+				return true;
+			break;
+	}
+
+	return false;
+
+}

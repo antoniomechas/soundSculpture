@@ -8,7 +8,7 @@
 	<audioMult>0.11</audioMult>
 	<audioPeakDecay>0.931</audioPeakDecay>
 	<audioMaxDecay>0.9</audioMaxDecay>
-	<audioMirror>1</audioMirror>
+	<audioMirror>0</audioMirror>
 	<linewidth>1.07</linewidth>
 	<FX_Bloom>0</FX_Bloom>
 	<FX_fxaa>0</FX_fxaa>
@@ -22,28 +22,28 @@
 		<part_Color_A_Delay>0.035965</part_Color_A_Delay>
 		<part_Color_Ini>255, 183, 84, 255</part_Color_Ini>
 		<part_Color_Fin>85, 255, 0, 255</part_Color_Fin>
-		<part_Vida_Ini>105</part_Vida_Ini>
-		<part_Vida_Fin>205</part_Vida_Fin>
+		<part_Vida_Ini>60</part_Vida_Ini>
+		<part_Vida_Fin>195</part_Vida_Fin>
 		<part_Size_Ini>1</part_Size_Ini>
 		<part_Size_Fin>1</part_Size_Fin>
 		<part_Alpha_Ini_1>1</part_Alpha_Ini_1>
 		<part_Alpha_Ini_2>0.625</part_Alpha_Ini_2>
 		<part_Alpha_Fin_1>0</part_Alpha_Fin_1>
 		<part_Alpha_Fin_2>0</part_Alpha_Fin_2>
-		<part_damping>0.9925</part_damping>
+		<part_damping>0.9975</part_damping>
 		<part_gravedad>0</part_gravedad>
 		<part_Vel_Z_1>0</part_Vel_Z_1>
 		<part_Vel_Z_2>0</part_Vel_Z_2>
 		<part_Porcentaje_Esp>0</part_Porcentaje_Esp>
-	<Multiplicador>11.1445</Multiplicador>
+	<Multiplicador>10.249</Multiplicador>
 	<DrawMode>1</DrawMode>
-	<part_vel_x_min>-0.76</part_vel_x_min>
-		<part_vel_x_max>0.74</part_vel_x_max>
-		<part_vel_y_min>-0.72</part_vel_y_min>
-		<part_vel_y_max>0.72</part_vel_y_max>
+	<part_vel_x_min>-0.14</part_vel_x_min>
+		<part_vel_x_max>0.16</part_vel_x_max>
+		<part_vel_y_min>-0.16</part_vel_y_min>
+		<part_vel_y_max>0.16</part_vel_y_max>
 	<Speed_inc>8.5915</Speed_inc>
 		<Color_Noise>0.09955</Color_Noise>
-	<Move_Noise>5.95405</Move_Noise>
+	<Move_Noise>8.65135</Move_Noise>
 	</Particulas>
 <audio/>
 <matrix_width_mult>1</matrix_width_mult>
@@ -52,7 +52,10 @@
 <Beat_Value>3.677</Beat_Value>
 <ligth>0</ligth>
 	<light_distance>1</light_distance>
-<Beat_Hat_Value>2.7865</Beat_Hat_Value>
-	<Beat_Kick_Value>2.7865</Beat_Kick_Value>
-	<Beat_Snare_Value>2.886</Beat_Snare_Value>
+<Beat_Hat_Value>2.886</Beat_Hat_Value>
+	<Beat_Kick_Value>3.085</Beat_Kick_Value>
+	<Beat_Snare_Value>2.1895</Beat_Snare_Value>
+<Beat_Low_Value>3.085</Beat_Low_Value>
+	<Beat_Mid_Value>2.9855</Beat_Mid_Value>
+	<Beat_High_Value>3.085</Beat_High_Value>
 </audio>

@@ -13,7 +13,7 @@ class Particulas
 	public:
 		
 		void	setup				(float width, float height, ofxBeatDetector *beatDetector, ofEasyCam *camera);
-		void	update				(float average, float *soundData);
+		void	update				(float average);
 		void	draw				( );
 		int		getAudioDataAmount	( );
 
@@ -34,13 +34,15 @@ class Particulas
 		//ofxFloatSlider	paramDamp;
 
 		AVGSistPart		sistPart;
+		ofxBeatDetector *beatDetector;
+		vector<Emitter> emitters;
 
 	protected:
-
-		void	updateMesh			( float average, float *soundData );
+		bool	isEmitterBeat		( Emitter *emitter );
+		void	updateMesh			( float average);
 		void	setupLigths			( );
 		void	drawAsociaciones	( bool postPass );
-		void	addAsociacion		( Emitter &emitter, int *pos, float lineWidth );
+		void	addAsociacion		( Emitter *emitter, int *pos, float lineWidth );
 		void	updatePosicion		( );
 		int		addParticula		( ofVec3f pos, ofVec3f vel, ofVec3f dirIni, float audioAverage, ofColor color );
 
@@ -80,9 +82,7 @@ class Particulas
 		};
 		vector<CIRCULO> circulos;
 
-		vector<Emitter> emitters;
 
-		ofxBeatDetector *beatDetector;
 		ofxPostProcessing post;
 		ofxPostProcessing post2;
 		ofEasyCam		*camera;
