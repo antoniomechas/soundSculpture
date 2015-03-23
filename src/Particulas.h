@@ -17,13 +17,14 @@ class Particulas
 		void	draw				( );
 		int		getAudioDataAmount	( );
 
-		//ofxIntSlider	paramMaxLenght;
+		ofxToggle		paramDrawParticles;
 		ofxFloatSlider	paramMult;
 		ofxIntSlider	paramLightDistance;
 		ofxIntSlider	paramDrawMode;
 		ofxFloatSlider	paramSpeedInc;
 		ofxFloatSlider	paramColorNoiseMult;
 		ofxFloatSlider	paramMoveNoiseMult;
+		ofxFloatSlider	paramMoveBeatMult;
 
 		float			beatHatValue;
 		float			beatKickValue;
@@ -38,7 +39,7 @@ class Particulas
 		vector<Emitter> emitters;
 
 	protected:
-		bool	isEmitterBeat		( Emitter *emitter );
+		//bool	isEmitterBeat		( Emitter *emitter );
 		void	updateMesh			( float average);
 		void	setupLigths			( );
 		void	drawAsociaciones	( bool postPass );
@@ -58,29 +59,30 @@ class Particulas
 
 		struct ASOCIACION
 		{
-			int		nodo1;
-			int		nodo2;
-			int		nodo3;
-			int		vida;
-			ofColor	color1;
-			ofColor	color2;
-			ofColor	color3;
-			float	lineWidth;
-			int		bloomLife;
+			int					nodo1;
+			int					nodo2;
+			int					nodo3;
+			int					vida;
+			ofColor				color1;
+			ofColor				color2;
+			ofColor				color3;
+			float				lineWidth;
+			int					bloomLife;
+			Emitter::DrawMode	drawMode;
 		};
 
-		vector <int> pVivas;
-		vector<ASOCIACION> asociaciones;
+		vector <int>			pVivas;
+		vector<ASOCIACION>		asociaciones;
 
-		struct CIRCULO
-		{
-			ofVec3f		direccion;
-			ofPoint		centro;
-			float		radio;
-			ofColor		color;
-			int			vida;
-		};
-		vector<CIRCULO> circulos;
+		//struct CIRCULO
+		//{
+		//	ofVec3f		direccion;
+		//	ofPoint		centro;
+		//	float		radio;
+		//	ofColor		color;
+		//	int			vida;
+		//};
+		//vector<CIRCULO> circulos;
 
 
 		ofxPostProcessing post;

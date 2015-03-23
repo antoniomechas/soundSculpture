@@ -6,6 +6,14 @@ class Emitter
 {
 	public:
 
+		// Draw Mode
+		enum DrawMode{
+			EMITTER_DRAW_TRIANGLES = 0,
+			EMITTER_DRAW_CIRCLES = 1,
+			EMITTER_DRAW_ELLIPSES = 2,
+			EMITTER_DRAW_RECTANGLES = 3
+		};
+
 		void			setup					( float width, float height, ofPoint pos, ofVec3f dir, ofFloatColor color, ColorUtil *colorUtil, ofxBeatDetector *beat );
 		void			update					( );
 		void			setColorNoiseMult		( float noiseMult );
@@ -13,6 +21,9 @@ class Emitter
 		void			setMoveNoise			( float moveNoise );
 		float			getMoveSeed				( );
 		void			setMoveSeed				( float seed );
+		void			setDrawMode				( DrawMode drawMode);
+		DrawMode		getDrawMode				( );
+
 		bool			isBeat					( );
 		void			setBeatLowValue			( float value );
 		void			setBeatHighValue		( float value );
@@ -25,6 +36,8 @@ class Emitter
 		ofVec3f			dir;
 		ofFloatColor	color;
 
+		DrawMode		drawMode;
+		
 		// Beat reaction 
 		enum BeatReaction{
 			BEAT_REACTION_LOW = 0,

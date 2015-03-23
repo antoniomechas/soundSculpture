@@ -200,6 +200,7 @@ void ofApp::setupGui()
 	gui2.setPosition(gui.getPosition() + ofPoint(gui.getWidth() + 20, 0));
 	gui2.add(particulas.paramDrawMode.setup( "DrawMode", 1, 0, 2 ));
 	gui2.add(particulas.paramMult.setup( "Multiplicador", 1, 0.1, 20.0 ));
+	gui2.add(particulas.paramDrawParticles.setup( "Draw Particles", true ));
 	gui2.add(particulas.sistPart.partTipo.setup( "part Tipo", 0, 0, 4 ));
 	gui2.add(particulas.sistPart.partColorAuto.setup( "part Color Auto", false));
 	gui2.add(particulas.sistPart.partColorAutoDelay.setup( "part Color A Delay", 0.1, 0.001, 1.0 ));
@@ -225,6 +226,7 @@ void ofApp::setupGui()
 	gui2.add(particulas.paramSpeedInc.setup( "Speed inc", 0.1, 0.1, 100 ));
 	gui2.add(particulas.paramColorNoiseMult.setup( "Color Noise", 0.1, 0.01, 2.0 ));
 	gui2.add(particulas.paramMoveNoiseMult.setup( "Move Noise", 0.1, 0.01, 10.0 ));
+	gui2.add(particulas.paramMoveBeatMult.setup( "Move Beat Mult", 0.1, 0.001, 1.0 ));
 
 }
 

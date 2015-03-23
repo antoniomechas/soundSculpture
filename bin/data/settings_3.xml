@@ -43,7 +43,9 @@
 		<part_vel_y_max>0.16</part_vel_y_max>
 	<Speed_inc>8.5915</Speed_inc>
 		<Color_Noise>0.09955</Color_Noise>
-	<Move_Noise>8.65135</Move_Noise>
+	<Move_Noise>1.05895</Move_Noise>
+	<Draw_Particles>1</Draw_Particles>
+		<Move_Beat_Mult>0.125875</Move_Beat_Mult>
 	</Particulas>
 <audio/>
 <matrix_width_mult>1</matrix_width_mult>

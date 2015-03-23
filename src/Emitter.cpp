@@ -16,6 +16,9 @@ void Emitter::setup(float width, float height, ofPoint pos, ofVec3f dir, ofFloat
 	moveNoise = 1.0f;
 	seedColor = ofRandom(100,5000);
 	seedMove = ofRandom(100,5000);
+
+	drawMode = EMITTER_DRAW_TRIANGLES;
+
 }
 
 void Emitter::update()
@@ -73,6 +76,16 @@ void Emitter::setMoveSeed( float seed )
 float Emitter::getMoveSeed( )
 {
 	return(seedMove);
+}
+
+void Emitter::setDrawMode( DrawMode drawMode)
+{
+	this->drawMode = drawMode;
+}
+
+Emitter::DrawMode Emitter::getDrawMode( )
+{
+	return drawMode;
 }
 
 bool Emitter::isBeat()
