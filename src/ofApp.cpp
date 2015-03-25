@@ -146,6 +146,7 @@ void ofApp::setup(){
 	loadSettings(iPresetActual);
 
 	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector, &camera);
+	onda.setup(ofGetWidth(),ofGetHeight(), &beatDetector, &camera);
 	soundShader.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
 
 	bFullScreen = false;
@@ -344,6 +345,7 @@ void ofApp::update(){
 		case PRESET_AUDIO_SHADER:
 			soundShader.update();
 			break;
+
 	}
 
 
@@ -459,16 +461,17 @@ void ofApp::drawShadow()
 
 void ofApp::updateSoundObjects()
 {
-	int amount = soundBoxes[0].getAudioDataAmount();
-	float * audioData = new float[amount];
+	float * audioData;
+	int amount = 0;
 	float average = fftFile.getAveragePeak();
 
 	if (presetType == PRESET_AUDIO_OBJECTS)
 	{
+		amount = soundBoxes[0].getAudioDataAmount();
+		audioData = new float[amount];
 		fftFile.getFftPeakData(audioData, amount);
 		for (int i = 0 ; i < soundBoxes.size() ; i++)
 			soundBoxes[i].update(average, audioData, audioMult);
-		delete [] audioData;
 	}
 
 	if (presetType == PRESET_MATRIX3D)
@@ -490,7 +493,15 @@ void ofApp::updateSoundObjects()
 		particulas.update(average);
 	}
 
-	
+	if (presetType == PRESET_ONDA)
+	{
+		amount = onda.getAudioDataAmount();
+		audioData = new float[amount];
+		fftFile.getFftPeakData(audioData, amount);
+		onda.update(average, audioData);    
+	}
+
+	delete [] audioData;
 
 }
 
@@ -576,6 +587,10 @@ void ofApp::draw(){
 
 			case PRESET_AUDIO_SHADER:
 				soundShader.draw();
+				break;
+
+			case PRESET_ONDA:
+				onda.draw();
 				break;
 		}
 

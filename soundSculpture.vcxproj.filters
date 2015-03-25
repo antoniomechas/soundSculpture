@@ -187,6 +187,9 @@
     <ClCompile Include="src\SoundShader.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Onda.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -519,6 +522,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\SoundShader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Onda.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

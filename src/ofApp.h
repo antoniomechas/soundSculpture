@@ -15,13 +15,15 @@
 #include "Particulas.h"
 #include "ofxBeatDetector.h"
 #include "SoundShader.h"
+#include "Onda.h"
 
 #define PRESET_MODEL 1
 #define PRESET_MATRIX3D 2
 #define PRESET_PARTICLES 3
 #define PRESET_AUDIO_OBJECTS 4
 #define PRESET_AUDIO_SHADER 5
-#define PRESET_MAX 6
+#define PRESET_ONDA 6
+#define PRESET_MAX 7
 
 class ofApp : public ofBaseApp{
 
@@ -135,4 +137,5 @@ public:
 	SoundShader			soundShader;
 	bool				bFullScreen;
 
+	Onda				onda;
 };
