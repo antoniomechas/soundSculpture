@@ -80,9 +80,12 @@ void Onda::update(float average, float *audioData)
   //          mesh.getVertices()[i].y = mesh.getVertices()[i-1].y;
   //      }
   //      mesh.getVertices()[0].y = newHeight;
-	generaOnda(poly[0], 4, audioData, 300);
-	generaOnda(poly[1], 8, audioData, 300);
-	generaOnda(poly[2], 16, audioData, 300);
+	//generaOnda(poly[0], 4, audioData, 300);
+	//generaOnda(poly[1], 8, audioData, 300);
+	//generaOnda(poly[2], 16, audioData, 300);
+	generaOndaSin(poly[0], audioData[0], 200);
+	generaOndaSin(poly[1], audioData[1], 200);
+	generaOndaSin(poly[2], audioData[2], 200);
 
 }
 
@@ -112,4 +115,30 @@ void Onda::generaOnda ( ofPolyline &pol, int intervalo, float *audioData, float 
 		//float audioV = beatDetector->getSmoothedFFT()[i];
 		pol.curveTo(x, (height / 2.0) - (maxHeight / 2.) + (audioV * maxHeight) * mult);
     }
+}
+
+//
+// Genera una onda sinusodal a partir de un valor audio [0...1]
+//
+void Onda::generaOndaSin ( ofPolyline &pol, float value, float maxHeight )
+{
+
+	pol.clear();
+	pol.addVertex(0, height/2.);
+	int resolution = width / 2;
+
+	float freq = 20 * value;
+	double full = 2 * PI * freq;
+
+	for (int i = 0 ; i < resolution ; i++)
+	{
+
+		float x = ofMap(i,0,resolution,0,width);
+		float y = (height / 2.) + (sin(x/freq)* maxHeight * value);
+		pol.addVertex(x,y);
+		//_x++;
+		//if (_x >= _full)
+		//	_x -= _full;
+	}
+
 }

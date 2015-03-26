@@ -30,6 +30,7 @@ class Onda
 	protected:
 
 		void			generaOnda ( ofPolyline &pol, int intervalo, float *audioData, float maxHeight );
+		void			generaOndaSin ( ofPolyline &pol, float value, float maxHeight );
 
 		float			width;
 		float			height;
