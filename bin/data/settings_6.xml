@@ -7,8 +7,8 @@
 	<scale>12.088</scale>
 	<bUseAudioInput>1</bUseAudioInput>
 	<audioMult>0.11</audioMult>
-	<audioPeakDecay>0.9155</audioPeakDecay>
-	<audioMaxDecay>0.907</audioMaxDecay>
+	<audioPeakDecay>0.904</audioPeakDecay>
+	<audioMaxDecay>0.913</audioMaxDecay>
 	<audioMirror>0</audioMirror>
 	<Beat_Hat_Value>2.7865</Beat_Hat_Value>
 	<Beat_Kick_Value>2.7865</Beat_Kick_Value>

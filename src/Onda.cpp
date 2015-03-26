@@ -83,9 +83,10 @@ void Onda::update(float average, float *audioData)
 	//generaOnda(poly[0], 4, audioData, 300);
 	//generaOnda(poly[1], 8, audioData, 300);
 	//generaOnda(poly[2], 16, audioData, 300);
-	generaOndaSin(poly[0], audioData[0], 200);
-	generaOndaSin(poly[1], audioData[1], 200);
-	generaOndaSin(poly[2], audioData[2], 200);
+	
+	generaOndaSin(poly[0], 4,0, audioData, 200);
+	generaOndaSin(poly[1], 4,1,audioData, 200);
+	generaOndaSin(poly[2], 4,2,audioData, 200);
 
 }
 
@@ -120,25 +121,43 @@ void Onda::generaOnda ( ofPolyline &pol, int intervalo, float *audioData, float 
 //
 // Genera una onda sinusodal a partir de un valor audio [0...1]
 //
-void Onda::generaOndaSin ( ofPolyline &pol, float value, float maxHeight )
+void Onda::generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *audioData, float maxHeight )
 {
 
 	pol.clear();
-	pol.addVertex(0, height/2.);
+	//pol.addVertex(0, height/2.);
 	int resolution = width / 2;
 
-	float freq = 20 * value;
+	float audioV = 0;
+	int num = audioDataAmount / divisiones;
+	for (int k = 0 ; k < num ; k++)
+		audioV += (audioData[num*indice + k]) / (float)num;
+
+	//float freq = 20 * value;
+	float freq = 100 * ofNoise(ofGetElapsedTimef() * .01);
+	//float freq = 60 * audioV;
 	double full = 2 * PI * freq;
 
 	for (int i = 0 ; i < resolution ; i++)
 	{
 
 		float x = ofMap(i,0,resolution,0,width);
-		float y = (height / 2.) + (sin(x/freq)* maxHeight * value);
-		pol.addVertex(x,y);
+		//float y = (height / 2.) + (sin(x/freq)* maxHeight * value);
 		//_x++;
 		//if (_x >= _full)
 		//	_x -= _full;
+		float t = ((x + ofGetElapsedTimeMillis() * .1 ) / freq);// / mouse.x;
+		float sint = sin(t) * maxHeight;
+		//float cost = cos(t) * maxHeight;
+		//float dist1 = abs(sint-py) / sqrt(cost*cost+1.0);
+		//float dist2 = abs(cost-py) / sqrt(sint*sint+1.0);
+		//return vec3(0.0, thickness / dist1, thickness/dist2);
+		float y = (height / 2.) + (sint * audioV);
+
+		pol.addVertex(x,y);
+
 	}
+
+
 
 }
