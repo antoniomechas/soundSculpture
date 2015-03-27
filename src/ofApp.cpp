@@ -141,13 +141,13 @@ void ofApp::setup(){
 	m_angle = 0;
     setupLights();
 
-	iPresetActual = 1;
-	setupGui();
-	loadSettings(iPresetActual);
-
 	particulas.setup(ofGetWidth(),ofGetHeight(), &beatDetector, &camera);
 	onda.setup(ofGetWidth(),ofGetHeight(), &beatDetector, &camera);
 	soundShader.setup(ofGetWidth(),ofGetHeight(), &beatDetector);
+
+	iPresetActual = 1;
+	setupGui();
+	loadSettings(iPresetActual);
 
 	bFullScreen = false;
 }
@@ -196,6 +196,7 @@ void ofApp::setupGui()
 	gui.add(matrix3D.paramMult.setup("matrix Mult",1,1,20));
 	gui.add(matrix3D.paramDamp.setup("matrix Damp", 0.9,0.01,1.0));
 	gui.add(matrix3D.paramWidthMult.setup("matrix width mult", 1.0,0.1,2.0));
+	gui.add(onda.paramSquareDistMult.setup("Onda Sq mult", 20000, 10000, 40000));
 	
     gui2.setup("Particulas");
 	gui2.setPosition(gui.getPosition() + ofPoint(gui.getWidth() + 20, 0));

@@ -21,6 +21,8 @@ void Onda::setup(float width, float height, ofxBeatDetector *beat, ofEasyCam *ca
 	{
 		mesh.addVertex(ofVec3f(ofMap(i,0,audioDataAmount,0,width), height / 2.0,0));
 	}
+	
+	paramSquareDistMult = 20000;
 
 }
 
@@ -35,12 +37,13 @@ void Onda::draw()
 
 	post.begin();
 		//camera->begin();
-		ofSetLineWidth(2.0);	
+		ofSetLineWidth(10.0);	
 		poly[0].draw();
-		ofSetColor(255,0,0);
+		//ofSetColor(255,0,0);
 		poly[1].draw();
-		ofSetColor(0,255,0);
+		//ofSetColor(0,255,0);
 		poly[2].draw();
+		poly[3].draw();
 		//mesh.draw();
 			//drawAsociaciones(true);
 		//camera->end();
@@ -57,7 +60,7 @@ void Onda::update(float average, float *audioData)
 	if (average > 0.8)
 		post[1]->setEnabled(true);
 	
-	post[2]->setEnabled(false);
+	post[2]->setEnabled(true);
 
 	float   t = ofGetElapsedTimef() * 1.2;
 	float maxH = 300;
@@ -84,10 +87,13 @@ void Onda::update(float average, float *audioData)
 	//generaOnda(poly[1], 8, audioData, 300);
 	//generaOnda(poly[2], 16, audioData, 300);
 	
-	generaOndaSin(poly[0], 4,0, audioData, 200);
-	generaOndaSin(poly[1], 4,1,audioData, 200);
-	generaOndaSin(poly[2], 4,2,audioData, 200);
+	generaOndaSin(poly[0], 4,0, audioData, 200, 0);
+	generaOndaSin(poly[1], 4,1,audioData, 180, 200);
+	generaOndaSin(poly[2], 4,2,audioData, 160, 400);
+	generaOndaSin(poly[3], 4,3,audioData, 140, 600);
 
+	attractor.x = ofGetMouseX();
+	attractor.y = ofGetMouseY();
 }
 
 int Onda::getAudioDataAmount ()
@@ -121,7 +127,7 @@ void Onda::generaOnda ( ofPolyline &pol, int intervalo, float *audioData, float 
 //
 // Genera una onda sinusodal a partir de un valor audio [0...1]
 //
-void Onda::generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *audioData, float maxHeight )
+void Onda::generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *audioData, float maxHeight, float displaceX )
 {
 
 	pol.clear();
@@ -134,7 +140,8 @@ void Onda::generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *a
 		audioV += (audioData[num*indice + k]) / (float)num;
 
 	//float freq = 20 * value;
-	float freq = 100 * ofNoise(ofGetElapsedTimef() * .01);
+	//float freq = 500 * ofNoise(ofGetElapsedTimef() * .01);
+	float freq = ofMap(1.-audioV,0,1,200,500);
 	//float freq = 60 * audioV;
 	double full = 2 * PI * freq;
 
@@ -146,7 +153,7 @@ void Onda::generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *a
 		//_x++;
 		//if (_x >= _full)
 		//	_x -= _full;
-		float t = ((x + ofGetElapsedTimeMillis() * .1 ) / freq);// / mouse.x;
+		float t = ((x + ofGetElapsedTimeMillis() * .1 + displaceX) / freq);// / mouse.x;
 		float sint = sin(t) * maxHeight;
 		//float cost = cos(t) * maxHeight;
 		//float dist1 = abs(sint-py) / sqrt(cost*cost+1.0);
@@ -154,10 +161,32 @@ void Onda::generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *a
 		//return vec3(0.0, thickness / dist1, thickness/dist2);
 		float y = (height / 2.) + (sint * audioV);
 
-		pol.addVertex(x,y);
+		ofPoint p = resuelveFuerzas(ofPoint(x,y));
+
+		//pol.addVertex(x,y);
+		pol.addVertex(p);
 
 	}
 
+}
 
+//
+// Dado un punto origen, lo modifica segun las fuerzas que apliquen
+//
+ofPoint Onda::resuelveFuerzas ( ofPoint p )
+{
+	
+	ofVec2f v = attractor - p;
+	//float distSq = v.dot(v); 
+	//float f = (1. - (distSq / 1000.)) * 1. ;
+	//float distSq = v.lengthSquared(); 
+	float distSq = v.length(); 
 
+	if (distSq < 100)
+		return p;
+
+	float f = (1. / distSq ) * paramSquareDistMult ;
+	ofVec2f v2 = v.getNormalized() * f;
+
+	return (p + v2);
 }

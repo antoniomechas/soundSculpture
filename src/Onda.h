@@ -16,7 +16,7 @@ class Onda
 		void	draw				( );
 		int		getAudioDataAmount	( );
 
-		ofxFloatSlider	paramMult;
+		ofxFloatSlider	paramSquareDistMult;
 
 		float			beatHatValue;
 		float			beatKickValue;
@@ -30,7 +30,8 @@ class Onda
 	protected:
 
 		void			generaOnda ( ofPolyline &pol, int intervalo, float *audioData, float maxHeight );
-		void			generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *audioData, float maxHeight );
+		void			generaOndaSin ( ofPolyline &pol, int divisiones, int indice, float *audioData, float maxHeight, float displaceX );
+		ofPoint			resuelveFuerzas ( ofPoint p );
 
 		float			width;
 		float			height;
@@ -44,4 +45,6 @@ class Onda
 		ofxPostProcessing post;
 
 		ofEasyCam		*camera;
+
+		ofPoint			attractor;
 };
