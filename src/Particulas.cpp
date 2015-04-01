@@ -19,14 +19,14 @@ void Particulas::setup(float width, float height, ofxBeatDetector *beat, ofEasyC
 
 	colorUtil.setup();
 	Emitter *e;
-	for (int i = 0 ; i < 1 ; i++)
+	for (int i = 0 ; i < 6 ; i++)
 	{
 		e = new Emitter;
 		emitters.push_back(*e);
 		emitters.back().setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil, beat);
 		emitters.back().beatReaction = (Emitter::BeatReaction)((i));
-		//emitters.back().drawMode = (Emitter::DrawMode) (i % 4);
-		emitters.back().drawMode = Emitter::DrawMode::EMITTER_DRAW_TRIANGLES;
+		emitters.back().drawMode = (Emitter::DrawMode) (i % 4);
+		//emitters.back().drawMode = Emitter::DrawMode::EMITTER_DRAW_TRIANGLES;
 		//emitters.back().beatReaction = (Emitter::BeatReaction::BEAT_REACTION_HAT);
 	}
 
@@ -154,11 +154,14 @@ void Particulas::drawAsociaciones(bool postPass)
 			//mesh.addIndex(mesh.getNumVertices()-1);
 			//mesh.addIndex(mesh.getNumVertices());
 		}
+		ofVec2f vAnt;
 		switch (paramDrawMode)
 		{
 			case 0: //puntos
 				//mesh.setMode(OF_PRIMITIVE_TRIANGLES);
 				//ofBeginShape();
+				if (mesh.getNumVertices() > 0)
+					vAnt = mesh.getVertices()[0];
 				for (int i = 0 ; i < mesh.getNumVertices() ; )
 				{
 					ofSetColor(mesh.getColors()[i]);
@@ -166,7 +169,19 @@ void Particulas::drawAsociaciones(bool postPass)
 						for (int k = 0 ; k < 36 ; k++)
 						{
 							if (i < mesh.getNumVertices())
-								ofCurveVertex(mesh.getVertices()[i++]);
+							{
+								if (vAnt.distance(mesh.getVertices()[i]) < 300)
+								{
+									ofCurveVertex(mesh.getVertices()[i]);
+								}
+								else
+								{
+									ofEndShape();
+									ofBeginShape();
+								}
+								vAnt = mesh.getVertices()[i];
+								i++;
+							}
 						}
 					ofEndShape();
 				}
