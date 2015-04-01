@@ -50,6 +50,21 @@ class Emitter
 
 		BeatReaction	beatReaction;
 		ofxBeatDetector *beatDetector;
+		
+		struct ASOCIACION
+		{
+			int					nodo1;
+			int					nodo2;
+			int					nodo3;
+			int					vida;
+			ofColor				color1;
+			ofColor				color2;
+			ofColor				color3;
+			float				lineWidth;
+			int					bloomLife;
+			Emitter::DrawMode	drawMode;
+		};
+		vector<ASOCIACION>		asociaciones;
 
 
 	protected:
@@ -70,6 +85,8 @@ class Emitter
 		float			beatKickValue;
 		float			beatHatValue;
 		//ofPoint			posAnt;	
+
+
 
 
 };

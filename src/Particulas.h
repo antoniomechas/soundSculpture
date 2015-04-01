@@ -57,22 +57,8 @@ class Particulas
 		int				audioDataAmount;		//Cuantos valores de audio necesita de input
 		ColorUtil		colorUtil;
 
-		struct ASOCIACION
-		{
-			int					nodo1;
-			int					nodo2;
-			int					nodo3;
-			int					vida;
-			ofColor				color1;
-			ofColor				color2;
-			ofColor				color3;
-			float				lineWidth;
-			int					bloomLife;
-			Emitter::DrawMode	drawMode;
-		};
-
 		vector <int>			pVivas;
-		vector<ASOCIACION>		asociaciones;
+
 
 		//struct CIRCULO
 		//{

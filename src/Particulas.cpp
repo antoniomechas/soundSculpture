@@ -19,13 +19,14 @@ void Particulas::setup(float width, float height, ofxBeatDetector *beat, ofEasyC
 
 	colorUtil.setup();
 	Emitter *e;
-	for (int i = 0 ; i < 6 ; i++)
+	for (int i = 0 ; i < 1 ; i++)
 	{
 		e = new Emitter;
 		emitters.push_back(*e);
 		emitters.back().setup(width, height, ofPoint( 0, 0, 0 ), ofVec2f(0,0), colorUtil.getRandomBrightColor(), &colorUtil, beat);
 		emitters.back().beatReaction = (Emitter::BeatReaction)((i));
-		emitters.back().drawMode = (Emitter::DrawMode) (i % 4);
+		//emitters.back().drawMode = (Emitter::DrawMode) (i % 4);
+		emitters.back().drawMode = Emitter::DrawMode::EMITTER_DRAW_TRIANGLES;
 		//emitters.back().beatReaction = (Emitter::BeatReaction::BEAT_REACTION_HAT);
 	}
 
@@ -103,72 +104,92 @@ void Particulas::drawAsociaciones(bool postPass)
 	//	}
 	//}
 	//return;
-	for (int i = 0 ; i < asociaciones.size() ; i++)
+	Emitter::ASOCIACION *a;
+	for (int e = 0 ; e < emitters.size() ; e++)
 	{
-		float alpha = sistPart.particulas[asociaciones[i].nodo1].a + 
-						sistPart.particulas[asociaciones[i].nodo2].a +
-						sistPart.particulas[asociaciones[i].nodo3].a;
-		alpha = (alpha / 3.0) * 255.0;
-		if (!postPass || (postPass && asociaciones[i].bloomLife > 0))
+		mesh.clear();
+		for (int i = 0 ; i < emitters[e].asociaciones.size() ; i++)
 		{
-			switch (asociaciones[i].drawMode)
+			a = &emitters[e].asociaciones[i];
+			float alpha = sistPart.particulas[a->nodo1].a + 
+							sistPart.particulas[a->nodo2].a +
+							sistPart.particulas[a->nodo3].a;
+			alpha = (alpha / 3.0) * 255.0;
+			if (!postPass || (postPass && a->bloomLife > 0))
 			{
-				case Emitter::DrawMode::EMITTER_DRAW_TRIANGLES:
-					mesh.addVertex(sistPart.particulas[asociaciones[i].nodo1].pos);
-					mesh.addVertex(sistPart.particulas[asociaciones[i].nodo2].pos);
-					mesh.addVertex(sistPart.particulas[asociaciones[i].nodo3].pos);
-					mesh.addColor(ofColor(asociaciones[i].color1, alpha));
-					mesh.addColor(ofColor(asociaciones[i].color2, alpha));
-					mesh.addColor(ofColor(asociaciones[i].color3, alpha));
-					mesh.addTriangle(mesh.getNumVertices()-3, mesh.getNumVertices()-2, mesh.getNumVertices()-1);
-					break;
+				switch (emitters[e].asociaciones[i].drawMode)
+				{
+					case Emitter::DrawMode::EMITTER_DRAW_TRIANGLES:
+						mesh.addVertex(sistPart.particulas[a->nodo1].pos);
+						mesh.addVertex(sistPart.particulas[a->nodo2].pos);
+						mesh.addVertex(sistPart.particulas[a->nodo3].pos);
+						mesh.addColor(ofColor(a->color1, alpha));
+						mesh.addColor(ofColor(a->color2, alpha));
+						mesh.addColor(ofColor(a->color3, alpha));
+						mesh.addTriangle(mesh.getNumVertices()-3, mesh.getNumVertices()-2, mesh.getNumVertices()-1);
+						break;
 
-				case Emitter::DrawMode::EMITTER_DRAW_ELLIPSES:
-				case Emitter::DrawMode::EMITTER_DRAW_CIRCLES:
-				case Emitter::DrawMode::EMITTER_DRAW_RECTANGLES:
-					float dist = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo1].posIni); 
-					float dist2 = sistPart.particulas[asociaciones[i].nodo1].pos.distance(sistPart.particulas[asociaciones[i].nodo2].pos); 
-					ofSetColor(ofColor(asociaciones[i].color1, alpha));
-					ofPushMatrix();
-					ofVec3f dir = sistPart.particulas[asociaciones[i].nodo1].dirIni.getNormalized();
-					ofTranslate(sistPart.particulas[asociaciones[i].nodo1].posIni);
-					//ofRotateX(sistPart.particulas[asociaciones[i].nodo1].dirIni.x);
-					ofRotateZ(atan(dir.y / dir.x));
-					ofRotateY(90);
-					if (asociaciones[i].drawMode == Emitter::DrawMode::EMITTER_DRAW_ELLIPSES)
-						ofEllipse(ofPoint(0,0,0), dist, dist2);
-					else if (asociaciones[i].drawMode == Emitter::DrawMode::EMITTER_DRAW_RECTANGLES)
-						ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
-					else if (asociaciones[i].drawMode == Emitter::DrawMode::EMITTER_DRAW_CIRCLES)
-						ofCircle(ofVec3f(0,0,0), dist);
-					ofPopMatrix();
-					break;
+					case Emitter::DrawMode::EMITTER_DRAW_ELLIPSES:
+					case Emitter::DrawMode::EMITTER_DRAW_CIRCLES:
+					case Emitter::DrawMode::EMITTER_DRAW_RECTANGLES:
+						float dist = sistPart.particulas[a->nodo1].pos.distance(sistPart.particulas[a->nodo1].posIni); 
+						float dist2 = sistPart.particulas[a->nodo1].pos.distance(sistPart.particulas[a->nodo2].pos); 
+						ofSetColor(ofColor(a->color1, alpha));
+						ofPushMatrix();
+						ofVec3f dir = sistPart.particulas[a->nodo1].dirIni.getNormalized();
+						ofTranslate(sistPart.particulas[a->nodo1].posIni);
+						//ofRotateX(sistPart.particulas[a->nodo1].dirIni.x);
+						ofRotateZ(atan(dir.y / dir.x));
+						ofRotateY(90);
+						if (a->drawMode == Emitter::DrawMode::EMITTER_DRAW_ELLIPSES)
+							ofEllipse(ofPoint(0,0,0), dist, dist2);
+						else if (a->drawMode == Emitter::DrawMode::EMITTER_DRAW_RECTANGLES)
+							ofRect(- ofVec3f(dist/2, dist2/2,0), dist, dist2);
+						else if (a->drawMode == Emitter::DrawMode::EMITTER_DRAW_CIRCLES)
+							ofCircle(ofVec3f(0,0,0), dist);
+						ofPopMatrix();
+						break;
+				}
 			}
+			//mesh.addIndex(mesh.getNumVertices()-1);
+			//mesh.addIndex(mesh.getNumVertices());
 		}
-		//mesh.addIndex(mesh.getNumVertices()-1);
-		//mesh.addIndex(mesh.getNumVertices());
-	}
-	switch (paramDrawMode)
-	{
-		case 0: //puntos
-			//mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-			mesh.drawVertices();
-			break;
+		switch (paramDrawMode)
+		{
+			case 0: //puntos
+				//mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+				//ofBeginShape();
+				for (int i = 0 ; i < mesh.getNumVertices() ; )
+				{
+					ofSetColor(mesh.getColors()[i]);
+					ofBeginShape();
+						for (int k = 0 ; k < 36 ; k++)
+						{
+							if (i < mesh.getNumVertices())
+								ofCurveVertex(mesh.getVertices()[i++]);
+						}
+					ofEndShape();
+				}
+				//ofEndShape();
+				//mesh.drawVertices();
+				break;
 
-		case 1: //wireframe
-			mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-			mesh.drawWireframe();
-			break;
+			case 1: //wireframe
+				mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+				mesh.drawWireframe();
+				break;
 
-		case 2: //puntos
-			mesh.setMode(OF_PRIMITIVE_TRIANGLES);
-			mesh.drawFaces();
-			break;
+			case 2: //puntos
+				mesh.setMode(OF_PRIMITIVE_TRIANGLES);
+				mesh.drawFaces();
+				break;
+		}
 	}
 }
 
 void Particulas::update(float average)
 {
+
 	for (int iEmitter = 0 ; iEmitter < emitters.size() ; iEmitter++)
 	{
 		emitters[iEmitter].setBeatHatValue(beatHatValue);
@@ -282,7 +303,7 @@ void Particulas::updatePosicion()
 
 void Particulas::addAsociacion(Emitter *emitter, int *pos, float lineWidht)
 {
-		ASOCIACION a;
+		Emitter::ASOCIACION a;
 		
 		a.lineWidth = MAX(1.0, lineWidht);		
 		a.lineWidth = 1.0;
@@ -308,7 +329,7 @@ void Particulas::addAsociacion(Emitter *emitter, int *pos, float lineWidht)
 		else
 			a.bloomLife = 0;
 
-		asociaciones.push_back(a);
+		emitter->asociaciones.push_back(a);
 }
 
 void Particulas::updateMesh(float average)
@@ -365,16 +386,18 @@ void Particulas::updateMesh(float average)
 			asociaciones.push_back(a);
 	}
 */
-	for (int i = 0 ; i < asociaciones.size() ; i++)
+	for (int e = 0 ; e < emitters.size() ; e++)
 	{
-		asociaciones[i].vida--;
-		asociaciones[i].bloomLife--;
-		if (asociaciones[i].vida <= 0 || !sistPart.particulas[asociaciones[i].nodo1].viva
-										|| !sistPart.particulas[asociaciones[i].nodo2].viva 
-										|| !sistPart.particulas[asociaciones[i].nodo3].viva )
-			asociaciones.erase(asociaciones.begin() + (i--));
+		for (int i = 0 ; i < emitters[e].asociaciones.size() ; i++)
+		{
+			emitters[e].asociaciones[i].vida--;
+			emitters[e].asociaciones[i].bloomLife--;
+			if (emitters[e].asociaciones[i].vida <= 0 || !sistPart.particulas[emitters[e].asociaciones[i].nodo1].viva
+											|| !sistPart.particulas[emitters[e].asociaciones[i].nodo2].viva 
+											|| !sistPart.particulas[emitters[e].asociaciones[i].nodo3].viva )
+				emitters[e].asociaciones.erase(emitters[e].asociaciones.begin() + (i--));
+		}
 	}
-
 }
 
 void Particulas::setupLigths() {

@@ -386,7 +386,7 @@ void ofApp::update(){
 	}
 
 	delete [] audioData;
-
+	
 	updateSoundObjects();
 
 	ofSetWindowTitle(ofToString(ofGetFrameRate()));
@@ -473,6 +473,7 @@ void ofApp::updateSoundObjects()
 		fftFile.getFftPeakData(audioData, amount);
 		for (int i = 0 ; i < soundBoxes.size() ; i++)
 			soundBoxes[i].update(average, audioData, audioMult);
+		delete [] audioData;
 	}
 
 	if (presetType == PRESET_MATRIX3D)
@@ -481,6 +482,7 @@ void ofApp::updateSoundObjects()
 		audioData = new float[amount];
 		fftFile.getFftPeakData(audioData, amount);
 		matrix3D.update(average, audioData);    
+		delete [] audioData;
 	}
 
 	if (presetType == PRESET_PARTICLES)
@@ -500,9 +502,9 @@ void ofApp::updateSoundObjects()
 		audioData = new float[amount];
 		fftFile.getFftPeakData(audioData, amount);
 		onda.update(average, audioData);    
+		delete [] audioData;
 	}
 
-	delete [] audioData;
 
 }
 
@@ -545,7 +547,7 @@ void ofApp::drawFboTest(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	
+
 	ofBackground(0,0,0);
 	ofSetColor(255,255,255);
     if (bGuiVisible)
